@@ -1,7 +1,17 @@
-from PyQt6.QtWidgets import QApplication, QWidget
+import sys
+from PyQt6.QtWidgets import QApplication, QPushButton
+from PyQt6.QtQml import QQmlApplicationEngine
 import sys
 
 app = QApplication(sys.argv)
-window = QWidget()
-window.show()
-app.exec()
+
+engine = QQmlApplicationEngine()
+engine.load('main.qml')
+
+if not engine.rootObjects():
+    sys.exit(-1)
+
+with open('style.qss', 'r') as style_file:
+    app.setStyleSheet(style_file.read())
+
+sys.exit(app.exec())
