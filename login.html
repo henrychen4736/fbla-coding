@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBHS CTE Contacts</title>
+    <link rel="stylesheet" href="loginStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <div class="log-form">
+        <form action="">
+            <h1>Sign In</h1>
+            <p class="welcome">Welcome back, please sign in below.</p>
+            <div class="inner-form">
+                <p class="caption">Enter your Admin ID</p>
+                <div class="input-container">
+                    <i class="fa-solid fa-id-card"></i>
+                    <input type="text" placeholder="Admin ID" id="ID" required>
+                </div>
+                <p class="caption">Enter your Password</p>
+                <div class="input-container">
+                    <i class="fa-solid fa-lock"></i>
+                    <i class="fa-solid fa-eye" id="show-password"></i>
+                    <input type="password" placeholder="Password" id="password" required>
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <input type="image" name="submit" src="assets/buttonIdle.png" alt="Submit" />
+            </div>
+
+        </form>
+        <script src="loginScript.js"></script>
+    </div>
+</body>
+</html>
