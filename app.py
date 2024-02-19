@@ -1,8 +1,12 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from db_manager import DBManager
 
 app = Flask(__name__)
 db_manager = DBManager('partners.db')
+
+@app.route('/help')
+def help():
+    return render_template('help.html')
 
 @app.route('/add_partner', methods=['POST'])
 def add_partner():
