@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Orbitron", sans-serif;
+    font-weight: 400;
+}
+
+.list-container {
+    background: #1E1E1E;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.list-container .left-col {
+    flex-basis: 70%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+}
+
+.list-container .right-col {
+    flex-basis: 25%;
+}
+
+.left-col h1 {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 30px;
+    grid-column: 1 / -1;
+    padding: 20px;
+    border-bottom: 2px solid rgba(255, 255, 255, .2);
+}
+
+.left-col .company {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.company .company-img {
+    width: 100px;
+    height: auto;
+}
