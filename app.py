@@ -4,10 +4,6 @@ from db_manager import DBManager
 app = Flask(__name__)
 db_manager = DBManager('partners.db')
 
-@app.route('/help')
-def help():
-    return render_template('help.html')
-
 @app.route('/add_partner', methods=['POST'])
 def add_partner():
     data = request.json
@@ -58,3 +54,12 @@ def set_password():
     db_manager.set_password(data['password'])
     return jsonify({'message': 'Password set successfully'}), 200
 
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data.get('username')
+    input_password = data.get('password')
+    if db_manager.verify_password(input_password):
+        return jsonify({'message': 'Login successful'}), 200
+    else:
+        return jsonify({'error': 'Invalid credentials'}), 401

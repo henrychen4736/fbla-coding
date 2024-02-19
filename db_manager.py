@@ -1,4 +1,5 @@
 import sqlite3 as sql
+import bcrypt
 
 class DBManager:
     def __init__(self, db_name):
@@ -163,12 +164,31 @@ class DBManager:
     
     def set_password(self, password):
         try:
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             conn = self._connect()
             c = conn.cursor()
             self._execute(c, 'DELETE FROM AdminAuth')
-            self._execute(c, 'INSERT INTO AdminAuth (password) VALUES (?)', (password,))
+            self._execute(c, 'INSERT INTO AdminAuth (password) VALUES (?)', (hashed_password,))
             conn.commit()
         except Exception as e:
             raise e
         finally:
             conn.close()
+    
+    def get_hashed_password(self):
+        try:
+            conn = self._connect()
+            c = conn.cursor()
+            self._execute(c, "SELECT password FROM AdminAuth LIMIT 1")
+            hashed_password = c.fetchone()
+            if hashed_password:
+                return hashed_password[0]
+            else:
+                return None
+        except Exception as e:
+            raise e
+        finally:
+            conn.close()
+
+    def verify_password(self, input_password):
+        return bcrypt.checkpw(input_password.encode('utf-8'), hashed_password)
