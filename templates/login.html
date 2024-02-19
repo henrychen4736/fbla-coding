@@ -9,28 +9,29 @@
 </head>
 <body>
     <div class="log-form">
-        <form action="">
+        <form action="/login" method="post">
             <h1>Sign In</h1>
             <p class="welcome">Welcome back, please sign in below.</p>
             <div class="inner-form">
                 <p class="caption">Enter your Admin ID</p>
                 <div class="input-container">
                     <i class="fa-solid fa-id-card"></i>
-                    <input type="text" placeholder="Admin ID" id="ID" required>
+                    <input type="text" name="username" placeholder="Admin ID" id="ID" required>
                 </div>
                 <p class="caption">Enter your Password</p>
                 <div class="input-container">
                     <i class="fa-solid fa-lock"></i>
                     <i class="fa-solid fa-eye" id="show-password"></i>
-                    <input type="password" placeholder="Password" id="password" required>
+                    <input type="password" name="password" placeholder="Password" id="password" required>
                 </div>
             </div>
             
             <div class="button-container">
+                <!-- <button type="submit">Login</button> -->
                 <input type="image" name="submit" src="assets/buttonIdle.png" alt="Submit" />
             </div>
-
         </form>
+        
         <script src="loginScript.js"></script>
     </div>
 </body>

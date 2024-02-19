@@ -16,18 +16,10 @@ class DBManager:
             cursor.execute(query, params)
         except sql.IntegrityError as e:
             raise Exception(f"Integrity error: {e}")
-        except sql.ProgrammingError as e:
-            raise Exception(f"Programming error: {e}")
         except sql.OperationalError as e:
             raise Exception(f"Operational error: {e}")
-        except sql.DataError as e:
-            raise Exception(f"Data error: {e}")
-        except sql.NotSupportedError as e:
-            raise Exception(f"Not supported error: {e}")
         except sql.Error as e:
             raise Exception(f"Database error: {e}")
-        except Exception as e:
-            raise Exception(f"Unexpected error: {e}")
 
     def add_partner(self, organization_name, type_of_organization, resources_available, description):
         try:
@@ -35,8 +27,8 @@ class DBManager:
             c = conn.cursor()
             self._execute(c, '''INSERT INTO Partners (OrganizationName, TypeOfOrganization, ResourcesAvailable, Description) VALUES (?, ?, ?, ?)''', (organization_name, type_of_organization, resources_available, description))
             conn.commit()
-        except Exception as e:
-            raise e
+        except Exception: 
+            raise
         finally:
             conn.close()
 
@@ -46,8 +38,8 @@ class DBManager:
             c = conn.cursor()
             self._execute(c, '''INSERT INTO Contacts (PartnerID, ContactName, Role, Email, Phone) VALUES (?, ?, ?, ?, ?)''', (partner_id, contact_name, role, email, phone))
             conn.commit()
-        except Exception as e:
-            raise e
+        except Exception:
+            raise
         finally:
             conn.close()
     
@@ -58,8 +50,8 @@ class DBManager:
             self._execute(c, 'DELETE FROM Contacts WHERE PartnerID = ?', (partner_id,))
             self._execute(c, 'DELETE FROM Partners WHERE ID = ?', (partner_id,))
             conn.commit()
-        except Exception as e:
-            raise e
+        except Exception:
+            raise
         finally:
             conn.close()
 
@@ -69,8 +61,8 @@ class DBManager:
             c = conn.cursor()
             self._execute(c, 'DELETE FROM Contacts WHERE ID = ?', (contact_id,))
             conn.commit()
-        except Exception as e:
-            raise e
+        except Exception:
+            raise
         finally:
             conn.close()
 
@@ -96,8 +88,8 @@ class DBManager:
             query = 'UPDATE Partners SET ' + ', '.join(updates) + ' WHERE ID = ?'
             self._execute(c, query, params)
             conn.commit()
-        except Exception as e:
-            raise e
+        except Exception:
+            raise
         finally:
             conn.close()
     
@@ -123,8 +115,8 @@ class DBManager:
             query = 'UPDATE Contacts SET ' + ', '.join(updates) + ' WHERE ID = ?'
             self._execute(c, query, params)
             conn.commit()
-        except Exception as e:
-            raise e
+        except Exception:
+            raise
         finally:
             conn.close()
 
@@ -140,8 +132,8 @@ class DBManager:
                 partner_dict = dict(zip(columns, partner))
                 partners_list.append(partner_dict)
             return partners_list
-        except Exception as e:
-            raise e
+        except Exception:
+            raise
         finally:
             conn.close()
     
@@ -157,38 +149,31 @@ class DBManager:
                 contact_dict = dict(zip(columns, contact))
                 contacts_list.append(contact_dict)
             return contacts_list
-        except Exception as e:
-            raise e
+        except Exception:
+            raise
         finally:
             conn.close()
     
-    def set_password(self, password):
+    def set_password(self, username, password):
         try:
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             conn = self._connect()
             c = conn.cursor()
             self._execute(c, 'DELETE FROM AdminAuth')
-            self._execute(c, 'INSERT INTO AdminAuth (password) VALUES (?)', (hashed_password,))
+            self._execute(c, 'INSERT INTO AdminAuth (username, password) VALUES (?, ?)', (username, password))
             conn.commit()
-        except Exception as e:
-            raise e
-        finally:
-            conn.close()
-    
-    def get_hashed_password(self):
-        try:
-            conn = self._connect()
-            c = conn.cursor()
-            self._execute(c, "SELECT password FROM AdminAuth LIMIT 1")
-            hashed_password = c.fetchone()
-            if hashed_password:
-                return hashed_password[0]
-            else:
-                return None
-        except Exception as e:
-            raise e
+        except Exception:
+            raise
         finally:
             conn.close()
 
     def verify_password(self, input_password):
-        return bcrypt.checkpw(input_password.encode('utf-8'), hashed_password)
+        try:
+            conn = self._connect()
+            c = conn.cursor()
+            self._execute(c, 'SELECT password FROM AdminAuth LIMIT 1')
+            stored_password = c.fetchone()[0]
+            return input_password == stored_password
+        except Exception:
+            raise
+        finally:
+            conn.close()

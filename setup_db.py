@@ -31,9 +31,13 @@ def setup(name):
 
    c.execute(
       '''CREATE TABLE IF NOT EXISTS AdminAuth (
+         username TEXT NOT NULL,
          password TEXT NOT NULL
       )'''
    )
+
+   # TODO: make it so the user can set a password and username, and also add password encryption
+   c.execute('INSERT INTO AdminAuth (username, password) VALUES (?, ?)', ('123456', '123'))
 
    conn.commit()
    conn.close()
