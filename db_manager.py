@@ -166,13 +166,17 @@ class DBManager:
         finally:
             conn.close()
 
-    def verify_password(self, input_password):
+    def verify_credentials(self, input_username, input_password):
         try:
             conn = self._connect()
             c = conn.cursor()
-            self._execute(c, 'SELECT password FROM AdminAuth LIMIT 1')
-            stored_password = c.fetchone()[0]
-            return input_password == stored_password
+            self._execute(c, 'SELECT username, password FROM AdminAuth WHERE username = ?', (input_username,))
+            user = c.fetchone()
+            if user:
+                stored_username, stored_password = user
+                return input_password == stored_password and input_username == stored_username
+            else:
+                return False
         except Exception:
             raise
         finally:

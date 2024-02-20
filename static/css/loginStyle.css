@@ -13,7 +13,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-image: url(assets/background.png);
+    background-image: url(/static/assets/background.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -117,7 +117,7 @@ body {
     position: absolute;
     right: 0;
     width: 100px;
-    background-image: url('assets/buttonIdle.png');
+    background-image: url('/static/assets/buttonIdle.png');
     background-size: cover;
     border: none;
     outline: none;
@@ -125,7 +125,14 @@ body {
     transition: background-image 0.3s;
 }
 
-
 .button-container input:hover{
-    background-image: url(assets/buttonHover.png);
+    background-image: url(/static/assets/buttonHover.png);
+}
+
+.flash-success {
+    color: green;
+}
+
+.flash-error {
+    color: red;
 }
