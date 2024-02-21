@@ -39,12 +39,12 @@ class DBManager:
         except sql.Error as e:
             raise DatabaseError(f'Database error: {e}')
 
-    def add_partner(self, user_id, organization_name, type_of_organization, resources_available, description, contact_name, role, email, phone):
+    def add_partner(self, user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone):
         try:
             conn = self._connect()
             c = conn.cursor()
-            self._execute(c, 'INSERT INTO Partners (UserID, OrganizationName, TypeOfOrganization, ResourcesAvailable, Description, ContactName, Role, Email, Phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                          (user_id, organization_name, type_of_organization, resources_available, description, contact_name, role, email, phone))
+            self._execute(c, 'INSERT INTO Partners (UserID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                          (user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone))
             conn.commit()
         except Exception:
             raise
@@ -63,7 +63,7 @@ class DBManager:
         finally:
             conn.close()
 
-    def modify_partner(self, partner_id, organization_name=None, type_of_organization=None, resources_available=None, description=None, contact_name=None, role=None, email=None, phone=None):
+    def modify_partner(self, partner_id, organization_name=None, type_of_organization=None, organization_is_other_type=None, resources_available=None, resources_available_is_other_type=None, description=None, contact_name=None, role=None, email=None, phone=None):
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -76,9 +76,15 @@ class DBManager:
             if type_of_organization is not None:
                 updates.append('TypeOfOrganization = ?')
                 params.append(type_of_organization)
+            if organization_is_other_type is not None:
+                updates.append('OrganizationIsOtherType = ?')
+                params.append(organization_is_other_type)
             if resources_available is not None:
                 updates.append('ResourcesAvailable = ?')
                 params.append(resources_available)
+            if resources_available_is_other_type is not None:
+                updates.append('ResourcesAvailableIsOtherType = ?')
+                params.append(resources_available_is_other_type)
             if description is not None:
                 updates.append('Description = ?')
                 params.append(description)
@@ -111,10 +117,9 @@ class DBManager:
             conn = self._connect()
             c = conn.cursor()
             self._execute(
-                c, 'SELECT ID, OrganizationName, TypeOfOrganization, ResourcesAvailable, Description, ContactName, Role, Email, Phone FROM Partners WHERE UserID = ?', (user_id,))
+                c, 'SELECT ID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone FROM Partners WHERE UserID = ?', (user_id,))
             partners = c.fetchall()
-            columns = ['ID', 'OrganizationName', 'TypeOfOrganization',
-                       'ResourcesAvailable', 'Description', 'ContactName', 'Role', 'Email', 'Phone']
+            columns = ['ID', 'OrganizationName', 'TypeOfOrganization', 'OrganizationIsOtherType', 'ResourcesAvailable', 'ResourcesAvailableIsOtherType', 'Description', 'ContactName', 'Role', 'Email', 'Phone']
             partners_list = []
             for partner in partners:
                 partner_dict = dict(zip(columns, partner))
@@ -124,7 +129,27 @@ class DBManager:
             raise
         finally:
             conn.close()
-
+    
+    def search_partners(self, search_query):
+        try:
+            conn = self._connect()
+            c = conn.cursor()
+            search_pattern = f"%{search_query}%"
+            query = 'SELECT ID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone FROM Partners WHERE OrganizationName LIKE ? OR ContactName LIKE ? OR Description LIKE ?;'
+            params = (search_pattern, search_pattern, search_pattern)
+            self._execute(c, query, params)
+            partners = c.fetchall()
+            columns = ['ID', 'OrganizationName', 'TypeOfOrganization', 'OrganizationIsOtherType', 'ResourcesAvailable', 'ResourcesAvailableIsOtherType', 'Description', 'ContactName', 'Role', 'Email', 'Phone']
+            partners_list = []
+            for partner in partners:
+                partner_dict = dict(zip(columns, partner))
+                partners_list.append(partner_dict)
+            return partners_list
+        except Exception:
+            raise
+        finally:
+            conn.close()
+        
     def register_user(self, username, password):
         try:
             conn = self._connect()
