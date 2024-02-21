@@ -1,13 +1,20 @@
 import sqlite3 as sql
 import bcrypt
 
+
 class DatabaseError(Exception):
     pass
+
 
 class IntegrityError(DatabaseError):
     pass
 
+
 class OperationalError(DatabaseError):
+    pass
+
+
+class SignupError(DatabaseError):
     pass
 
 
@@ -32,24 +39,12 @@ class DBManager:
         except sql.Error as e:
             raise DatabaseError(f'Database error: {e}')
 
-    def add_partner(self, user_id, organization_name, type_of_organization, resources_available, description):
+    def add_partner(self, user_id, organization_name, type_of_organization, resources_available, description, contact_name, role, email, phone):
         try:
             conn = self._connect()
             c = conn.cursor()
-            self._execute(c, 'INSERT INTO Partners (UserID, OrganizationName, TypeOfOrganization, ResourcesAvailable, Description) VALUES (?, ?, ?, ?, ?)',
-                          (user_id, organization_name, type_of_organization, resources_available, description))
-            conn.commit()
-        except Exception:
-            raise
-        finally:
-            conn.close()
-
-    def add_contact(self, partner_id, contact_name, role, email, phone):
-        try:
-            conn = self._connect()
-            c = conn.cursor()
-            self._execute(c, 'INSERT INTO Contacts (PartnerID, ContactName, Role, Email, Phone) VALUES (?, ?, ?, ?, ?)',
-                          (partner_id, contact_name, role, email, phone))
+            self._execute(c, 'INSERT INTO Partners (UserID, OrganizationName, TypeOfOrganization, ResourcesAvailable, Description, ContactName, Role, Email, Phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                          (user_id, organization_name, type_of_organization, resources_available, description, contact_name, role, email, phone))
             conn.commit()
         except Exception:
             raise
@@ -61,8 +56,6 @@ class DBManager:
             conn = self._connect()
             c = conn.cursor()
             self._execute(
-                c, 'DELETE FROM Contacts WHERE PartnerID = ?', (partner_id,))
-            self._execute(
                 c, 'DELETE FROM Partners WHERE ID = ?', (partner_id,))
             conn.commit()
         except Exception:
@@ -70,69 +63,44 @@ class DBManager:
         finally:
             conn.close()
 
-    def remove_contact(self, contact_id):
-        try:
-            conn = self._connect()
-            c = conn.cursor()
-            self._execute(
-                c, 'DELETE FROM Contacts WHERE ID = ?', (contact_id,))
-            conn.commit()
-        except Exception:
-            raise
-        finally:
-            conn.close()
-
-    def modify_partner(self, partner_id, organization_name=None, type_of_organization=None, resources_available=None, description=None):
+    def modify_partner(self, partner_id, organization_name=None, type_of_organization=None, resources_available=None, description=None, contact_name=None, role=None, email=None, phone=None):
         try:
             conn = self._connect()
             c = conn.cursor()
             updates = []
             params = []
-            if organization_name:
+
+            if organization_name is not None:
                 updates.append('OrganizationName = ?')
                 params.append(organization_name)
-            if type_of_organization:
+            if type_of_organization is not None:
                 updates.append('TypeOfOrganization = ?')
                 params.append(type_of_organization)
-            if resources_available:
+            if resources_available is not None:
                 updates.append('ResourcesAvailable = ?')
                 params.append(resources_available)
-            if description:
+            if description is not None:
                 updates.append('Description = ?')
                 params.append(description)
-            params.append(partner_id)
-            query = 'UPDATE Partners SET ' + \
-                ', '.join(updates) + ' WHERE ID = ?'
-            self._execute(c, query, params)
-            conn.commit()
-        except Exception:
-            raise
-        finally:
-            conn.close()
-
-    def modify_contact(self, contact_id, contact_name=None, role=None, email=None, phone=None):
-        try:
-            conn = self._connect()
-            c = conn.cursor()
-            updates = []
-            params = []
-            if contact_name:
+            if contact_name is not None:
                 updates.append('ContactName = ?')
                 params.append(contact_name)
-            if role:
+            if role is not None:
                 updates.append('Role = ?')
                 params.append(role)
-            if email:
+            if email is not None:
                 updates.append('Email = ?')
                 params.append(email)
-            if phone:
+            if phone is not None:
                 updates.append('Phone = ?')
                 params.append(phone)
-            params.append(contact_id)
-            query = 'UPDATE Contacts SET ' + \
-                ', '.join(updates) + ' WHERE ID = ?'
-            self._execute(c, query, params)
-            conn.commit()
+
+            if updates:
+                params.append(partner_id)
+                query = 'UPDATE Partners SET ' + \
+                    ', '.join(updates) + ' WHERE ID = ?'
+                self._execute(c, query, params)
+                conn.commit()
         except Exception:
             raise
         finally:
@@ -143,35 +111,15 @@ class DBManager:
             conn = self._connect()
             c = conn.cursor()
             self._execute(
-                c, 'SELECT * FROM Partners WHERE UserID = ?', (user_id,))
+                c, 'SELECT ID, OrganizationName, TypeOfOrganization, ResourcesAvailable, Description, ContactName, Role, Email, Phone FROM Partners WHERE UserID = ?', (user_id,))
             partners = c.fetchall()
             columns = ['ID', 'OrganizationName', 'TypeOfOrganization',
-                       'ResourcesAvailable', 'Description']
+                       'ResourcesAvailable', 'Description', 'ContactName', 'Role', 'Email', 'Phone']
             partners_list = []
             for partner in partners:
                 partner_dict = dict(zip(columns, partner))
                 partners_list.append(partner_dict)
             return partners_list
-        except Exception:
-            raise
-        finally:
-            conn.close()
-
-    def get_all_contacts(self, user_id):
-        try:
-            conn = self._connect()
-            c = conn.cursor()
-            self._execute(c, 'SELECT * FROM Contacts')
-            self._execute(
-                c, 'SELECT Contacts.* FROM Contacts JOIN Partners ON Contacts.PartnerID = Partner.ID WHERE Partners.UserID = ?', (user_id,))
-            contacts = c.fetchall()
-            columns = ['ID', 'PartnerID',
-                       'ContactName', 'Role', 'Email', 'Phone']
-            contacts_list = []
-            for contact in contacts:
-                contact_dict = dict(zip(columns, contact))
-                contacts_list.append(contact_dict)
-            return contacts_list
         except Exception:
             raise
         finally:
@@ -184,7 +132,7 @@ class DBManager:
             self._execute(
                 c, 'SELECT * FROM AdminAuth WHERE username = ?', (username,))
             if c.fetchone():
-                raise Exception('Username is already taken')
+                raise SignupError('Username is already taken')
 
             hashed_password = bcrypt.hashpw(
                 password.encode('utf-8'), bcrypt.gensalt())

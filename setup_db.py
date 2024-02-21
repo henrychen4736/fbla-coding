@@ -4,34 +4,26 @@ import os
 import bcrypt
 
 def setup(name):
+   os.remove(name)
    conn = sql.connect(name)
    c = conn.cursor()
 
-   c.execute(
-      '''CREATE TABLE IF NOT EXISTS Partners (
-         ID INTEGER PRIMARY KEY,
-         UserID INTEGER NOT NULL,
-         OrganizationName TEXT NOT NULL,
-         TypeOfOrganization TEXT,
-         ResourcesAvailable TEXT,
-         Description TEXT,
-         FOREIGN KEY (UserID) REFERENCES AdminAuth(ID)
-         UNIQUE(UserID, OrganizationName)
-      )'''
-   )
-
-   c.execute(
-      '''CREATE TABLE IF NOT EXISTS Contacts (
-         ID INTEGER PRIMARY KEY,
-         PartnerID INTEGER NOT NULL,
-         ContactName TEXT NOT NULL,
-         Role TEXT,
-         Email TEXT,
-         Phone TEXT,
-         FOREIGN KEY (PartnerID) REFERENCES Partners(ID),
-         UNIQUE(PartnerID, ContactName)
-      )'''
-   )
+   c.execute('''
+        CREATE TABLE IF NOT EXISTS Partners (
+            ID INTEGER PRIMARY KEY,
+            UserID INTEGER NOT NULL,
+            OrganizationName TEXT NOT NULL,
+            TypeOfOrganization TEXT,
+            ResourcesAvailable TEXT,
+            Description TEXT,
+            ContactName TEXT NOT NULL,
+            Role TEXT,
+            Email TEXT,
+            Phone TEXT,
+            FOREIGN KEY (UserID) REFERENCES AdminAuth(ID),
+            UNIQUE(UserID, OrganizationName)
+        )'''
+    )
 
    c.execute(
       '''CREATE TABLE IF NOT EXISTS AdminAuth (
@@ -41,28 +33,21 @@ def setup(name):
       )'''
    )
 
-   pw = '123'
-   hashed_pw = bcrypt.hashpw(pw.encode('utf-8'), bcrypt.gensalt())
-   c.execute('INSERT INTO AdminAuth (username, password) VALUES (?, ?)', ('123456', hashed_pw))
-
    conn.commit()
    conn.close()
 
 def test_db(name):
-   os.remove(name)
-   setup(name)
-   db_man = DBManager(name)
+   db_manager = DBManager(name)
 
-   db_man.add_partner(1, 'FBLA', 'club', None, 'future business leaders of america')
-   db_man.add_partner(1, 'HOSA', 'club', None, 'hosa')
-   db_man.register_user('doggo', '345')
-   db_man.add_contact(1, 'joe', 'president', 'joe@gmail.com', 626123123123)
-   db_man.add_contact(2, 'joe', 'vice president', 'bob@gmail.com', 123)
-   db_man.add_contact(2, 'bobby', 'president', 'bobby@gmail.com', 123123123123)
-   db_man.modify_contact(1, 'john', None, None, None)
-   db_man.modify_partner(1, 'code club', 'club', None, 'CODING')
-   db_man.remove_contact(1)
-   db_man.remove_partner(1)
+   db_manager.register_user('user1', 'password1')
+   db_manager.register_user('user2', 'password2')
+   
+   db_manager.add_partner(1, 'Company1', 'Type1', 'Resource1', 'Description1', 'Contact1', 'Role1', 'contact1@company1.com', '555-0001')
+   db_manager.add_partner(1, 'Company2', 'Type2', 'Resource2', 'Description2', 'Contact2', 'Role2', 'contact2@company2.com', '555-0002')
+   db_manager.add_partner(2, 'Company3', 'Type3', 'Resource3', 'Description3', 'Contact3', 'Role3', 'contact3@company3.com', '555-0003')
+   db_manager.modify_partner(1, contact_name='Updated Contact1', email='updated1@company1.com')
+   db_manager.remove_partner(2)
 
-# setup('partners.db')
+
+setup('partners.db')
 test_db('partners.db')

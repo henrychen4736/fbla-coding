@@ -1,10 +1,27 @@
 from flask import Flask, request, redirect, render_template, url_for, flash
 from db_manager import DBManager
+from db_manager import DatabaseError, IntegrityError, OperationalError, SignupError
 
 app = Flask(__name__)
-app.secret_key = 'J8489$ngo4ga89(*&HG#87h`p9T*($Whtp9uehfg)hgi&94hpw'
+app.secret_key = 'PLACEHOLDER'
 
 db_manager = DBManager('partners.db')
+
+# TODO: add exception handling
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        try:
+            username = request.form['username']
+            password = request.form['password']
+            db_manager.register_user(username, password)
+            return redirect(url_for('login'))
+        except SignupError as e:
+            pass
+    else:
+        return render_template('signup.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
