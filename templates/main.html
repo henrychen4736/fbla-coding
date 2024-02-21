@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +7,9 @@
     <link rel="stylesheet" href="/static/css/mainStyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
-
 <body>
     <i class="fa-solid fa-bars"></i>
-    <div class="overlay"></div>
+    <div class="sidebar-overlay"></div>
     <div class="sidebar">
         <a href="main" class="sidebar-item">
             <i class="fa-solid fa-house"></i>
@@ -34,8 +32,8 @@
                 <div class="company-img">
                     <div class="blur-background"></div>
                     <i class="fa-regular fa-bookmark"></i>
-                    <img src="static/assets/company-placeholder.png" alt="Logo">
                 </div>
+                <img src="/static/assets/company-placeholder.png" alt="Logo">
                 <div class="company-info">
                     <h3>{{ partner['OrganizationName'] }}</h3>
                     <div class="brief-info">
@@ -47,72 +45,109 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
 
-            <div class="right-col">
-                <div class="filter-bar">
-                    <h2>Select Filters</h2>
-                    <form action="/search" method="get">
-                        <div class="search-bar">
-                            <input type="text" placeholder="Find anything..." name="searchQuery" id="searchInput">
-                            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                        </div>
-                        <h3>Partner Type</h3>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Sole Proprietorship</P> <span>(0)</span>
-                        </div>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Partnership</P> <span>(0)</span>
-                        </div>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Limited Partnership</P> <span>(0)</span>
-                        </div>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>LLC</P> <span>(0)</span>
-                        </div>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Corporation</P> <span>(0)</span>
-                        </div>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Non-Profit</P> <span>(0)</span>
-                        </div>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Other</P> <span>(0)</span>
-                        </div>
-                        <h3>Resources Available</h3>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Food Supply</P> <span>(0)</span>
-                        </div>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Construction</P> <span>(0)</span>
-                        </div>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Electronic</P> <span>(0)</span>
-                        </div>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Education Resource</P> <span>(0)</span>
-                        </div>
-                        <div class="filter">
-                            <input type="checkbox">
-                            <p>Other</P> <span>(0)</span>
-                        </div>
-                    </form>
-
+        <div class="right-col">
+            <div class="filter-bar">
+                <h2>Select Filters</h2>
+                <div class="search-bar">
+                    <input type="text" placeholder="Find anything..." id="searchInput">
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
-                <button class="add-contact"><i class="fa-solid fa-plus"></i>Create a new contact</button>
+                <h3>Partner Type</h3>
+                <div class="filter">
+                    <input type="checkbox"> <p>Sole Proprietorship</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>Partnership</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>Limited Partnership</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>LLC</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>Corporation</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>Non-Profit</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>Other</P> <span>(0)</span>
+                </div>
+                <h3>Resource Available</h3>
+                <div class="filter">
+                    <input type="checkbox"> <p>Food Supply</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>Construction</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>Electronic</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>Education</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>Other</P> <span>(0)</span>
+                </div>
+            </div>
+            <button class="add-contact"><i class="fa-solid fa-plus"></i>Create a new contact</button>
+        </div>
+    </div>
+    <div class="create-overlay"></div>
+    <div class="create-contact-page">
+        <i class="fa-solid fa-xmark"></i>
+        <h1>New Partner Contact</h1>
+        <div class="contact-content">
+            <div class="add-image-container">
+                <p class="caption">Add partner image</p>
+                <i class="fa-solid fa-plus"></i>
+            </div>
+            <div class="input-container">
+                <div class="left-input">
+                    <p class="caption">Name of partner</p>
+                    <input type="text" placeholder="Partner name" class="partner-name" required>
+                    <p class="caption">Type of partner</p>
+                    <select class="partner-type" name="partner-type" required>
+                        <option value="" disabled selected hidden>Select a partner type</option>
+                        <option value="Sole Proprietorship">Sole Proprietorship</option>
+                        <option value="Partnership">Partnership</option>
+                        <option value="Limited Partnership">Limited Partnership</option>
+                        <option value="LLC">LLC</option>
+                        <option value="Corporation">Corporation</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="text" class="other-type" name="other-type" placeholder="Enter other type">
+                </div>
+                <div class="right-input">
+                    <p class="caption">TEL of partner</p>
+                    <input type="text" placeholder="(###) ###-####" class="partner-number" required>
+                    <p class="caption">Partner resource</p>
+                    <select class="partner-resource" name="partner-resource" required>
+                        <option value="" disabled selected hidden>Select a resource</option>
+                        <option value="Food Supply">Food Supply</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Education">Education</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="text" class="other-resource" name="other-resource" placeholder="Enter other resource">
+                    <button class="submit-contact">Add</button>
+                </div>
             </div>
         </div>
-        <script src="/static/js/mainScript.js"></script>
-</body>
+    </div>
+    <div class="detail-view">
+        <div class="partner-photo">
+            <img src="/static/assets/company-placeholder.png">
+        </div>
+        <div class="partner-info">
 
+        </div>
+    </div>
+
+    <script src="mainScript.js"></script>
+</body>
 </html>

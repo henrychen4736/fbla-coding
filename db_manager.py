@@ -149,7 +149,9 @@ class DBManager:
             raise
         finally:
             conn.close()
-        
+    
+    # def filter_partners(self, )
+
     def register_user(self, username, password):
         try:
             conn = self._connect()

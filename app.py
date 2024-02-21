@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, url_for, session, flash
+from flask import Flask, request, redirect, render_template, url_for, session
 from db_manager import DBManager, DatabaseError, IntegrityError, OperationalError, SignupError
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
@@ -21,6 +21,7 @@ db_manager = DBManager('partners.db')
 # TODO: new font
 # TODO: make the 0 on the filter mean number of partners in that category
 # TODO: generate report feature
+# TODO: find some way to handle the "other type"
 
 
 def backup_db():
@@ -72,9 +73,10 @@ def login():
 def main():
     if 'logged_in' in session and session['logged_in']:
         search_query = request.args.get('searchQuery', None)
-        
+        print(session)
         if search_query:
             partners = db_manager.search_partners(search_query)
+            print("Search query:" + search_query)
         else:
             partners = db_manager.get_all_partners(session['user_id'])
         print(partners)
@@ -90,6 +92,7 @@ def help():
 
 @app.route('/logout')
 def logout():
+    session['logged_in'] = False
     session.clear()
     return redirect(url_for('login'))
 

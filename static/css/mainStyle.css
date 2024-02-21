@@ -1,26 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Orbitron", sans-serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 400;
 }
 
 ::-webkit-scrollbar {
     width: 10px;
     background-color: #333333;
-  }
+}
   
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background-color: #666666;
     border-radius: 5px;
-  }
+}
 
-  ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background-color: #999999;
-  }
+}
 
 .fa-bars {
     color: #fff;
@@ -33,6 +33,7 @@
     z-index: 5;
     border-radius: 20px;
     background-color: #1E1E1E;
+    transition: box-shadow 0.3s ease;
     padding: 10px;
 }
 
@@ -40,7 +41,7 @@
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-.overlay {
+.sidebar-overlay {
     width: 0;
     height: 100vh;
     position: fixed;
@@ -158,7 +159,7 @@
     margin-left: 10px;
     position: sticky;
     padding-top: 20px;
-    border-bottom: 2px solid rgba(255, 255, 255, .2);
+    border-bottom: 2px solid #fff;
     z-index: 3;
 }
 
@@ -170,6 +171,7 @@
     flex-wrap: wrap;
     border-radius: 20px;
     background: #1E1E1E;
+    transition: background-color 0.3s ease;
     padding: 20px;
 }
 
@@ -213,47 +215,49 @@
     flex-wrap: wrap;
     justify-content: space-between;
     color: #fff;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .company-info .brief-info .company-type {
     text-align: right;
-    flex-basis: 40%;
+    flex-basis: 30%;
 }
 
 .company-info .brief-info .phone-number {
-    flex-basis: 60%;
+    flex-basis: 70%;
 }
 
-.company-info .brief-info .company-resources {
+.company-info .brief-info .company-resource {
     margin-top: 5px;
 }
 
-.company-info .brief-info .company-resources span {
+.company-info .brief-info .company-resource span {
     font-size: 10px;
 }
 
-
-
 .company .blur-background {
     position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 30px;
     height: 30px;
-    
     right: 0;
     margin: 9px 6px;
     backdrop-filter: blur(4px);
     background-color: rgba(255, 255, 255, 0.5);
+    transition: background-color 0.3s ease;
     border-radius: 20%;
 }
 
-.company .company-img i {
-    position: absolute;
+.company .company-img .blur-background .fa-bookmark {
     color: #808080;
     font-size: 25px;
-    right: 0;
-    margin: 12px 12px;
     z-index: 1;
+}
+
+.blur-background:hover {
+    background-color: #1E1E1E;
 }
 
 .right-col .filter-bar {
@@ -319,7 +323,7 @@
     display: flex;
     align-items: center;
     color: #808080;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .filter-bar .filter p {
@@ -331,10 +335,15 @@
     cursor: pointer;
 }
 
+.filter input[type="checkbox"]:checked + p {
+    color: #1E1E1E;
+    font-weight: 500;
+}
+
 .add-contact {
     position: absolute;
-    bottom: 30px;
-    width: 320px;
+    bottom: 20px;
+    width: 276px;
     left: 0;
     padding: 10px 20px;
     background-color: #fff;
@@ -348,7 +357,7 @@
     border-right: 5px solid rgba(0, 0, 0, .5);
     border-radius: 10px;
     font-weight: 500;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .add-contact:hover {
@@ -358,4 +367,240 @@
 
 .add-contact .fa-plus {
     margin-right: 10px;
+}
+
+.create-overlay {
+    transition: transform 0.2s ease;
+    transform-origin: center;
+    transform: scale(0);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(20px);
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.create-contact-page {
+    position: fixed;
+    transform: scale(0) translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    width: 52%;
+    height: 65%;
+    border-radius: 20px;
+    z-index: 1000;
+    overflow: hidden;
+    background: #1E1E1E;
+}
+
+.fa-xmark {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 20px 0 0 20px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    color: #fff;
+    background-color: #1E1E1E;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    border-top: none;
+    border-left: none;
+    border-bottom: 4px solid rgba(0, 0, 0, 1);
+    border-right: 4px solid rgba(0, 0, 0, 1);
+    font-size: 40px;
+}
+
+.fa-xmark:hover {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.create-contact-page h1 {
+    text-align: center;
+    border-bottom: 2px solid #fff;
+    color: #fff;
+    padding-bottom: 10px;
+}
+
+.contact-content {
+    background: linear-gradient(to bottom, #000000, #333333);
+    display: flex;
+    position: fixed;
+    align-items: center;
+    top: 24%;
+    bottom: 0;
+    padding: 40px;
+    height: auto;
+    width: 100%;
+}
+
+.add-image-container {
+    flex-basis: 30%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: fit-content;
+    height: 100%;
+    padding: 10px;
+    margin-right: 20px;
+    background-color: #666666;
+    color: #fff;
+    border-bottom: 4px solid rgba(0, 0, 0, .2);
+    border-right: 4px solid rgba(0, 0, 0, .2);
+    border-radius: 20px;
+}
+
+.add-image-container .caption {
+    width: 100%;
+    border-bottom: 2px solid #fff;
+    font-size: 20px;
+    padding-bottom: 5px;
+    text-align: left;
+}
+
+.add-image-container .fa-plus {
+    background-color: #1E1E1E;
+    width: 200px;
+    height: 200px;
+    margin-top: 10px;
+    padding: 0 12.5px;
+    text-align: center;
+    color: #808080;
+    border: none;
+    transition: box-shadow 0.3s ease;
+    box-shadow: inset 0 0 0 4px #808080;
+    font-size: 200px;
+    border-radius: 10px;
+}
+
+.add-image-container .fa-plus:hover {
+    box-shadow: inset 0 0 0 4px #fff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.input-container {
+    flex-basis: 70%;
+    top: 0;
+    right: 0;
+    color: #fff;
+    display: flex;
+    background-color: #666666;
+    height: 100%;
+    border-bottom: 4px solid rgba(0, 0, 0, .2);
+    border-right: 4px solid rgba(0, 0, 0, .2);
+    border-radius: 20px;
+    width: fit-content;
+    padding: 0 20px;
+}
+
+.right-input {
+    flex-basis: 50%;
+    margin-left: 10px;
+}
+
+.left-input {
+    flex-basis: 50%;
+    margin-right: 10px;
+}
+
+.input-container .caption {
+    width: 180px;
+    font-size: 20px;
+    padding-bottom: 5px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #fff;
+}
+
+.other-resource::placeholder,
+.other-type::placeholder,
+.partner-name::placeholder, 
+.partner-number::placeholder {
+    color: #fff;
+    padding: 4px;
+    transition: box-shadow 0.3s ease;
+}
+
+.input-container .partner-resource,
+.input-container .partner-type,
+.input-container .partner-name, 
+.input-container .partner-number {
+    width: 180px;
+    height: 30px;
+    padding: 4px;
+    background: #1E1E1E;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+}
+
+
+.input-container .partner-resource:hover,
+.input-container .partner-type:hover,
+.input-container input:hover {
+    transition: box-shadow 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.other-resource,
+.other-type {
+    width: 180px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 4px;
+    display: none;
+    background-color: #1E1E1E;
+    color: #fff;
+}
+
+.submit-contact {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px 20px;
+    margin: 0 50px 50px 0;
+    background-color: #fff;
+    color: #1E1E1E;
+    height: auto;
+    width: 150px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-top: none;
+    border-left: none;
+    border-bottom: 5px solid rgba(0, 0, 0, 1);
+    border-right: 5px solid rgba(0, 0, 0, 1);
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.submit-contact:hover {
+    background-color: #1E1E1E;
+    color: #fff;
+}
+
+
+.detail-view {
+    display: none;
+    position: fixed;
+    background-image: url(static/assets/background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    overflow: hidden;
 }
