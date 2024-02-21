@@ -139,6 +139,8 @@ class DBManager:
             self._execute(
                 c, 'INSERT INTO AdminAuth (username, password) VALUES (?, ?)', (username, hashed_password))
             conn.commit()
+            user_id = c.lastrowid
+            return user_id
         except Exception:
             raise
         finally:
@@ -149,13 +151,16 @@ class DBManager:
             conn = self._connect()
             c = conn.cursor()
             self._execute(
-                c, 'SELECT username, password FROM AdminAuth WHERE username = ?', (input_username,))
+                c, 'SELECT ID, username, password FROM AdminAuth WHERE username = ?', (input_username,))
             user = c.fetchone()
             if user:
-                stored_username, stored_password = user
-                return bcrypt.checkpw(input_password.encode('utf-8'), stored_password)
+                user_id, stored_username, stored_password = user
+                if bcrypt.checkpw(input_password.encode('utf-8'), stored_password):
+                    return True, user_id
+                else:
+                    return False, None
             else:
-                return False
+                return False, None
         except Exception:
             raise
         finally:

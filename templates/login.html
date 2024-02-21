@@ -11,6 +11,9 @@
 
 <body>
     <div class="log-form">
+        {% if error %}
+        <div style="color: red;">{{ error }}</div>
+        {% endif %}
         <form action="/login" method="post">
             <h1>Sign In</h1>
             <p class="welcome">Welcome back, please sign in below.</p>

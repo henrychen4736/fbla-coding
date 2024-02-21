@@ -12,15 +12,15 @@
     <i class="fa-solid fa-bars"></i>
     <div class="overlay"></div>
     <div class="sidebar">
-        <a href="#" class="sidebar-item">
+        <a href="{{ url_for('main') }}" class="sidebar-item">
             <i class="fa-solid fa-house"></i>
             <div>Home</div>
         </a>
-        <a href="#" class="sidebar-item">
+            <a href="#" class="sidebar-item"></a>
             <i class="fa-solid fa-question"></i>
             <div>Help</div>
         </a>
-        <a href="#" class="sidebar-item" style="color: #FF0000;">
+        <a href="{{ url_for('logout') }}" class="sidebar-item" style="color: #FF0000;">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             <div>Sign out</div>
         </a>
@@ -28,126 +28,23 @@
     <div class="list-container">
         <div class="left-col">
             <h1>Your Contacts</h1>
+            {% for partner in partners %}
             <div class="company">
                 <div class="company-img">
                     <div class="blur-background"></div>
                     <i class="fa-regular fa-bookmark"></i>
-                    <img src="static/assets/company-placeholder.png">
+                    <img src="{{ url_for('static', filename='assets/company-placeholder.png') }}">
                 </div>
                 <div class="company-info">
-                    <h3>[Title]</h3>
+                    <h3>{{ partner.OrganizationName }}</h3>
                     <div class="brief-info">
-                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
-                        <p class="company-type" id="company-type">[Type]</p>
-                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
+                        <p class="phone-number" id="phone-number">{{ partner.Phone }}</p>
+                        <p class="company-type" id="company-type">{{ partner.TypeOfOrganization }}</p>
+                        <p class="company-resources">Resources Available: <span id="company-resources">{{ partner.ResourcesAvailable }}</span></p>
                     </div>
                 </div>
             </div>
-            <div class="company">
-                <div class="company-img">
-                    <div class="blur-background"></div>
-                    <i class="fa-regular fa-bookmark"></i>
-                    <img src="static/assets/company-placeholder.png">
-                </div>
-                <div class="company-info">
-                    <h3>[Title]</h3>
-                    <div class="brief-info">
-                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
-                        <p class="company-type" id="company-type">[Type]</p>
-                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="company">
-                <div class="company-img">
-                    <div class="blur-background"></div>
-                    <i class="fa-regular fa-bookmark"></i>
-                    <img src="static/assets/company-placeholder.png">
-                </div>
-                <div class="company-info">
-                    <h3>[Title]</h3>
-                    <div class="brief-info">
-                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
-                        <p class="company-type" id="company-type">[Type]</p>
-                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="company">
-                <div class="company-img">
-                    <div class="blur-background"></div>
-                    <i class="fa-regular fa-bookmark"></i>
-                    <img src="static/assets/company-placeholder.png">
-                </div>
-                <div class="company-info">
-                    <h3>[Title]</h3>
-                    <div class="brief-info">
-                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
-                        <p class="company-type" id="company-type">[Type]</p>
-                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="company">
-                <div class="company-img">
-                    <div class="blur-background"></div>
-                    <i class="fa-regular fa-bookmark"></i>
-                    <img src="static/assets/company-placeholder.png">
-                </div>
-                <div class="company-info">
-                    <h3>[Title]</h3>
-                    <div class="brief-info">
-                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
-                        <p class="company-type" id="company-type">[Type]</p>
-                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="company">
-                <div class="company-img">
-                    <div class="blur-background"></div>
-                    <i class="fa-regular fa-bookmark"></i>
-                    <img src="static/assets/company-placeholder.png">
-                </div>
-                <div class="company-info">
-                    <h3>[Title]</h3>
-                    <div class="brief-info">
-                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
-                        <p class="company-type" id="company-type">[Type]</p>
-                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="company">
-                <div class="company-img">
-                    <div class="blur-background"></div>
-                    <i class="fa-regular fa-bookmark"></i>
-                    <img src="static/assets/company-placeholder.png">
-                </div>
-                <div class="company-info">
-                    <h3>[Title]</h3>
-                    <div class="brief-info">
-                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
-                        <p class="company-type" id="company-type">[Type]</p>
-                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="company">
-                <div class="company-img">
-                    <div class="blur-background"></div>
-                    <i class="fa-regular fa-bookmark"></i>
-                    <img src="static/assets/company-placeholder.png">
-                </div>
-                <div class="company-info">
-                    <h3>[Title]</h3>
-                    <div class="brief-info">
-                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
-                        <p class="company-type" id="company-type">[Type]</p>
-                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
 
         <div class="right-col">
@@ -193,6 +90,6 @@
             </div>
         </div>
     </div>
-    <script src="mainScript.js"></script>
+    <script src="/static/js/mainScript.js"></script>
 </body>
 </html>

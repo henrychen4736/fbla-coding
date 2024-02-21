@@ -4,7 +4,8 @@ import os
 import bcrypt
 
 def setup(name):
-   os.remove(name)
+   if os.path.exists(name):
+      os.remove(name)
    conn = sql.connect(name)
    c = conn.cursor()
 
@@ -46,7 +47,7 @@ def test_db(name):
    db_manager.add_partner(1, 'Company2', 'Type2', 'Resource2', 'Description2', 'Contact2', 'Role2', 'contact2@company2.com', '555-0002')
    db_manager.add_partner(2, 'Company3', 'Type3', 'Resource3', 'Description3', 'Contact3', 'Role3', 'contact3@company3.com', '555-0003')
    db_manager.modify_partner(1, contact_name='Updated Contact1', email='updated1@company1.com')
-   db_manager.remove_partner(2)
+   # db_manager.remove_partner(2)
 
 
 setup('partners.db')
