@@ -9,6 +9,22 @@
 </head>
 
 <body>
+    <i class="fa-solid fa-bars"></i>
+    <div class="overlay"></div>
+    <div class="sidebar">
+        <a href="#" class="sidebar-item">
+            <i class="fa-solid fa-house"></i>
+            <div>Home</div>
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fa-solid fa-question"></i>
+            <div>Help</div>
+        </a>
+        <a href="#" class="sidebar-item" style="color: #FF0000;">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <div>Sign out</div>
+        </a>
+    </div>
     <div class="list-container">
         <div class="left-col">
             <h1>Your Contacts</h1>
@@ -135,7 +151,7 @@
         </div>
 
         <div class="right-col">
-            <div class="sidebar">
+            <div class="filter-bar">
                 <h2>Select Filters</h2>
                 <div class="search-bar">
                     <input type="text" placeholder="Find anything..." id="searchInput">
@@ -174,9 +190,9 @@
                     <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
                 </div>
 
-
             </div>
         </div>
     </div>
+    <script src="mainScript.js"></script>
 </body>
 </html>
