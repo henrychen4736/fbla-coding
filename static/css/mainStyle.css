@@ -28,7 +28,7 @@
     position: fixed;
     top: 0;
     right: 0;
-    margin: 30px;
+    margin: 20px 30px;
     cursor: pointer;
     z-index: 5;
     border-radius: 20px;
@@ -54,7 +54,7 @@
     position: fixed;
     top: 0;
     right: 0;
-    margin: 90px 30px 0 0;
+    margin: 85px 30px 0 0;
     padding: 10px;
     width: 250px;
     height: auto;
@@ -251,13 +251,13 @@
 }
 
 .company .company-img .blur-background .fa-bookmark {
-    color: #808080;
+    color: #4169E1;
     font-size: 25px;
     z-index: 1;
 }
 
 .blur-background:hover {
-    background-color: #1E1E1E;
+    background-color: #FFA500;
 }
 
 .right-col .filter-bar {
@@ -388,8 +388,8 @@
     transform: scale(0) translate(-50%, -50%);
     top: 50%;
     left: 50%;
-    width: 52%;
-    height: 65%;
+    width: 65%;
+    height: 85%;
     border-radius: 20px;
     z-index: 1000;
     overflow: hidden;
@@ -432,7 +432,7 @@
     display: flex;
     position: fixed;
     align-items: center;
-    top: 24%;
+    top: 18.5%;
     bottom: 0;
     padding: 40px;
     height: auto;
@@ -440,7 +440,7 @@
 }
 
 .add-image-container {
-    flex-basis: 30%;
+    flex-basis: 25%;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -485,7 +485,7 @@
 }
 
 .input-container {
-    flex-basis: 70%;
+    flex-basis: 75%;
     top: 0;
     right: 0;
     color: #fff;
@@ -499,18 +499,16 @@
     padding: 0 20px;
 }
 
-.right-input {
-    flex-basis: 50%;
-    margin-left: 10px;
+.left-input {
+    flex-basis: 40%;
 }
 
-.left-input {
-    flex-basis: 50%;
-    margin-right: 10px;
+.right-input {
+    margin-left: 40px;
 }
 
 .input-container .caption {
-    width: 180px;
+    width: 250px;
     font-size: 20px;
     padding-bottom: 5px;
     margin-top: 20px;
@@ -518,6 +516,8 @@
     border-bottom: 2px solid #fff;
 }
 
+.description::placeholder,
+.individual-info input::placeholder,
 .other-resource::placeholder,
 .other-type::placeholder,
 .partner-name::placeholder, 
@@ -527,11 +527,13 @@
     transition: box-shadow 0.3s ease;
 }
 
+.individual-info input,
+.input-container .description,
 .input-container .partner-resource,
 .input-container .partner-type,
 .input-container .partner-name, 
 .input-container .partner-number {
-    width: 180px;
+    width: 250px;
     height: 30px;
     padding: 4px;
     background: #1E1E1E;
@@ -540,9 +542,24 @@
     color: #fff;
 }
 
+.input-container .description {
+    height: 100px;
+    resize: none;
+    display: block;
+}
+
+.individual-info input {
+    margin-bottom: 5px;
+}
 
 .input-container .partner-resource:hover,
-.input-container .partner-type:hover,
+.input-container .partner-type:hover {
+    transition: box-shadow 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.input-container .description:hover,
 .input-container input:hover {
     transition: box-shadow 0.3s ease;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
@@ -550,7 +567,7 @@
 
 .other-resource,
 .other-type {
-    width: 180px;
+    width: 250px;
     height: 30px;
     border: none;
     border-radius: 5px;
@@ -588,19 +605,47 @@
     color: #fff;
 }
 
+.detail-overlay {
+    transition: transform 0.2s ease;
+    transform: translateY(100%);
+    transform-origin: bottom;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(20px);
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
 
 .detail-view {
     display: none;
     position: fixed;
-    background-image: url(static/assets/background.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    background: url(static/assets/background.png) center/cover no-repeat;
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
-    width: 100%;
-    height: 100%;
+    width: 800px;
+    height: 624px;
+    padding: 20px;
     z-index: 1000;
     overflow: hidden;
+}
+
+.detail-view .fa-right-from-bracket {
+    font-size: 50px;
+    color: #FF0000;
+}
+
+.detail-view h1 {
+    color: #fff;
+    width: 30%;
+    font-weight: 500;
+    border-bottom: 2px solid #1E1E1E;
+    margin-bottom: 30px;
+}
+
+.detail-view .partner-photo {
+
 }

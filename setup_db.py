@@ -23,6 +23,7 @@ def setup(name):
             Role TEXT,
             Email TEXT NOT NULL,
             Phone TEXT NOT NULL,
+            Bookmarked BOOLEAN NOT NULL DEFAULT FALSE,
             FOREIGN KEY (UserID) REFERENCES AdminAuth(ID),
             UNIQUE(UserID, OrganizationName)
         )'''
@@ -45,9 +46,9 @@ def test_db(name):
    db_manager.register_user('user1', 'password1')
    db_manager.register_user('user2', 'password2')
    
-   db_manager.add_partner(1, 'Company1', 'Type1', True, 'Resource1', True, 'Description1', 'Contact1', 'Role1', 'contact1@company1.com', '555-0001')
-   db_manager.add_partner(1, 'Company2', 'Type2', True, 'Resource2', True, 'Description2', 'Contact2', 'Role2', 'contact2@company2.com', '555-0002')
-   db_manager.add_partner(2, 'Company3', 'Type3', False, 'Resource3', False, 'Description3', 'Contact3', 'Role3', 'contact3@company3.com', '555-0003')
+   db_manager.add_partner(1, 'A company', 'Type1', True, 'Resource1', True, 'Description1', 'Contact1', 'Role1', 'contact1@company1.com', '555-0001', False)
+   db_manager.add_partner(1, 'B Company2', 'Type2', True, 'Resource2', True, 'Description2', 'Contact2', 'Role2', 'contact2@company2.com', '555-0002', False)
+   db_manager.add_partner(2, 'C Company3', 'Type3', False, 'Resource3', False, 'Description3', 'Contact3', 'Role3', 'contact3@company3.com', '555-0003', False)
    db_manager.modify_partner(1, contact_name='Updated Contact1', email='updated1@company1.com')
    # db_manager.remove_partner(2)
 

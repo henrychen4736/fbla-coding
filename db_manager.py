@@ -39,12 +39,12 @@ class DBManager:
         except sql.Error as e:
             raise DatabaseError(f'Database error: {e}')
 
-    def add_partner(self, user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone):
+    def add_partner(self, user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked):
         try:
             conn = self._connect()
             c = conn.cursor()
-            self._execute(c, 'INSERT INTO Partners (UserID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                          (user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone))
+            self._execute(c, 'INSERT INTO Partners (UserID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone, Bookmarked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                          (user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked))
             conn.commit()
         except Exception:
             raise
@@ -63,7 +63,7 @@ class DBManager:
         finally:
             conn.close()
 
-    def modify_partner(self, partner_id, organization_name=None, type_of_organization=None, organization_is_other_type=None, resources_available=None, resources_available_is_other_type=None, description=None, contact_name=None, role=None, email=None, phone=None):
+    def modify_partner(self, partner_id, organization_name=None, type_of_organization=None, organization_is_other_type=None, resources_available=None, resources_available_is_other_type=None, description=None, contact_name=None, role=None, email=None, phone=None, bookmarked=None):
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -100,6 +100,9 @@ class DBManager:
             if phone is not None:
                 updates.append('Phone = ?')
                 params.append(phone)
+            if bookmarked is not None:
+                updates.append('Bookmarked = ?')
+                params.append(bookmarked)
 
             if updates:
                 params.append(partner_id)
@@ -112,14 +115,31 @@ class DBManager:
         finally:
             conn.close()
 
+    def get_partner_by_id(self, partner_id):
+        try:
+            conn = self._connect()
+            c = conn.cursor()
+            self._execute(c, 'SELECT ID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone, Bookmarked FROM Partners WHERE ID = ?', (partner_id,))
+            partner = c.fetchone()
+            if partner:
+                columns = ['ID', 'OrganizationName', 'TypeOfOrganization', 'OrganizationIsOtherType', 'ResourcesAvailable', 'ResourcesAvailableIsOtherType', 'Description', 'ContactName', 'Role', 'Email', 'Phone', 'Bookmarked']
+                partner_dict = dict(zip(columns, partner))
+                return partner_dict
+            else:
+                return None
+        except Exception:
+            raise
+        finally:
+            conn.close()
+
     def get_all_partners(self, user_id):
         try:
             conn = self._connect()
             c = conn.cursor()
             self._execute(
-                c, 'SELECT ID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone FROM Partners WHERE UserID = ?', (user_id,))
+                c, 'SELECT ID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone, Bookmarked FROM Partners WHERE UserID = ? ORDER BY Bookmarked DESC, OrganizationName ASC', (user_id,))
             partners = c.fetchall()
-            columns = ['ID', 'OrganizationName', 'TypeOfOrganization', 'OrganizationIsOtherType', 'ResourcesAvailable', 'ResourcesAvailableIsOtherType', 'Description', 'ContactName', 'Role', 'Email', 'Phone']
+            columns = ['ID', 'OrganizationName', 'TypeOfOrganization', 'OrganizationIsOtherType', 'ResourcesAvailable', 'ResourcesAvailableIsOtherType', 'Description', 'ContactName', 'Role', 'Email', 'Phone', 'Bookmarked']
             partners_list = []
             for partner in partners:
                 partner_dict = dict(zip(columns, partner))
@@ -130,25 +150,67 @@ class DBManager:
         finally:
             conn.close()
     
-    def search_partners(self, search_query):
+    def search_partners(self, search_query, types=None, resources=None):
         try:
             conn = self._connect()
             c = conn.cursor()
             search_pattern = f"%{search_query}%"
-            query = 'SELECT ID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone FROM Partners WHERE OrganizationName LIKE ? OR ContactName LIKE ? OR Description LIKE ?;'
-            params = (search_pattern, search_pattern, search_pattern)
+            query_parts = [
+                'SELECT ID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone, Bookmarked FROM Partners WHERE (OrganizationName LIKE ? OR ContactName LIKE ? OR Description LIKE ?)'
+            ]
+            params = [search_pattern, search_pattern, search_pattern]
+
+            if types:
+                if 'Other' in types:
+                    types.remove('Other')
+                    query_parts.append('(TypeOfOrganization IN ({}) OR OrganizationIsOtherType = 1)'.format(','.join(['?']*len(types))))
+                else:
+                    query_parts.append('AND TypeOfOrganization IN ({})'.format(','.join(['?']*len(types))))
+                params.extend(types)
+
+            if resources:
+                if 'Other' in resources:
+                    resources.remove('Other')
+                    query_parts.append('(ResourcesAvailable IN ({}) OR ResourcesAvailableIsOtherType = 1)'.format(','.join(['?']*len(resources))))
+                else:
+                    query_parts.append('AND ResourcesAvailable IN ({})'.format(','.join(['?']*len(resources))))
+                params.extend(resources)
+
+            query = ' '.join(query_parts)
             self._execute(c, query, params)
             partners = c.fetchall()
-            columns = ['ID', 'OrganizationName', 'TypeOfOrganization', 'OrganizationIsOtherType', 'ResourcesAvailable', 'ResourcesAvailableIsOtherType', 'Description', 'ContactName', 'Role', 'Email', 'Phone']
+
+            columns = ['ID', 'OrganizationName', 'TypeOfOrganization', 'OrganizationIsOtherType', 'ResourcesAvailable', 'ResourcesAvailableIsOtherType', 'Description', 'ContactName', 'Role', 'Email', 'Phone', 'Bookmarked']
             partners_list = []
             for partner in partners:
                 partner_dict = dict(zip(columns, partner))
                 partners_list.append(partner_dict)
             return partners_list
-        except Exception:
+        except Exception as e:
             raise
         finally:
             conn.close()
+
+    
+    # def search_partners(self, search_query):
+    #     try:
+    #         conn = self._connect()
+    #         c = conn.cursor()
+    #         search_pattern = f"%{search_query}%"
+    #         query = 'SELECT ID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone FROM Partners WHERE OrganizationName LIKE ? OR ContactName LIKE ? OR Description LIKE ?;'
+    #         params = (search_pattern, search_pattern, search_pattern)
+    #         self._execute(c, query, params)
+    #         partners = c.fetchall()
+    #         columns = ['ID', 'OrganizationName', 'TypeOfOrganization', 'OrganizationIsOtherType', 'ResourcesAvailable', 'ResourcesAvailableIsOtherType', 'Description', 'ContactName', 'Role', 'Email', 'Phone']
+    #         partners_list = []
+    #         for partner in partners:
+    #             partner_dict = dict(zip(columns, partner))
+    #             partners_list.append(partner_dict)
+    #         return partners_list
+    #     except Exception:
+    #         raise
+    #     finally:
+    #         conn.close()
     
     # def filter_partners(self, )
 

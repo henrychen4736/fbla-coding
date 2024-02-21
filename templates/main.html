@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="/static/css/mainStyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
+
 <body>
     <i class="fa-solid fa-bars"></i>
     <div class="sidebar-overlay"></div>
@@ -27,13 +29,20 @@
     <div class="list-container">
         <h1>Your Contacts</h1>
         <div class="left-col">
+
             {% for partner in partners %}
             <div class="company">
                 <div class="company-img">
-                    <div class="blur-background"></div>
-                    <i class="fa-regular fa-bookmark"></i>
+                    <div class="blur-background">
+                        <form action="{{ url_for('toggle_bookmark', partner_id=partner['ID']) }}" method="post"
+                            style="display: inline;">
+                            <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                <i class="{{ 'fa-solid' if partner['Bookmarked'] else 'fa-regular' }} fa-bookmark"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <img src="/static/assets/company-placeholder.png" alt="Logo">
                 </div>
-                <img src="/static/assets/company-placeholder.png" alt="Logo">
                 <div class="company-info">
                     <h3>{{ partner['OrganizationName'] }}</h3>
                     <div class="brief-info">
@@ -45,109 +54,132 @@
                 </div>
             </div>
             {% endfor %}
-        </div>
 
-        <div class="right-col">
-            <div class="filter-bar">
-                <h2>Select Filters</h2>
-                <div class="search-bar">
-                    <input type="text" placeholder="Find anything..." id="searchInput">
-                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <div class="right-col">
+                <div class="filter-bar">
+                    <h2>Select Filters</h2>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Find anything..." id="searchInput">
+                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                    <h3>Partner Type</h3>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Sole Proprietorship</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Partnership</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Limited Partnership</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>LLC</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Corporation</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Non-Profit</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Other</P> <span>(0)</span>
+                    </div>
+                    <h3>Resource Available</h3>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Food Supply</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Construction</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Electronic</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Education</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Other</P> <span>(0)</span>
+                    </div>
                 </div>
-                <h3>Partner Type</h3>
-                <div class="filter">
-                    <input type="checkbox"> <p>Sole Proprietorship</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>Partnership</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>Limited Partnership</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>LLC</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>Corporation</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>Non-Profit</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>Other</P> <span>(0)</span>
-                </div>
-                <h3>Resource Available</h3>
-                <div class="filter">
-                    <input type="checkbox"> <p>Food Supply</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>Construction</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>Electronic</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>Education</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>Other</P> <span>(0)</span>
-                </div>
-            </div>
-            <button class="add-contact"><i class="fa-solid fa-plus"></i>Create a new contact</button>
-        </div>
-    </div>
-    <div class="create-overlay"></div>
-    <div class="create-contact-page">
-        <i class="fa-solid fa-xmark"></i>
-        <h1>New Partner Contact</h1>
-        <div class="contact-content">
-            <div class="add-image-container">
-                <p class="caption">Add partner image</p>
-                <i class="fa-solid fa-plus"></i>
-            </div>
-            <div class="input-container">
-                <div class="left-input">
-                    <p class="caption">Name of partner</p>
-                    <input type="text" placeholder="Partner name" class="partner-name" required>
-                    <p class="caption">Type of partner</p>
-                    <select class="partner-type" name="partner-type" required>
-                        <option value="" disabled selected hidden>Select a partner type</option>
-                        <option value="Sole Proprietorship">Sole Proprietorship</option>
-                        <option value="Partnership">Partnership</option>
-                        <option value="Limited Partnership">Limited Partnership</option>
-                        <option value="LLC">LLC</option>
-                        <option value="Corporation">Corporation</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <input type="text" class="other-type" name="other-type" placeholder="Enter other type">
-                </div>
-                <div class="right-input">
-                    <p class="caption">TEL of partner</p>
-                    <input type="text" placeholder="(###) ###-####" class="partner-number" required>
-                    <p class="caption">Partner resource</p>
-                    <select class="partner-resource" name="partner-resource" required>
-                        <option value="" disabled selected hidden>Select a resource</option>
-                        <option value="Food Supply">Food Supply</option>
-                        <option value="Construction">Construction</option>
-                        <option value="Electronic">Electronic</option>
-                        <option value="Education">Education</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <input type="text" class="other-resource" name="other-resource" placeholder="Enter other resource">
-                    <button class="submit-contact">Add</button>
-                </div>
+                <button class="add-contact"><i class="fa-solid fa-plus"></i>Create a new contact</button>
             </div>
         </div>
-    </div>
-    <div class="detail-view">
-        <div class="partner-photo">
-            <img src="/static/assets/company-placeholder.png">
+        <div class="create-overlay"></div>
+        <div class="create-contact-page">
+            <i class="fa-solid fa-xmark"></i>
+            <h1>New Partner Contact</h1>
+            <div class="contact-content">
+                <div class="add-image-container">
+                    <p class="caption">Add partner image</p>
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div class="input-container">
+                    <div class="left-input">
+                        <p class="caption">Name of partner</p>
+                        <input type="text" placeholder="Partner name" class="partner-name" required>
+                        <p class="caption">Type of partner</p>
+                        <select class="partner-type" name="partner-type" required>
+                            <option value="" disabled selected hidden>Select a partner type</option>
+                            <option value="Sole Proprietorship">Sole Proprietorship</option>
+                            <option value="Partnership">Partnership</option>
+                            <option value="Limited Partnership">Limited Partnership</option>
+                            <option value="LLC">LLC</option>
+                            <option value="Corporation">Corporation</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input type="text" class="other-type" name="other-type" placeholder="Enter other type">
+                        <p class="caption">Contact individual</p>
+                        <div class="individual-info">
+                            <input type="text" placeholder="Individual name" class="individual-name" required>
+                            <input type="text" placeholder="Individual role" class="individual-role" required>
+                            <input type="email" placeholder="123@example.com" class="individual-email" required>
+                        </div>
+                    </div>
+                    <div class="right-input">
+                        <p class="caption">TEL of partner</p>
+                        <input type="text" placeholder="(###) ###-####" class="partner-number" required>
+                        <p class="caption">Partner resource</p>
+                        <select class="partner-resource" name="partner-resource" required>
+                            <option value="" disabled selected hidden>Select a resource</option>
+                            <option value="Food Supply">Food Supply</option>
+                            <option value="Construction">Construction</option>
+                            <option value="Electronic">Electronic</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input type="text" class="other-resource" name="other-resource"
+                            placeholder="Enter other resource">
+                        <p class="caption">Description</p>
+                        <textarea class="description" name="description" placeholder="Enter description..."></textarea>
+                        <button class="submit-contact">Add</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="partner-info">
-
+        <div class="detail-overlay"></div>
+        <div class="detail-view">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <h1>[Name]</h1>
+            <div class="partner-photo">
+                <img src="/static/assets/company-placeholder.png">
+            </div>
+            <div class="partner-info">
+            </div>
         </div>
-    </div>
 
-    <script src="mainScript.js"></script>
+        <script src="/static/js/mainScript.js"></script>
 </body>
+
 </html>

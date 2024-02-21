@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, url_for, session
+from flask import Flask, request, redirect, render_template, url_for, session, jsonify
 from db_manager import DBManager, DatabaseError, IntegrityError, OperationalError, SignupError
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
@@ -85,6 +85,69 @@ def main():
         return redirect(url_for('login'))
 
 
+# @app.route('/add_partner', methods=['POST'])
+# def add_partner():
+#     if 'logged_in' not in session or not session['logged_in']:
+#         return redirect(url_for('login'))
+
+#     user_id = session['user_id']
+#     organization_name = request.form['organization_name']
+#     type_of_organization = request.form['type_of_organization']
+#     other_type = request.form.get('other_type', '')
+
+#     organization_is_other_type = (type_of_organization == "Other")
+#     if organization_is_other_type:
+#         type_of_organization = other_type
+
+#     resources_available = request.form['resources_available']
+#     other_resource = request.form.get('other_resource', '')
+
+#     resources_available_is_other_type = (resources_available == "Other")
+#     if resources_available_is_other_type:
+#         resources_available = other_resource
+
+#     description = request.form.get('description', '')
+#     contact_name = request.form.get('contact_name', '')
+#     role = request.form.get('role', '')
+#     email = request.form.get('email', '')
+#     phone = request.form.get('phone')
+
+#     try:
+#         db_manager.add_partner(user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone)
+#         flash("Partner added successfully.", "success")
+#     except Exception as e:
+#         flash(str(e), "error")
+
+#     return redirect(url_for('main'))
+
+
+@app.route('/search', methods=['GET'])
+def search():
+    if 'logged_in' in session and session['logged_in']:
+        search_query = request.args.get('searchQuery', '')
+        search_results = db_manager.search_partners(search_query)
+        print(search_results)
+        return render_template('main.html', partners=search_results, searchQuery=search_query)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/toggle_bookmark/<int:partner_id>', methods=['POST'])
+def toggle_bookmark(partner_id):
+    try:
+        partner = db_manager.get_partner_by_id(partner_id)
+        if not partner:
+            return render_template('main.html')
+            print("PARTNER NOT FOUND")
+
+        new_status = not partner['Bookmarked']
+        db_manager.modify_partner(partner_id, bookmarked=new_status)
+        return redirect(url_for('main'))
+    except Exception as e:
+        return str(e), 500
+
+
+
 @app.route('/help')
 def help():
     return render_template('help.html')
@@ -97,12 +160,6 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/search', methods=['GET'])
-def search():
-    if 'logged_in' in session and session['logged_in']:
-        search_query = request.args.get('searchQuery', '')
-        search_results = db_manager.search_partners(search_query)
-        print(search_results)
-        return render_template('main.html', partners=search_results, searchQuery=search_query)
-    else:
-        return redirect(url_for('login'))
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
