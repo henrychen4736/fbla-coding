@@ -119,54 +119,57 @@
         <div class="create-overlay"></div>
         <div class="create-contact-page">
             <i class="fa-solid fa-xmark"></i>
-            <h1>New Partner Contact</h1>
-            <div class="contact-content">
-                <div class="add-image-container">
-                    <p class="caption">Add partner image</p>
-                    <i class="fa-solid fa-plus"></i>
-                </div>
-                <div class="input-container">
-                    <div class="left-input">
-                        <p class="caption">Name of partner</p>
-                        <input type="text" placeholder="Partner name" class="partner-name" required>
-                        <p class="caption">Type of partner</p>
-                        <select class="partner-type" name="partner-type" required>
-                            <option value="" disabled selected hidden>Select a partner type</option>
-                            <option value="Sole Proprietorship">Sole Proprietorship</option>
-                            <option value="Partnership">Partnership</option>
-                            <option value="Limited Partnership">Limited Partnership</option>
-                            <option value="LLC">LLC</option>
-                            <option value="Corporation">Corporation</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <input type="text" class="other-type" name="other-type" placeholder="Enter other type">
-                        <p class="caption">Contact individual</p>
-                        <div class="individual-info">
-                            <input type="text" placeholder="Individual name" class="individual-name" required>
-                            <input type="text" placeholder="Individual role" class="individual-role" required>
-                            <input type="email" placeholder="123@example.com" class="individual-email" required>
+
+            <form method="post" action="/add_partner" enctype="multipart/form-data">
+                <h1>New Partner Contact</h1>
+                <div class="contact-content">
+                    <div class="add-image-container">
+                        <p class="caption">Add partner image</p>
+                        <input type="file" name="partner-image" accept="image/*" style="display: none;" id="partner-image">
+                        <label for="partner-image" class="fa-solid fa-plus" style="cursor: pointer;"></label>
+                    </div>
+                    <div class="input-container">
+                        <div class="left-input">
+                            <p class="caption">Name of partner</p>
+                            <input type="text" name="organization_name" placeholder="Partner name" class="partner-name" required>
+                            <p class="caption">Type of partner</p>
+                            <select name="type_of_organization" class="partner-type" required>
+                                <option value="" disabled selected hidden>Select a partner type</option>
+                                <option value="Sole Proprietorship">Sole Proprietorship</option>
+                                <option value="Partnership">Partnership</option>
+                                <option value="Limited Partnership">Limited Partnership</option>
+                                <option value="LLC">LLC</option>
+                                <option value="Corporation">Corporation</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <input type="text" class="other-type" name="other_type" placeholder="Enter other type">
+                            <p class="caption">Contact individual</p>
+                            <div class="individual-info">
+                                <input type="text" name="contact_name" placeholder="Individual name" required>
+                                <input type="text" name="role" placeholder="Individual role" required>
+                                <input type="email" name="email" placeholder="123@example.com" required>
+                            </div>
+                        </div>
+                        <div class="right-input">
+                            <p class="caption">TEL of partner</p>
+                            <input type="text" class="partner-number" name="phone" placeholder="(###) ###-####" required>
+                            <p class="caption">Partner resource</p>
+                            <select class="partner-resource" name="resources_available" required>
+                                <option value="" disabled selected hidden>Select a resource</option>
+                                <option value="Food Supply">Food Supply</option>
+                                <option value="Construction">Construction</option>
+                                <option value="Electronic">Electronic</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <input type="text" class="other-resource" name="other_resource" placeholder="Enter other resource">
+                            <p class="caption">Description</p>
+                            <textarea class="description" name="description" placeholder="Enter description..."></textarea>
+                            <button type="submit" class="submit-contact">Add</button>
                         </div>
                     </div>
-                    <div class="right-input">
-                        <p class="caption">TEL of partner</p>
-                        <input type="text" placeholder="(###) ###-####" class="partner-number" required>
-                        <p class="caption">Partner resource</p>
-                        <select class="partner-resource" name="partner-resource" required>
-                            <option value="" disabled selected hidden>Select a resource</option>
-                            <option value="Food Supply">Food Supply</option>
-                            <option value="Construction">Construction</option>
-                            <option value="Electronic">Electronic</option>
-                            <option value="Education">Education</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <input type="text" class="other-resource" name="other-resource"
-                            placeholder="Enter other resource">
-                        <p class="caption">Description</p>
-                        <textarea class="description" name="description" placeholder="Enter description..."></textarea>
-                        <button class="submit-contact">Add</button>
-                    </div>
                 </div>
-            </div>
+            </form>
         </div>
         <div class="detail-overlay"></div>
         <div class="detail-view">

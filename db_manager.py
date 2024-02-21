@@ -39,12 +39,16 @@ class DBManager:
         except sql.Error as e:
             raise DatabaseError(f'Database error: {e}')
 
-    def add_partner(self, user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked):
+    def add_partner(self, user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data=None):
+        if image_data is None:
+            with open('./static/assets/company-placeholder.png', 'rb') as default_image:
+                image_data = default_image.read()
+
         try:
             conn = self._connect()
             c = conn.cursor()
-            self._execute(c, 'INSERT INTO Partners (UserID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone, Bookmarked) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                          (user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked))
+            self._execute(c, 'INSERT INTO Partners (UserID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone, Bookmarked, ImageData) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                          (user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data))
             conn.commit()
         except Exception:
             raise
@@ -63,7 +67,7 @@ class DBManager:
         finally:
             conn.close()
 
-    def modify_partner(self, partner_id, organization_name=None, type_of_organization=None, organization_is_other_type=None, resources_available=None, resources_available_is_other_type=None, description=None, contact_name=None, role=None, email=None, phone=None, bookmarked=None):
+    def modify_partner(self, partner_id, organization_name=None, type_of_organization=None, organization_is_other_type=None, resources_available=None, resources_available_is_other_type=None, description=None, contact_name=None, role=None, email=None, phone=None, bookmarked=None, image_data=None):
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -103,6 +107,9 @@ class DBManager:
             if bookmarked is not None:
                 updates.append('Bookmarked = ?')
                 params.append(bookmarked)
+            if image_data is not None:
+                updates.append('ImageData = ?')
+                params.append(image_data)
 
             if updates:
                 params.append(partner_id)
@@ -154,7 +161,7 @@ class DBManager:
         try:
             conn = self._connect()
             c = conn.cursor()
-            search_pattern = f"%{search_query}%"
+            search_pattern = f'%{search_query}%'
             query_parts = [
                 'SELECT ID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone, Bookmarked FROM Partners WHERE (OrganizationName LIKE ? OR ContactName LIKE ? OR Description LIKE ?)'
             ]
@@ -196,7 +203,7 @@ class DBManager:
     #     try:
     #         conn = self._connect()
     #         c = conn.cursor()
-    #         search_pattern = f"%{search_query}%"
+    #         search_pattern = f'%{search_query}%'
     #         query = 'SELECT ID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone FROM Partners WHERE OrganizationName LIKE ? OR ContactName LIKE ? OR Description LIKE ?;'
     #         params = (search_pattern, search_pattern, search_pattern)
     #         self._execute(c, query, params)
