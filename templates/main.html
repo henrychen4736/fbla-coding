@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,22 +12,171 @@
     <div class="list-container">
         <div class="left-col">
             <h1>Your Contacts</h1>
-            {% for name, description in contacts.items() %}
             <div class="company">
                 <div class="company-img">
-                    <img src="/static/assets/company-placeholder.png">
+                    <div class="blur-background"></div>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <img src="static/assets/company-placeholder.png">
                 </div>
                 <div class="company-info">
-                    <h3>{{ name }}</h3>
-                    <p>{{ description }}</p>
+                    <h3>[Title]</h3>
+                    <div class="brief-info">
+                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
+                        <p class="company-type" id="company-type">[Type]</p>
+                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
+                    </div>
                 </div>
             </div>
-            {% endfor %}
+            <div class="company">
+                <div class="company-img">
+                    <div class="blur-background"></div>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <img src="static/assets/company-placeholder.png">
+                </div>
+                <div class="company-info">
+                    <h3>[Title]</h3>
+                    <div class="brief-info">
+                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
+                        <p class="company-type" id="company-type">[Type]</p>
+                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="company">
+                <div class="company-img">
+                    <div class="blur-background"></div>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <img src="static/assets/company-placeholder.png">
+                </div>
+                <div class="company-info">
+                    <h3>[Title]</h3>
+                    <div class="brief-info">
+                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
+                        <p class="company-type" id="company-type">[Type]</p>
+                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="company">
+                <div class="company-img">
+                    <div class="blur-background"></div>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <img src="static/assets/company-placeholder.png">
+                </div>
+                <div class="company-info">
+                    <h3>[Title]</h3>
+                    <div class="brief-info">
+                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
+                        <p class="company-type" id="company-type">[Type]</p>
+                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="company">
+                <div class="company-img">
+                    <div class="blur-background"></div>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <img src="static/assets/company-placeholder.png">
+                </div>
+                <div class="company-info">
+                    <h3>[Title]</h3>
+                    <div class="brief-info">
+                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
+                        <p class="company-type" id="company-type">[Type]</p>
+                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="company">
+                <div class="company-img">
+                    <div class="blur-background"></div>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <img src="static/assets/company-placeholder.png">
+                </div>
+                <div class="company-info">
+                    <h3>[Title]</h3>
+                    <div class="brief-info">
+                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
+                        <p class="company-type" id="company-type">[Type]</p>
+                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="company">
+                <div class="company-img">
+                    <div class="blur-background"></div>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <img src="static/assets/company-placeholder.png">
+                </div>
+                <div class="company-info">
+                    <h3>[Title]</h3>
+                    <div class="brief-info">
+                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
+                        <p class="company-type" id="company-type">[Type]</p>
+                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="company">
+                <div class="company-img">
+                    <div class="blur-background"></div>
+                    <i class="fa-regular fa-bookmark"></i>
+                    <img src="static/assets/company-placeholder.png">
+                </div>
+                <div class="company-info">
+                    <h3>[Title]</h3>
+                    <div class="brief-info">
+                        <p class="phone-number" id="phone-number">[(###) ###-####]</p>
+                        <p class="company-type" id="company-type">[Type]</p>
+                        <p class="company-resources">Resources Available: <span id="company-resources">[Resources]</span></p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="right-col">
 
+        <div class="right-col">
+            <div class="sidebar">
+                <h2>Select Filters</h2>
+                <div class="search-bar">
+                    <input type="text" placeholder="Find anything..." id="searchInput">
+                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <h3>Company Type</h3>
+                <div class="filter">
+                    <input type="checkbox"> <p>[Type]</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>[Type]</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>[Type]</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>[Type]</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>[Type]</P> <span>(0)</span>
+                </div>
+                <h3>Resources Available</h3>
+                <div class="filter">
+                    <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
+                </div>
+                <div class="filter">
+                    <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
+                </div>
+
+
+            </div>
         </div>
     </div>
 </body>
-
 </html>

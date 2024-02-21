@@ -128,11 +128,3 @@ body {
 .button-container input:hover{
     background-image: url(/static/assets/buttonHover.png);
 }
-
-.flash-success {
-    color: green;
-}
-
-.flash-error {
-    color: red;
-}
