@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,24 +9,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <div class="sidebar">
-        <a href="#" class="sidebar-item">
-            <i class="fa-solid fa-house"></i>
-            <div>Home</div>
-        </a>
-        <a href="#" class="sidebar-item">
-            <i class="fa-solid fa-question"></i>
-            <div>Help</div>
-        </a>
-        <a href="#" class="sidebar-item" style="color: #FF0000;">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            <div>Sign out</div>
-        </a>
-    </div>
+
     <div class="main-container">
         <h1>How can we help you?</h1>
+        <div class="accordion-container">
+            <button class="accordion">How do I add a new partner to the database?</button>
+            <div class="panel">
+                <p>To add a new partner, navigate to the 'Add New Partner' section from the main menu. Fill out the
+                    form...</p>
+            </div>
+
+            <button class="accordion">Can I edit information for an existing partner?</button>
+            <div class="panel">
+                <p>Yes, you can edit information for existing partners. Search for the partner using the search
+                    functionality...</p>
+            </div>
+
+        </div>
     </div>
+
+
+
     <script src="/static/js/helpScript.js"></script>
 </body>
+
 </html>

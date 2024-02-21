@@ -30,7 +30,7 @@ def signup():
             session['username'] = username
             session['user_id'] = user_id
             return redirect(url_for('main'))
-        except SignupError as e:
+        except SignupError:
             return render_template('signup.html', error='The username already exists!')
     else:
         return render_template('signup.html')
@@ -55,11 +55,17 @@ def login():
 
 @app.route('/main')
 def main():
+    print(session)
     if 'logged_in' in session and session['logged_in']:
         partners = db_manager.get_all_partners(session['user_id'])
         return render_template('main.html', partners=partners)
     else:
         return redirect(url_for('login'))
+
+
+@app.route('/help')
+def help():
+    return render_template('help.html')
 
 
 @app.route('/logout')

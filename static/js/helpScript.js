@@ -1,33 +1,25 @@
-const toggleButton = document.querySelector('.fa-bars');
-const sidebar = document.querySelector('.sidebar');
-const overlay = document.querySelector('.overlay');
+document.querySelectorAll('.accordion').forEach(button => {
+    button.addEventListener('click', () => {
+        const panel = button.nextElementSibling;
+        
+        button.classList.toggle("active");
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
+    });
+});
 
-let sidebarOpen = false;
-
-function openSidebar() {
-    sidebarOpen = true;
-    overlay.style.display = "block";
-    overlay.style.width = "100vw";
-    sidebar.style.transform = "scale(1)";
-}
-
-function closeSidebar() {
-    sidebarOpen = false;
-    overlay.style.display = "none";
-    sidebar.style.transform = "scale(0)";
-}
-
-toggleButton.addEventListener('click', function () {
-    if (!sidebarOpen) {
-        openSidebar();
-    }
-    else {
-        closeSidebar();
-    }
-})
-
-overlay.addEventListener('click', function () {
-    if (sidebarOpen) {
-        closeSidebar();
-    }
-})
+document.querySelectorAll('.accordion').forEach(button => {
+    button.addEventListener('click', () => {
+        const panel = button.nextElementSibling;
+        
+        button.classList.toggle("active");
+        if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+        } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+        } 
+    });
+});

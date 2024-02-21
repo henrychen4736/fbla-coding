@@ -8,24 +8,6 @@
     font-weight: 400;
 }
 
-.fa-bars {
-    color: #fff;
-    font-size: 30px;
-    position: fixed;
-    top: 0;
-    right: 0;
-    margin: 40px;
-    cursor: pointer;
-    z-index: 5;
-    border-radius: 20px;
-    background-color: #1E1E1E;
-    padding: 10px;
-}
-
-.fa-bars:hover {
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
 .overlay {
     width: 0;
     height: 100vh;
@@ -95,33 +77,6 @@
     width: 70%;
 }
 
-.list-container {
-    background: #1E1E1E;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 100%;
-    height: 100vh;
-}
-
-.list-container .left-col {
-    flex-basis: 70%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-}
-
-.list-container .right-col {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    flex-basis: 30%;
-    overflow-y: auto;
-    display: flex;
-    align-items: center;
-    z-index: 3;
-}
-
 .left-col h1 {
     color: #fff;
     font-weight: 500;
@@ -145,155 +100,27 @@
     cursor: pointer;
 }
 
-.company .company-img {
-    margin: auto;
-    width: 200px;
-    height: 200px;
-    position: relative;
-    border-radius: 8px;
-    background: #fff;
-    margin-bottom: 10px;
-    overflow: hidden;
-}
-
-.company .company-img img {
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 2;
-}
-
-.company .company-info {
-    display: flex;
-    flex-direction: column;
-    width: 100%
-}
-
-.company .company-info h3 {
-    color: #fff;
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-
-.company-info .brief-info {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    color: #fff;
-    font-size: 12px;
-}
-
-.company-info .brief-info .company-type {
-    text-align: right;
-    flex-basis: 40%;
-}
-
-.company-info .brief-info .phone-number {
-    flex-basis: 60%;
-}
-
-.company-info .brief-info .company-resources {
-    margin-top: 5px;
-}
-
-.company-info .brief-info .company-resources span {
-    font-size: 10px;
-}
-
-
-
-.company .blur-background {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    
-    right: 0;
-    margin: 9px 6px;
-    backdrop-filter: blur(4px);
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 20%;
-}
-
-.company .company-img i {
-    position: absolute;
-    color: #808080;
-    font-size: 25px;
-    right: 0;
-    margin: 12px 12px;
-    z-index: 1;
-}
-
-.right-col .filter-bar {
-    background: #fff;
-    border-bottom: 5px solid rgba(0, 0, 0, .5);
-    border-right: 5px solid rgba(0, 0, 0, .5);
-    border-radius: 10px;
-    margin-right: 30px;
-    padding: 20px 30px;
-}
-
-.filter-bar h2 {
-    font-weight: 500;
-    margin-bottom: 20px;
-}
-
-.filter-bar h3 {
-    font-weight: 500;
-    margin: 20px 0 10px;
-}
-
-.filter-bar .search-bar {
-    width: 100%;
-    height: 40px;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    border: 2px solid #1E1E1E;
-    border-radius: 60px;
-    overflow: hidden;
-}
-
-.filter-bar .search-bar input {
-    flex: 1;
-    border: 0;
+    border: none;
+    text-align: left;
     outline: none;
-    padding: 24px 20px;
-    font-size: 12px;
-    color: #1E1E1E;
+    font-size: 15px;
+    transition: 0.4s;
 }
 
-.filter-bar .search-bar input::placeholder {
-    color: #808080;
+.active, .accordion:hover {
+    background-color: #ccc;
 }
 
-.filter-bar .search-bar button i {
-    width: 25px;
-    color: #fff;
-    text-align: center;
-}
-
-.filter-bar .search-bar button {
-    border: 0;
-    margin-right: 10px;
-    border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    background: #1E1E1E;
-    cursor: pointer;
-}
-
-.filter-bar .filter {
-    display: flex;
-    align-items: center;
-    color: #808080;
-    margin-bottom: 10px;
-}
-
-.filter-bar .filter p {
-    flex: 1;
-}
-
-.filter-bar .filter input {
-    margin-right: 15px;
-    cursor: pointer;
+.panel {
+    padding: 0 18px;
+    display: none;
+    background-color: white;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
 }

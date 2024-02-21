@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,84 +13,103 @@
     <i class="fa-solid fa-bars"></i>
     <div class="overlay"></div>
     <div class="sidebar">
-        <a href="{{ url_for('main') }}" class="sidebar-item">
+        <a href="#" class="sidebar-item">
             <i class="fa-solid fa-house"></i>
             <div>Home</div>
         </a>
-            <a href="#" class="sidebar-item"></a>
+        <a href="#" class="sidebar-item">
             <i class="fa-solid fa-question"></i>
             <div>Help</div>
         </a>
-        <a href="{{ url_for('logout') }}" class="sidebar-item" style="color: #FF0000;">
+        <a href="#" class="sidebar-item" style="color: #FF0000;">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             <div>Sign out</div>
         </a>
     </div>
     <div class="list-container">
+        <h1>Your Contacts</h1>
         <div class="left-col">
-            <h1>Your Contacts</h1>
             {% for partner in partners %}
             <div class="company">
                 <div class="company-img">
                     <div class="blur-background"></div>
                     <i class="fa-regular fa-bookmark"></i>
-                    <img src="{{ url_for('static', filename='assets/company-placeholder.png') }}">
+                    <img src="static/assets/company-placeholder.png" alt="Logo">
                 </div>
                 <div class="company-info">
-                    <h3>{{ partner.OrganizationName }}</h3>
+                    <h3>{{ partner['OrganizationName'] }}</h3>
                     <div class="brief-info">
-                        <p class="phone-number" id="phone-number">{{ partner.Phone }}</p>
-                        <p class="company-type" id="company-type">{{ partner.TypeOfOrganization }}</p>
-                        <p class="company-resources">Resources Available: <span id="company-resources">{{ partner.ResourcesAvailable }}</span></p>
+                        <p class="phone-number">{{ partner['Phone'] }}</p>
+                        <p class="company-type">{{ partner['TypeOfOrganization'] }}</p>
+                        <p class="company-resources">Resources Available: <br><span>{{ partner['ResourcesAvailable']
+                                }}</span></p>
                     </div>
                 </div>
             </div>
             {% endfor %}
-        </div>
 
-        <div class="right-col">
-            <div class="filter-bar">
-                <h2>Select Filters</h2>
-                <div class="search-bar">
-                    <input type="text" placeholder="Find anything..." id="searchInput">
-                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <div class="right-col">
+                <div class="filter-bar">
+                    <h2>Select Filters</h2>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Find anything..." id="searchInput">
+                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                    <h3>Partner Type</h3>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Sole Proprietorship</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Partnership</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Limited Partnership</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>LLC</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Corporation</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Non-Profit</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Other</P> <span>(0)</span>
+                    </div>
+                    <h3>Resources Available</h3>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Food Supply</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Construction</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Electronic</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Education Resource</P> <span>(0)</span>
+                    </div>
+                    <div class="filter">
+                        <input type="checkbox">
+                        <p>Other</P> <span>(0)</span>
+                    </div>
                 </div>
-                <h3>Company Type</h3>
-                <div class="filter">
-                    <input type="checkbox"> <p>[Type]</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>[Type]</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>[Type]</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>[Type]</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>[Type]</P> <span>(0)</span>
-                </div>
-                <h3>Resources Available</h3>
-                <div class="filter">
-                    <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
-                </div>
-                <div class="filter">
-                    <input type="checkbox"> <p>[Resource]</P> <span>(0)</span>
-                </div>
-
+                <button class="add-contact"><i class="fa-solid fa-plus"></i>Create a new contact</button>
             </div>
         </div>
-    </div>
-    <script src="/static/js/mainScript.js"></script>
+        <script src="static/mainScript.js"></script>
 </body>
+
 </html>
