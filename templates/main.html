@@ -41,7 +41,7 @@
                             </button>
                         </form>
                     </div>
-                    <img src="/static/assets/company-placeholder.png" alt="Logo">
+                    <img src="{{ url_for('partner_image', partner_id=partner['ID']) }}" alt="{{ partner['OrganizationName'] }} Logo">
                 </div>
                 <div class="company-info">
                     <h3>{{ partner['OrganizationName'] }}</h3>
@@ -55,65 +55,32 @@
             </div>
             {% endfor %}
 
-            <div class="right-col">
-                <div class="filter-bar">
-                    <h2>Select Filters</h2>
-                    <div class="search-bar">
-                        <input type="text" placeholder="Find anything..." id="searchInput">
-                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    </div>
-                    <h3>Partner Type</h3>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Sole Proprietorship</P> <span>(0)</span>
-                    </div>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Partnership</P> <span>(0)</span>
-                    </div>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Limited Partnership</P> <span>(0)</span>
-                    </div>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>LLC</P> <span>(0)</span>
-                    </div>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Corporation</P> <span>(0)</span>
-                    </div>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Non-Profit</P> <span>(0)</span>
-                    </div>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Other</P> <span>(0)</span>
-                    </div>
-                    <h3>Resource Available</h3>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Food Supply</P> <span>(0)</span>
-                    </div>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Construction</P> <span>(0)</span>
-                    </div>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Electronic</P> <span>(0)</span>
-                    </div>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Education</P> <span>(0)</span>
-                    </div>
-                    <div class="filter">
-                        <input type="checkbox">
-                        <p>Other</P> <span>(0)</span>
+            <form method="get" action="/search">
+                <div class="right-col">
+                    <div class="filter-bar">
+                        <h2>Select Filters</h2>
+                        <div class="search-bar">
+                            <input type="text" name="searchQuery" placeholder="Find anything..." id="searchInput">
+                            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                        <h3>Partner Type</h3>
+                        <div class="filter"><input type="checkbox" name="types" value="Sole Proprietorship" {% if "Sole Proprietorship" in request.args.getlist('types') %}checked{% endif %}> Sole Proprietorship</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Partnership" {% if "Partnership" in request.args.getlist('types') %}checked{% endif %}> Partnership</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Limited Partnership" {% if "Limited Partnership" in request.args.getlist('types') %}checked{% endif %}> Limited Partnership</div>
+                        <div class="filter"><input type="checkbox" name="types" value="LLC" {% if "LLC" in request.args.getlist('types') %}checked{% endif %}> LLC</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Corporation" {% if "Corporation" in request.args.getlist('types') %}checked{% endif %}> Corporation</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Non-Profit" {% if "Non-Profit" in request.args.getlist('types') %}checked{% endif %}> Non-Profit</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Other" {% if "Other" in request.args.getlist('types') %}checked{% endif %}> Other</div>
+                        <h3>Resource Available</h3>
+                        <div class="filter"><input type="checkbox" name="resources" value="Food Supply" {% if "Food Supply" in request.args.getlist('resources') %}checked{% endif %}> Food Supply</div>
+                        <div class="filter"><input type="checkbox" name="resources" value="Construction" {% if "Construction" in request.args.getlist('resources') %}checked{% endif %}> Construction</div>
+                        <div class="filter"><input type="checkbox" name="resources" value="Electronic" {% if "Electronic" in request.args.getlist('resources') %}checked{% endif %}> Electronic</div>
+                        <div class="filter"><input type="checkbox" name="resources" value="Education" {% if "Education" in request.args.getlist('resources') %}checked{% endif %}> Education</div>
+                        <div class="filter"><input type="checkbox" name="resources" value="Other" {% if "Other" in request.args.getlist('resources') %}checked{% endif %}> Other</div>
                     </div>
                 </div>
-                <button class="add-contact"><i class="fa-solid fa-plus"></i>Create a new contact</button>
+            </form>
+            <button class="add-contact"><i class="fa-solid fa-plus"></i>Create a new contact</button>
             </div>
         </div>
         <div class="create-overlay"></div>
@@ -125,13 +92,15 @@
                 <div class="contact-content">
                     <div class="add-image-container">
                         <p class="caption">Add partner image</p>
-                        <input type="file" name="partner-image" accept="image/*" style="display: none;" id="partner-image">
+                        <input type="file" name="partner-image" accept="image/*" style="display: none;"
+                            id="partner-image">
                         <label for="partner-image" class="fa-solid fa-plus" style="cursor: pointer;"></label>
                     </div>
                     <div class="input-container">
                         <div class="left-input">
                             <p class="caption">Name of partner</p>
-                            <input type="text" name="organization_name" placeholder="Partner name" class="partner-name" required>
+                            <input type="text" name="organization_name" placeholder="Partner name" class="partner-name"
+                                required>
                             <p class="caption">Type of partner</p>
                             <select name="type_of_organization" class="partner-type" required>
                                 <option value="" disabled selected hidden>Select a partner type</option>
@@ -152,7 +121,8 @@
                         </div>
                         <div class="right-input">
                             <p class="caption">TEL of partner</p>
-                            <input type="text" class="partner-number" name="phone" placeholder="(###) ###-####" required>
+                            <input type="text" class="partner-number" name="phone" placeholder="(###) ###-####"
+                                required>
                             <p class="caption">Partner resource</p>
                             <select class="partner-resource" name="resources_available" required>
                                 <option value="" disabled selected hidden>Select a resource</option>
@@ -162,9 +132,11 @@
                                 <option value="Education">Education</option>
                                 <option value="Other">Other</option>
                             </select>
-                            <input type="text" class="other-resource" name="other_resource" placeholder="Enter other resource">
+                            <input type="text" class="other-resource" name="other_resource"
+                                placeholder="Enter other resource">
                             <p class="caption">Description</p>
-                            <textarea class="description" name="description" placeholder="Enter description..."></textarea>
+                            <textarea class="description" name="description"
+                                placeholder="Enter description..."></textarea>
                             <button type="submit" class="submit-contact">Add</button>
                         </div>
                     </div>

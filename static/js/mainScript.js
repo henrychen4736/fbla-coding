@@ -14,7 +14,6 @@ function openSidebar() {
 function closeSidebar() {
     sidebarOpen = false;
     sidebarOverlay.style.display = "none";
-    sidebar.style.transform = "scale(0)";
 }
 
 toggleButton.addEventListener('click', function () {
@@ -84,5 +83,25 @@ function showResourceInput() {
         resourceInput.style.display = "block";
     } else {
         resourceInput.style.display = "none";
+    }
+}
+
+function showTypeInput() {
+    if (typeSelect.value === "Other") {
+        typeInput.style.display = "block";
+        typeInput.setAttribute('required', '');
+    } else {
+        typeInput.style.display = "none";
+        typeInput.removeAttribute('required');
+    }
+}
+
+function showResourceInput() {
+    if (resourceSelect.value === "Other") {
+        resourceInput.style.display = "block";
+        resourceInput.setAttribute('required', '');
+    } else {
+        resourceInput.style.display = "none";
+        resourceInput.removeAttribute('required');
     }
 }

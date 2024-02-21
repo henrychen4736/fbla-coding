@@ -1,9 +1,10 @@
-from flask import Flask, request, redirect, render_template, url_for, session, jsonify
+from flask import Flask, request, redirect, render_template, url_for, session, jsonify, send_file
 from db_manager import DBManager, DatabaseError, IntegrityError, OperationalError, SignupError
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
 import shutil
 import os
+import io
 
 app = Flask(__name__)
 app.secret_key = 'PLACEHOLDER'
@@ -75,10 +76,10 @@ def main():
         print('SESSION: ',session)
         if search_query:
             partners = db_manager.search_partners(search_query)
-            print('Search query:' + search_query)
+            # print('Search query:' + search_query)
         else:
             partners = db_manager.get_all_partners(session['user_id'])
-        print('PARTNERS: ',partners)
+        # print('PARTNERS: ',partners)
         return render_template('main.html', partners=partners, searchQuery=search_query)
     else:
         return redirect(url_for('login'))
@@ -115,12 +116,14 @@ def add_partner():
     file = request.files.get('partner-image')
     if file and file.filename != '':
         image_data = file.read()
+        image_mime_type = file.content_type
     else:
         image_data = None
+        image_mime_type = None
 
     try:
         print('PARAMS FOR ADDING PARTNER:',user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked)
-        db_manager.add_partner(user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data)
+        db_manager.add_partner(user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data, image_mime_type)
         print('partner added')
     except Exception as e:
         print("EXEPTION: ", e)
@@ -128,15 +131,30 @@ def add_partner():
     return redirect(url_for('main'))
 
 
-@app.route('/search', methods=['GET'])
+# @app.route('/search', methods=['GET'])
+# def search():
+#     if 'logged_in' in session and session['logged_in']:
+#         search_query = request.args.get('searchQuery', '')
+#         search_results = db_manager.search_partners(search_query)
+#         print('SEARCH RESULTS: ',search_results)
+#         return render_template('main.html', partners=search_results, searchQuery=search_query)
+#     else:
+#         return redirect(url_for('login'))
+
+
+@app.route('/search')
 def search():
-    if 'logged_in' in session and session['logged_in']:
-        search_query = request.args.get('searchQuery', '')
-        search_results = db_manager.search_partners(search_query)
-        print('SEARCH RESULTS: ',search_results)
-        return render_template('main.html', partners=search_results, searchQuery=search_query)
-    else:
+    if 'logged_in' not in session or not session['logged_in']:
         return redirect(url_for('login'))
+    
+    search_query = request.args.get('searchQuery', '')
+    types = request.args.getlist('types')
+    resources = request.args.getlist('resources')
+    print("TYPES: ",types)
+    print(" RESOURCES: ", resources)
+
+    partners = db_manager.search_partners(search_query, types, resources)
+    return render_template('main.html', partners=partners, searchQuery=search_query)
 
 
 @app.route('/toggle_bookmark/<int:partner_id>', methods=['POST'])
@@ -152,6 +170,16 @@ def toggle_bookmark(partner_id):
         return redirect(url_for('main'))
     except Exception as e:
         return str(e), 500
+
+
+@app.route('/partner-image/<int:partner_id>')
+def partner_image(partner_id):
+    image_data, image_mime_type = db_manager.get_partner_image(partner_id)
+    if image_data and image_mime_type:
+        return send_file(io.BytesIO(image_data), mimetype=image_mime_type)
+    else:
+        print("IMAGE UPLOADING WENT WRONG")
+        # abort(404)
 
 
 @app.route('/help')
