@@ -136,7 +136,6 @@ class DBManager:
             if partner:
                 columns = ['ID', 'OrganizationName', 'TypeOfOrganization', 'OrganizationIsOtherType', 'ResourcesAvailable', 'ResourcesAvailableIsOtherType', 'Description', 'ContactName', 'Role', 'Email', 'Phone', 'Bookmarked', 'ImageData', 'ImageMimeType']
                 partner_dict = dict(zip(columns, partner))
-                print("SEGHWERIOUGH", type(partner_dict))
                 return partner_dict
             else:
                 return None

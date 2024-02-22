@@ -41,7 +41,8 @@
                             </button>
                         </form>
                     </div>
-                    <img src="{{ url_for('partner_image', partner_id=partner['ID']) }}" alt="{{ partner['OrganizationName'] }} Logo">
+                    <img src="{{ url_for('partner_image', partner_id=partner['ID']) }}"
+                        alt="{{ partner['OrganizationName'] }} Logo">
                 </div>
                 <div class="company-info">
                     <h3>{{ partner['OrganizationName'] }}</h3>
@@ -64,129 +65,166 @@
                             <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </div>
                         <h3>Partner Type</h3>
-                        <div class="filter"><input type="checkbox" name="types" value="Sole Proprietorship" {% if "Sole Proprietorship" in request.args.getlist('types') %}checked{% endif %}> Sole Proprietorship</div>
-                        <div class="filter"><input type="checkbox" name="types" value="Partnership" {% if "Partnership" in request.args.getlist('types') %}checked{% endif %}> Partnership</div>
-                        <div class="filter"><input type="checkbox" name="types" value="Limited Partnership" {% if "Limited Partnership" in request.args.getlist('types') %}checked{% endif %}> Limited Partnership</div>
-                        <div class="filter"><input type="checkbox" name="types" value="LLC" {% if "LLC" in request.args.getlist('types') %}checked{% endif %}> LLC</div>
-                        <div class="filter"><input type="checkbox" name="types" value="Corporation" {% if "Corporation" in request.args.getlist('types') %}checked{% endif %}> Corporation</div>
-                        <div class="filter"><input type="checkbox" name="types" value="Non-Profit" {% if "Non-Profit" in request.args.getlist('types') %}checked{% endif %}> Non-Profit</div>
-                        <div class="filter"><input type="checkbox" name="types" value="Other" {% if "Other" in request.args.getlist('types') %}checked{% endif %}> Other</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Sole Proprietorship" {%
+                                if "Sole Proprietorship" in request.args.getlist('types') %}checked{% endif %}> Sole
+                            Proprietorship</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Partnership" {% if "Partnership"
+                                in request.args.getlist('types') %}checked{% endif %}> Partnership</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Limited Partnership" {%
+                                if "Limited Partnership" in request.args.getlist('types') %}checked{% endif %}> Limited
+                            Partnership</div>
+                        <div class="filter"><input type="checkbox" name="types" value="LLC" {% if "LLC" in
+                                request.args.getlist('types') %}checked{% endif %}> LLC</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Corporation" {% if "Corporation"
+                                in request.args.getlist('types') %}checked{% endif %}> Corporation</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Non-Profit" {% if "Non-Profit" in
+                                request.args.getlist('types') %}checked{% endif %}> Non-Profit</div>
+                        <div class="filter"><input type="checkbox" name="types" value="Other" {% if "Other" in
+                                request.args.getlist('types') %}checked{% endif %}> Other</div>
                         <h3>Resource Available</h3>
-                        <div class="filter"><input type="checkbox" name="resources" value="Food Supply" {% if "Food Supply" in request.args.getlist('resources') %}checked{% endif %}> Food Supply</div>
-                        <div class="filter"><input type="checkbox" name="resources" value="Construction" {% if "Construction" in request.args.getlist('resources') %}checked{% endif %}> Construction</div>
-                        <div class="filter"><input type="checkbox" name="resources" value="Electronic" {% if "Electronic" in request.args.getlist('resources') %}checked{% endif %}> Electronic</div>
-                        <div class="filter"><input type="checkbox" name="resources" value="Education" {% if "Education" in request.args.getlist('resources') %}checked{% endif %}> Education</div>
-                        <div class="filter"><input type="checkbox" name="resources" value="Other" {% if "Other" in request.args.getlist('resources') %}checked{% endif %}> Other</div>
+                        <div class="filter"><input type="checkbox" name="resources" value="Food Supply" {%
+                                if "Food Supply" in request.args.getlist('resources') %}checked{% endif %}> Food Supply
+                        </div>
+                        <div class="filter"><input type="checkbox" name="resources" value="Construction" {%
+                                if "Construction" in request.args.getlist('resources') %}checked{% endif %}>
+                            Construction</div>
+                        <div class="filter"><input type="checkbox" name="resources" value="Electronic" {%
+                                if "Electronic" in request.args.getlist('resources') %}checked{% endif %}> Electronic
+                        </div>
+                        <div class="filter"><input type="checkbox" name="resources" value="Education" {% if "Education"
+                                in request.args.getlist('resources') %}checked{% endif %}> Education</div>
+                        <div class="filter"><input type="checkbox" name="resources" value="Other" {% if "Other" in
+                                request.args.getlist('resources') %}checked{% endif %}> Other</div>
                     </div>
                 </div>
             </form>
             <button class="add-contact"><i class="fa-solid fa-plus"></i>Create a new contact</button>
-            </div>
         </div>
-        <div class="create-overlay"></div>
-        <div class="create-contact-page">
-            <i class="fa-solid fa-xmark"></i>
+    </div>
+    <div class="create-overlay"></div>
+    <div class="create-contact-page">
+        <i class="fa-solid fa-xmark"></i>
 
-            <form method="post" action="/add_partner" enctype="multipart/form-data">
-                <h1>New Partner Contact</h1>
-                <div class="contact-content">
-                    <div class="add-image-container">
-                        <p class="caption">Add partner image</p>
-                        <input type="file" name="partner-image" accept="image/*" style="display: none;"
-                            id="partner-image">
-                        <label for="partner-image" class="fa-solid fa-plus" style="cursor: pointer;"></label>
-                    </div>
-                    <div class="input-container">
-                        <div class="left-input">
-                            <p class="caption">Name of partner</p>
-                            <input type="text" name="organization_name" placeholder="Partner name" class="partner-name"
-                                required>
-                            <p class="caption">Type of partner</p>
-                            <select name="type_of_organization" class="partner-type" required>
-                                <option value="" disabled selected hidden>Select a partner type</option>
-                                <option value="Sole Proprietorship">Sole Proprietorship</option>
-                                <option value="Partnership">Partnership</option>
-                                <option value="Limited Partnership">Limited Partnership</option>
-                                <option value="LLC">LLC</option>
-                                <option value="Corporation">Corporation</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <input type="text" class="other-type" name="other_type" placeholder="Enter other type">
-                            <p class="caption">Contact individual</p>
-                            <div class="individual-info">
-                                <input type="text" name="contact_name" placeholder="Individual name" required>
-                                <input type="text" name="role" placeholder="Individual role" required>
-                                <input type="email" name="email" placeholder="123@example.com" required>
-                            </div>
-                        </div>
-                        <div class="right-input">
-                            <p class="caption">TEL of partner</p>
-                            <input type="text" class="partner-number" name="phone" placeholder="(###) ###-####"
-                                required>
-                            <p class="caption">Partner resource</p>
-                            <select class="partner-resource" name="resources_available" required>
-                                <option value="" disabled selected hidden>Select a resource</option>
-                                <option value="Food Supply">Food Supply</option>
-                                <option value="Construction">Construction</option>
-                                <option value="Electronic">Electronic</option>
-                                <option value="Education">Education</option>
-                                <option value="Other">Other</option>
-                            </select>
-                            <input type="text" class="other-resource" name="other_resource"
-                                placeholder="Enter other resource">
-                            <p class="caption">Description</p>
-                            <textarea class="description" name="description"
-                                placeholder="Enter description..."></textarea>
-                            <button type="submit" class="submit-contact">Add</button>
+        <form method="post" action="/add_partner" enctype="multipart/form-data">
+            <h1>New Partner Contact</h1>
+            <div class="contact-content">
+                <div class="add-image-container">
+                    <p class="caption">Add partner image</p>
+                    <input type="file" name="partner-image" accept="image/*" style="display: none;" id="partner-image">
+                    <label for="partner-image" class="fa-solid fa-plus" style="cursor: pointer;"></label>
+                </div>
+                <div class="input-container">
+                    <div class="left-input">
+                        <p class="caption">Name of partner</p>
+                        <input type="text" name="organization_name" placeholder="Partner name" class="partner-name"
+                            required>
+                        <p class="caption">Type of partner</p>
+                        <select name="type_of_organization" class="partner-type" required>
+                            <option value="" disabled selected hidden>Select a partner type</option>
+                            <option value="Sole Proprietorship">Sole Proprietorship</option>
+                            <option value="Partnership">Partnership</option>
+                            <option value="Limited Partnership">Limited Partnership</option>
+                            <option value="LLC">LLC</option>
+                            <option value="Corporation">Corporation</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input type="text" class="other-type" name="other_type" placeholder="Enter other type">
+                        <p class="caption">Contact individual</p>
+                        <div class="individual-info">
+                            <input type="text" name="contact_name" placeholder="Individual name" required>
+                            <input type="text" name="role" placeholder="Individual role" required>
+                            <input type="email" name="email" placeholder="123@example.com" required>
                         </div>
                     </div>
-                </div>
-            </form>
-        </div>
-
-
-        <div class="detail-overlay"></div>
-        <div class="detail-view">
-            <div class="detail-top">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <h1 id="partnerName">Partner Name</h1>
-                <div class="tool-icon">
-                    <i class="fa-solid fa-file-pdf"></i>
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    <i class="fa-solid fa-copy"></i>
-                    <i class="fa-solid fa-delete-left"></i>
-                </div>
-            </div>
-            <div class="detail-container">
-                <div class="left-detail-col">
-                    <div class="partner-photo">
-                        <img id="partnerPhoto" src="static/assets/company-placeholder.png">
-                    </div>
-                    <div class="individual-contact">
-                        <p class="caption">Individual Name</p>
-                        <p id="contactName">[Name]</p>
-                        <p class="caption">Role</p>
-                        <p id="contactRole">[Role]</p>
-                        <p class="caption">Email</p>
-                        <p id="contactEmail">[Email]</p>
-                    </div>
-                </div>
-                <div class="right-detail-col">
-                    <div class="partner-info">
-                        <p class="caption">Type of Partner</p>
-                        <p id="partnerType">[Type]</p>
-                        <p class="caption">Resource Available</p>
-                        <p id="partnerResource">[Resource]</p>
-                        <p class="caption">Telephone Number</p>
-                        <p id="partnerPhone">[Number]</p>
+                    <div class="right-input">
+                        <p class="caption">TEL of partner</p>
+                        <input type="text" class="partner-number" name="phone" placeholder="(###) ###-####" required>
+                        <p class="caption">Partner resource</p>
+                        <select class="partner-resource" name="resources_available" required>
+                            <option value="" disabled selected hidden>Select a resource</option>
+                            <option value="Food Supply">Food Supply</option>
+                            <option value="Construction">Construction</option>
+                            <option value="Electronic">Electronic</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <input type="text" class="other-resource" name="other_resource"
+                            placeholder="Enter other resource">
                         <p class="caption">Description</p>
-                        <p id="partnerDescription">[Description]</p>
+                        <textarea class="description" name="description" placeholder="Enter description..."></textarea>
+                        <button type="submit" class="submit-contact">Add</button>
                     </div>
                 </div>
             </div>
+        </form>
+    </div>
+
+
+    <div class="detail-overlay"></div>
+    <div class="detail-view">
+        <div class="detail-top">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <h1 id="partnerName">Partner Name</h1>
+            <div class="tool-icon">
+                <i id="pdfButton" class="fa-solid fa-file-pdf"></i>
+                <i id="editButton" class="fa-solid fa-pen-to-square"></i>
+                <i id="copyButton" class="fa-solid fa-copy"></i>
+                <i id="deleteButton" class="fa-solid fa-delete-left"></i>
+
+            </div>
         </div>
-        
-        <script src="/static/js/mainScript.js"></script>
+        <div class="detail-container" id="content">
+            <div class="left-detail-col">
+                <div class="partner-photo">
+                    <img id="partnerPhoto" src="static/assets/company-placeholder.png">
+                </div>
+                <div class="individual-contact">
+                    <p class="caption">Individual Name</p>
+                    <p id="contactName">[Name]</p>
+                    <p class="caption">Role</p>
+                    <p id="contactRole">[Role]</p>
+                    <p class="caption">Email</p>
+                    <p id="contactEmail">[Email]</p>
+                </div>
+            </div>
+            <div class="right-detail-col">
+                <div class="partner-info">
+                    <p class="caption">Type of Partner</p>
+                    <p id="partnerType">[Type]</p>
+                    <p class="caption">Resource Available</p>
+                    <p id="partnerResource">[Resource]</p>
+                    <p class="caption">Telephone Number</p>
+                    <p id="partnerPhone">[Number]</p>
+                    <p class="caption">Description</p>
+                    <p id="partnerDescription">[Description]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/mainScript.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        window.jsPDF = window.jspdf.jsPDF;
+
+        function generatePDF() {
+            var element = document.getElementById('content');
+            html2canvas(element).then(function (canvas) {
+                var imgData = canvas.toDataURL('image/png');
+                var pdfWidth = 190;
+                var pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                var doc = new jsPDF();
+                doc.addImage(imgData, 'PNG', 10, 10, pdfWidth, pdfHeight);
+                doc.save('report.pdf');
+            });
+        }
+        document.getElementById('pdfButton').addEventListener('click', generatePDF);
+    </script>
 </body>
 
 </html>
