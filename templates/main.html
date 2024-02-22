@@ -202,6 +202,69 @@
         </div>
     </div>
 
+    <div class="modify-detail-view">
+        <div class="detail-top">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <h1>Apple</h1>
+            <div class="tool-icon">
+                <i class="fa-solid fa-file-pdf"></i>
+                <i class="fa-solid fa-floppy-disk"></i>
+                <i class="fa-solid fa-copy"></i>
+                <i class="fa-solid fa-delete-left"></i>
+            </div>
+        </div>
+        <div class="detail-container">
+            <div class="left-detail-col">
+                <div class="partner-photo">
+                    <img src="static/assets/company-placeholder.png">
+                </div>
+                <div class="individual-contact">
+                    <p class="caption" style="width: 265px;">Individual-Information</p>
+                    <div class="modify-individual">
+                        <div class="individual-info individual-input-container input-container">
+                            <input type="text" class="individual-name" id="contactName" required>
+                            <input type="text" class="individual-role" id="contactRole" required>
+                            <input type="email" class="individual-email" id="contactEmail" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right-detail-col">
+                <div class="partner-info">
+                    <p class="caption">Type of Partner</p>
+                    <div class="type-container input-container">
+                        <select class="partner-type" name="partner-type" id="partnerTypeDropdown" required>
+                            <option value="Sole Proprietorship">Sole Proprietorship</option>
+                            <option value="Partnership">Partnership</option>
+                            <option value="Limited Partnership">Limited Partnership</option>
+                            <option value="LLC">LLC</option>
+                            <option value="Corporation">Corporation</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <p class="caption">Resource Available</p>
+                    <div class="resource-container input-container">
+                        <select class="partner-resource " name="partner-resource" id="resourcesAvailableDropdown" required>
+                            <option value="Food Supply">Food Supply</option>
+                            <option value="Construction">Construction</option>
+                            <option value="Electronic">Electronic</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <p class="caption">Telephone Number</p>
+                    <div class="tel-container input-container">
+                        <input type="text" class="partner-number" id="partnerTelephoneNumber" required>
+                    </div>
+                    <p class="caption">Description</p>
+                    <div class="description-container input-container">
+                        <textarea class="description" name="description" id="partnerDescription"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/static/js/mainScript.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
         integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
