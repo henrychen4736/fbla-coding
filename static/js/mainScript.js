@@ -90,7 +90,7 @@ function showResourceInput() {
 const detailButtons = document.querySelectorAll('.company');
 const bookmarkButtons = document.querySelectorAll('.blur-background');
 const backButtons = document.querySelectorAll('.fa-right-from-bracket');
-const editButton = document.querySelector('.fa-pen-to-square');
+const editButton = document.getElementById('editButton');
 const saveButton = document.querySelector('.fa-floppy-disk');
 const detailOverlay = document.querySelector('.detail-overlay');
 const detailView = document.querySelector('.detail-view');
@@ -134,6 +134,7 @@ detailButtons.forEach(button => {
     button.addEventListener('click', function() {
         const partnerId = this.getAttribute('data-partner-id');
         console.log(partnerId)
+        document.getElementById('editButton').setAttribute('data-partner-id', partnerId);
         fetch(`/partner/details/${partnerId}`)
             .then(response => 
                 response.json())
@@ -156,12 +157,12 @@ bookmarkButtons.forEach(button => {
 
 editButton.addEventListener('click', function () {
     function populateEditPopup(partner) {
-        document.getElementById('contactName').value = partner.ContactName || '';
-        document.getElementById('contactRole').value = partner.Role || '';
-        document.getElementById('contactEmail').value = partner.Email || '';
-        document.getElementById('partnerTelephoneNumber').value = partner.TelephoneNumber || '';
-        document.getElementById('partnerDescription').value = partner.Description || '';
-    
+        document.getElementById('modifyContactName').value = partner.ContactName || '';
+        document.getElementById('modifyContactRole').value = partner.Role || '';
+        document.getElementById('modifyContactEmail').value = partner.Email || '';
+        document.getElementById('partnerTelephoneNumber').value = partner.Phone || '';
+        document.getElementById('modifyPartnerDescription').value = partner.Description || '';
+        
         function setSelectedOption(selectElementId, valueToSelect) {
             let selectElement = document.getElementById(selectElementId);
             let foundMatch = false;
@@ -179,13 +180,17 @@ editButton.addEventListener('click', function () {
         setSelectedOption("partnerTypeDropdown", partner.PartnerType || '');
         setSelectedOption("resourcesAvailableDropdown", partner.ResourcesAvailable || '');
     }
-
+    
     const partnerId = this.getAttribute('data-partner-id');
-    console.log(partnerId);
+    if (!partnerId) {
+        console.log('No partner ID set.');
+        return;
+    }
+    console.log("ID: ", partnerId);
     fetch(`/partner/details/${partnerId}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
+    .then(response => response.json())
+    .then(data => {
+        console.log("DATA: " ,data);
             populateEditPopup(data);
             openModify();
         })
