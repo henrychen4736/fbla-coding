@@ -87,12 +87,14 @@ function showResourceInput() {
     }
 }
 
-
 const detailButtons = document.querySelectorAll('.company');
-const bookmarkButtons = document.querySelectorAll('.blur-background')
-const backButton = document.querySelector('.fa-right-from-bracket');
+const bookmarkButtons = document.querySelectorAll('.blur-background');
+const backButtons = document.querySelectorAll('.fa-right-from-bracket');
+const editButton = document.querySelector('.fa-pen-to-square');
+const saveButton = document.querySelector('.fa-floppy-disk');
 const detailOverlay = document.querySelector('.detail-overlay');
 const detailView = document.querySelector('.detail-view');
+const modifyDetailView = document.querySelector('.modify-detail-view');
 
 function openDetail() {
     detailOverlay.style.transform = "translateY(0)";
@@ -104,6 +106,16 @@ function closeDetail() {
     detailOverlay.style.transform = "translateY(100%)";
     detailView.style.transform = "translate(-50%, 100%)";
     document.body.style.overflow = "";
+}
+
+function openModify() {
+    modifyDetailView.style.transform = "translate(-50%, -50%)";
+    document.body.style.overflow = "hidden";
+}
+
+function closeModify() {
+    modifyDetailView.style.transform = "translate(-50%, 100%)";
+    document.body.style.overflow = "hidden";
 }
 
 function populateDetailPopup(partner) {
@@ -134,33 +146,30 @@ detailButtons.forEach(button => {
     });
 });
 
+
+
 bookmarkButtons.forEach(button => {
     button.addEventListener('click', function(event) {
         event.stopPropagation();
     });
 });
 
-detailOverlay.addEventListener('click', function(event) {
-    if (event.target === detailOverlay) {
-        closeDetail();
-    }
-});
+editButton.addEventListener('click', function () {
+    openModify();
+})
 
-backButton.addEventListener('click', function() {
+saveButton.addEventListener('click', function () {
+    closeModify();
+})
+
+detailOverlay.addEventListener('click', function () {
+    closeModify();
     closeDetail();
 });
 
-
-
-
-var script = document.createElement('script');
-script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js';
-
-function downloadPDF() {
-    var doc = new jsPDF();
-    var popupContent = document.getElementById('popupContent').innerHTML;
-
-    doc.text(popupContent, 10, 10);
-
-    doc.save('popup_content.pdf');
-}
+backButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        closeModify();
+        closeDetail();
+    });
+});
