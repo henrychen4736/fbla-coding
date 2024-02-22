@@ -31,7 +31,7 @@
         <div class="left-col">
 
             {% for partner in partners %}
-            <div class="company">
+            <div class="company" data-partner-id="{{ partner['ID'] }}">
                 <div class="company-img">
                     <div class="blur-background">
                         <form action="{{ url_for('toggle_bookmark', partner_id=partner['ID']) }}" method="post"
@@ -146,45 +146,46 @@
 
 
         <div class="detail-overlay"></div>
-    <div class="detail-view">
-        <div class="detail-top">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <h1>Apple</h1>
-            <div class="tool-icon">
-                <i class="fa-solid fa-file-pdf"></i>
-                <i class="fa-solid fa-pen-to-square"></i>
-                <i class="fa-solid fa-copy"></i>
-                <i class="fa-solid fa-delete-left"></i>
+        <div class="detail-view">
+            <div class="detail-top">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <h1 id="partnerName">Partner Name</h1>
+                <div class="tool-icon">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i class="fa-solid fa-copy"></i>
+                    <i class="fa-solid fa-delete-left"></i>
+                </div>
+            </div>
+            <div class="detail-container">
+                <div class="left-detail-col">
+                    <div class="partner-photo">
+                        <img id="partnerPhoto" src="static/assets/company-placeholder.png">
+                    </div>
+                    <div class="individual-contact">
+                        <p class="caption">Individual Name</p>
+                        <p id="contactName">[Name]</p>
+                        <p class="caption">Role</p>
+                        <p id="contactRole">[Role]</p>
+                        <p class="caption">Email</p>
+                        <p id="contactEmail">[Email]</p>
+                    </div>
+                </div>
+                <div class="right-detail-col">
+                    <div class="partner-info">
+                        <p class="caption">Type of Partner</p>
+                        <p id="partnerType">[Type]</p>
+                        <p class="caption">Resource Available</p>
+                        <p id="partnerResource">[Resource]</p>
+                        <p class="caption">Telephone Number</p>
+                        <p id="partnerPhone">[Number]</p>
+                        <p class="caption">Description</p>
+                        <p id="partnerDescription">[Description]</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="detail-container">
-            <div class="left-detail-col">
-                <div class="partner-photo">
-                    <img src="static/assets/company-placeholder.png">
-                </div>
-                <div class="individual-contact">
-                    <P class="caption">Individual-name</P>
-                    <p>[Name]</p>
-                    <p class="caption">individual-role</p>
-                    <p>[Role]</p>
-                    <p class="caption">individual-email</p>
-                    <p>[Email]</p>
-                </div>
-            </div>
-            <div class="right-detail-col">
-                <div class="partner-info">
-                    <p class="caption">Type of Partner </p>
-                    <p>[Type]</p>
-                    <p class="caption">Resource Available </p>
-                    <p>[Resource]</p>
-                    <p class="caption">Telephone Number </p>
-                    <p>[Number]</p>
-                    <p class="caption">Description </p>
-                    <p>[Description]</p>
-                </div>
-            </div>
-        </div>
-    </div>
+        
         <script src="/static/js/mainScript.js"></script>
 </body>
 

@@ -6,6 +6,7 @@ import shutil
 import os
 import io
 import logging
+import base64
 
 app = Flask(__name__)
 app.secret_key = 'PLACEHOLDER'
@@ -90,19 +91,6 @@ def login():
         return render_template('login.html')
 
 
-# @app.route('/main')
-# def main():
-#     if 'logged_in' in session and session['logged_in']:
-#         search_query = request.args.get('searchQuery', None)
-#         if search_query:
-#             partners = db_manager.search_partners(search_query)
-#         else:
-#             partners = db_manager.get_all_partners(session['user_id'])
-#         return render_template('main.html', partners=partners, searchQuery=search_query)
-#     else:
-#         return redirect(url_for('login'))
-
-
 @app.route('/main')
 def main():
     if 'logged_in' in session and session['logged_in']:
@@ -174,26 +162,17 @@ def add_partner():
     return redirect(url_for('main'))
 
 
-@app.route('/partner_detail/<int:partner_id>')
-def partner_detail(partner_id):
-    if 'logged_in' not in session or not session['logged_in']:
-        return redirect(url_for('login'))
-
+@app.route('/partner/details/<int:partner_id>')
+def partner_details(partner_id):
     try:
-        partner = db_manager.get_partner_by_id(partner_id)
-        if partner:
-            return render_template('main.html', partner_detail=partner)
+        partner_data = db_manager.get_partner_by_id(partner_id)
+        if partner_data:
+            partner_data = dict(list(partner_data.items())[:-2])
+            return jsonify(partner_data)
         else:
-            flash('Partner not found')
-            return redirect(url_for('main'))
+            return jsonify({'error': 'Partner not found'}), 404
     except DatabaseError as e:
-        logger.error(f'Database error when fetching details for partner {partner_id}: {e}', exc_info=True)
-        flash('An error occurred while fetching partner details. Please try again.')
-        return redirect(url_for('main'))
-    except Exception as e:
-        logger.error(f"Unexpected error when accessing partner details for partner {partner_id}: {e}", exc_info=True)
-        flash('An unexpected error occurred. Please try again.')
-        return redirect(url_for('main'))
+        return jsonify({'error': 'An error occurred while fetching partner data', 'details': str(e)}), 500
 
 
 
@@ -226,11 +205,11 @@ def toggle_bookmark(partner_id):
 
 @app.route('/partner-image/<int:partner_id>')
 def partner_image(partner_id):
+    print("Received request for partner image:", partner_id)
     image_data, image_mime_type = db_manager.get_partner_image(partner_id)
     if image_data and image_mime_type:
         return send_file(io.BytesIO(image_data), mimetype=image_mime_type)
     else:
-        # abort(404)
         pass
 
 
@@ -249,45 +228,3 @@ def logout():
 @app.route('/')
 def index():
     return redirect(url_for('login'))
-
-'''
-<div class="detail-overlay"></div>
-    <div class="detail-view">
-        <div class="detail-top">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <h1 id="partnerName">Partner Name</h1>
-            <div class="tool-icon">
-                <i class="fa-solid fa-file-pdf"></i>
-                <i class="fa-solid fa-pen-to-square"></i>
-                <i class="fa-solid fa-copy"></i>
-                <i class="fa-solid fa-delete-left"></i>
-            </div>
-        </div>
-        <div class="detail-container">
-            <div class="left-detail-col">
-                <div class="partner-photo">
-                    <img id="partnerImage" src="static/assets/company-placeholder.png">
-                </div>
-                <div class="individual-contact">
-                    <P class="caption">Individual-name</P>
-                    <p>[Name]</p>
-                    <p class="caption">individual-role</p>
-                    <p>[Role]</p>
-                    <p class="caption">individual-email</p>
-                    <p>[Email]</p>
-                </div>
-            </div>
-            <div class="right-detail-col">
-                <div class="partner-info">
-                    <p class="caption">Type of Partner </p>
-                    <p>[Type]</p>
-                    <p class="caption">Resource Available </p>
-                    <p>[Resource]</p>
-                    <p class="caption">Telephone Number </p>
-                    <p>[Number]</p>
-                    <p class="caption">Description </p>
-                    <p>[Description]</p>
-                </div>
-            </div>
-        </div>
-    </div>'''

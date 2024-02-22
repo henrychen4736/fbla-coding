@@ -106,21 +106,61 @@ function closeDetail() {
     document.body.style.overflow = "";
 }
 
+function populateDetailPopup(partner) {
+    document.getElementById('partnerName').textContent = partner.OrganizationName;
+    document.getElementById('partnerPhoto').src = `/partner-image/${partner.ID}`;
+    document.getElementById('contactName').textContent = partner.ContactName;
+    document.getElementById('contactRole').textContent = partner.Role;
+    document.getElementById('contactEmail').textContent = partner.Email;
+    document.getElementById('partnerType').textContent = partner.TypeOfOrganization;
+    document.getElementById('partnerResource').textContent = partner.ResourcesAvailable;
+    document.getElementById('partnerPhone').textContent = partner.Phone;
+    document.getElementById('partnerDescription').textContent = partner.Description;
+}
+
 detailButtons.forEach(button => {
-    button.addEventListener('click', openDetail);
+    button.addEventListener('click', function() {
+        const partnerId = this.getAttribute('data-partner-id');
+        console.log(partnerId)
+        fetch(`/partner/details/${partnerId}`)
+            .then(response => 
+                response.json())
+            .then(data => {
+                console.log(data)
+                populateDetailPopup(data);
+                openDetail();
+            })
+            .catch(error => console.error('Error:', error));
+    });
 });
 
 bookmarkButtons.forEach(button => {
-    button.addEventListener('click', function (event) {
+    button.addEventListener('click', function(event) {
         event.stopPropagation();
     });
 });
 
+detailOverlay.addEventListener('click', function(event) {
+    if (event.target === detailOverlay) {
+        closeDetail();
+    }
+});
 
-detailOverlay.addEventListener('click', function () {
+backButton.addEventListener('click', function() {
     closeDetail();
 });
 
-backButton.addEventListener('click', function () {
-    closeDetail();
-});
+
+
+
+var script = document.createElement('script');
+script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js';
+
+function downloadPDF() {
+    var doc = new jsPDF();
+    var popupContent = document.getElementById('popupContent').innerHTML;
+
+    doc.text(popupContent, 10, 10);
+
+    doc.save('popup_content.pdf');
+}
