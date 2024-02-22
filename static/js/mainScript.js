@@ -95,6 +95,7 @@ const saveButton = document.querySelector('.fa-floppy-disk');
 const detailOverlay = document.querySelector('.detail-overlay');
 const detailView = document.querySelector('.detail-view');
 const modifyDetailView = document.querySelector('.modify-detail-view');
+let currentPartnerId = null;
 
 function openDetail() {
     detailOverlay.style.transform = "translateY(0)";
@@ -133,6 +134,7 @@ detailButtons.forEach(button => {
 
     button.addEventListener('click', function() {
         const partnerId = this.getAttribute('data-partner-id');
+        currentPartnerId = partnerId;
         console.log(partnerId)
         document.getElementById('editButton').setAttribute('data-partner-id', partnerId);
         fetch(`/partner/details/${partnerId}`)
@@ -181,25 +183,49 @@ editButton.addEventListener('click', function () {
         setSelectedOption("resourcesAvailableDropdown", partner.ResourcesAvailable || '');
     }
     
-    const partnerId = this.getAttribute('data-partner-id');
-    if (!partnerId) {
-        console.log('No partner ID set.');
-        return;
+    if (currentPartnerId) {
+        fetch(`/partner/details/${currentPartnerId}`)
+            .then(response => response.json())
+            .then(data => {
+                populateEditPopup(data);
+                openModify();
+            })
+            .catch(error => console.log('Error: ', error));
+    } else {
+        console.log("No partner selected for editing.");
     }
-    console.log("ID: ", partnerId);
-    fetch(`/partner/details/${partnerId}`)
-    .then(response => response.json())
-    .then(data => {
-        console.log("DATA: " ,data);
-            populateEditPopup(data);
-            openModify();
-        })
-        .catch(error => console.log('Error: ', error));
 });
 
 saveButton.addEventListener('click', function () {
-    closeModify();
-})
+    if (currentPartnerId) {
+        const formData = {
+            contactName: document.getElementById('modifyContactName').value,
+            contactRole: document.getElementById('modifyContactRole').value,
+            contactEmail: document.getElementById('modifyContactEmail').value,
+            partnerTelephoneNumber: document.getElementById('partnerTelephoneNumber').value,
+            partnerDescription: document.getElementById('modifyPartnerDescription').value,
+            partnerType: document.getElementById('partnerTypeDropdown').value,
+            resourcesAvailable: document.getElementById('resourcesAvailableDropdown').value,
+        };
+        console.log(formData)
+        fetch(`/partner/modify/${currentPartnerId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Update response:", data);
+            closeModify();
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        console.log("No partner selected for saving.");
+    }
+});
+
 
 detailOverlay.addEventListener('click', function () {
     closeModify();

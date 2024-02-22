@@ -162,6 +162,35 @@ def add_partner():
     return redirect(url_for('main'))
 
 
+@app.route('/partner/modify/<int:partner_id>', methods=['POST'])
+def modify_partner(partner_id):
+    data = request.json
+    try:
+        print(data)
+        db_manager.modify_partner(
+            partner_id,
+            organization_name=data.get('organization_name'),
+            type_of_organization=data.get('partnerType'),
+            organization_is_other_type=data.get('organization_is_other_type'),
+            resources_available=data.get('resourcesAvailable'),
+            resources_available_is_other_type=data.get('resources_available_is_other_type'),
+            description=data.get('partnerDescription'),
+            contact_name=data.get('contactName'),
+            role=data.get('contactRole'),
+            email=data.get('contactEmail'),
+            phone=data.get('partnerTelephoneNumber'),
+            bookmarked=data.get('bookmarked'),
+            image_data=data.get('image_data'),
+            image_mime_type=data.get('image_mime_type')
+        )
+        print("UPDATE SUCCESSFUL")
+        return render_template('main')
+        return jsonify({'success': True, 'message': 'successfully updated partner'}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+        pass
+
+
 @app.route('/partner/details/<int:partner_id>')
 def partner_details(partner_id):
     try:
