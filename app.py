@@ -1,10 +1,11 @@
-from flask import Flask, request, redirect, render_template, url_for, session, jsonify, send_file
+from flask import Flask, request, redirect, render_template, url_for, session, jsonify, send_file, flash
 from db_manager import DBManager, DatabaseError, IntegrityError, OperationalError, SignupError
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
 import shutil
 import os
 import io
+import logging
 
 app = Flask(__name__)
 app.secret_key = 'PLACEHOLDER'
@@ -12,23 +13,26 @@ app.secret_key = 'PLACEHOLDER'
 db_manager = DBManager('partners.db')
 
 # TODO: add exception handling
-# TODO: add auto redirecting to signup page when going to index
 # TODO: add more color to the ui
-# TODO: add searching, filtering
 # TODO: add 25 examples
 # TODO: make help page better
 # TODO: add button to clear search/filters
-# TODO: new font
-# TODO: make the 0 on the filter mean number of partners in that category
 # TODO: generate report feature
-# TODO: find some way to handle the "other type"
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def backup_db():
-    timestamp = time.strftime('%Y%m%d-%H%M%S')
-    backup_filename = f'db_backup_{timestamp}.db'
-    shutil.copyfile('partners.db', backup_filename)
-    print(f'Backup created: {backup_filename}')
+    try:
+        timestamp = time.strftime('%Y%m%d-%H%M%S')
+        backup_filename = f'db_backup_{timestamp}.db'
+        shutil.copyfile('partners.db', backup_filename)
+        logger.info(f'Backup created: {backup_filename}')
+    except Exception as e:
+        logger.error(f'Error creating backup: {e}')
+
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=backup_db, trigger='interval', weeks=1)
@@ -45,9 +49,17 @@ def signup():
             session['logged_in'] = True
             session['username'] = username
             session['user_id'] = user_id
+            logger.info(f'Username: {username} signed up with user ID: {user_id}')
             return redirect(url_for('main'))
-        except SignupError:
+        except SignupError as e:
+            logger.error(f'Signup error for username: {username}. Error: {e}', exc_info=True)
             return render_template('signup.html', error='The username already exists!')
+        except DatabaseError as e:
+            logger.error(f'Database error during signup for username: {username}. Error: {e}', exc_info=True)
+            return render_template('signup.html', error='There was a problem connecting to the database. Please try again.')
+        except Exception as e:
+            logger.error(f'Unexpected error during signup for username: {username}. Error: {e}', exc_info=True)
+            return render_template('signup.html', error='An unexpected error occurred. Please try again.')
     else:
         return render_template('signup.html')
 
@@ -55,33 +67,62 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        valid_login, user_id = db_manager.verify_credentials(username, password)
-        if valid_login:
-            session['logged_in'] = True
-            session['username'] = username
-            session['user_id'] = user_id
-            return redirect(url_for('main'))
-        else:
-            return render_template('login.html', error='Invalid username or password')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        try:
+            valid_login, user_id = db_manager.verify_credentials(username, password)
+            if valid_login:
+                session['logged_in'] = True
+                session['username'] = username
+                session['user_id'] = user_id
+                logger.info(f"User '{username}' logged in successfully.")
+                return redirect(url_for('main'))
+            else:
+                logger.warning(f"Failed login attempt for user '{username}'.")
+                return render_template('login.html', error='Invalid username or password')
+        except DatabaseError as e:
+            logger.error(f'Database error during logging in for username: {username}. Error: {e}', exc_info=True)
+            return render_template('login.html', error='There was a problem connecting to the database. Please try again.')
+        except Exception as e:
+            logger.error(f'Unexpected error during logging in for username: {username}. Error: {e}', exc_info=True)
+            return render_template('login.html', error='An unexpected error occurred. Please try again.')
     else:
         return render_template('login.html')
+
+
+# @app.route('/main')
+# def main():
+#     if 'logged_in' in session and session['logged_in']:
+#         search_query = request.args.get('searchQuery', None)
+#         if search_query:
+#             partners = db_manager.search_partners(search_query)
+#         else:
+#             partners = db_manager.get_all_partners(session['user_id'])
+#         return render_template('main.html', partners=partners, searchQuery=search_query)
+#     else:
+#         return redirect(url_for('login'))
 
 
 @app.route('/main')
 def main():
     if 'logged_in' in session and session['logged_in']:
         search_query = request.args.get('searchQuery', None)
-        print('SESSION: ',session)
-        if search_query:
-            partners = db_manager.search_partners(search_query)
-            # print('Search query:' + search_query)
-        else:
-            partners = db_manager.get_all_partners(session['user_id'])
-        # print('PARTNERS: ',partners)
-        return render_template('main.html', partners=partners, searchQuery=search_query)
+        try:
+            if search_query:
+                partners = db_manager.search_partners(search_query)
+                logger.info(f'Search performed by user ID {session["user_id"]} with query "{search_query}".')
+            else:
+                partners = db_manager.get_all_partners(session['user_id'])
+                logger.info(f'Main page accessed by user ID {session["user_id"]}')
+            return render_template('main.html', partners=partners, searchQuery=search_query)
+        except DatabaseError as e:
+            logger.error(f'Database error in main page for username: {session["username"]}. Error: {e}', exc_info=True)
+            
+        except Exception as e:
+            logger.error(f"Error accessing main page for user ID {session['user_id']}: {e}", exc_info=True)
+            return render_template('main.html', error='An error occurred while fetching partner data. Please try again.')
     else:
+        logger.warning("Attempt to access main page without being logged in.")
         return redirect(url_for('login'))
 
 
@@ -110,7 +151,7 @@ def add_partner():
     contact_name = request.form.get('contact_name', '')
     role = request.form.get('role', '')
     email = request.form.get('email', '')
-    phone = request.form.get('phone')
+    phone = request.form.get('phone', '')
     bookmarked = False
 
     file = request.files.get('partner-image')
@@ -122,24 +163,38 @@ def add_partner():
         image_mime_type = None
 
     try:
-        print('PARAMS FOR ADDING PARTNER:',user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked)
         db_manager.add_partner(user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data, image_mime_type)
-        print('partner added')
-    except Exception as e:
-        print("EXEPTION: ", e)
-
+    except IntegrityError:
+        pass
+    except OperationalError:
+        pass
+    except DatabaseError as e:
+        logger.error(f'Database error during add partner for username: {username}. Partner name: {organization_name} type: {type_of_organization} Error: {e}', exc_info=True)
+        return render_template('signup.html', error='There was a problem connecting to the database. Please try again.')
     return redirect(url_for('main'))
 
 
-# @app.route('/search', methods=['GET'])
-# def search():
-#     if 'logged_in' in session and session['logged_in']:
-#         search_query = request.args.get('searchQuery', '')
-#         search_results = db_manager.search_partners(search_query)
-#         print('SEARCH RESULTS: ',search_results)
-#         return render_template('main.html', partners=search_results, searchQuery=search_query)
-#     else:
-#         return redirect(url_for('login'))
+@app.route('/partner_detail/<int:partner_id>')
+def partner_detail(partner_id):
+    if 'logged_in' not in session or not session['logged_in']:
+        return redirect(url_for('login'))
+
+    try:
+        partner = db_manager.get_partner_by_id(partner_id)
+        if partner:
+            return render_template('main.html', partner_detail=partner)
+        else:
+            flash('Partner not found')
+            return redirect(url_for('main'))
+    except DatabaseError as e:
+        logger.error(f'Database error when fetching details for partner {partner_id}: {e}', exc_info=True)
+        flash('An error occurred while fetching partner details. Please try again.')
+        return redirect(url_for('main'))
+    except Exception as e:
+        logger.error(f"Unexpected error when accessing partner details for partner {partner_id}: {e}", exc_info=True)
+        flash('An unexpected error occurred. Please try again.')
+        return redirect(url_for('main'))
+
 
 
 @app.route('/search')
@@ -150,8 +205,6 @@ def search():
     search_query = request.args.get('searchQuery', '')
     types = request.args.getlist('types')
     resources = request.args.getlist('resources')
-    print("TYPES: ",types)
-    print(" RESOURCES: ", resources)
 
     partners = db_manager.search_partners(search_query, types, resources)
     return render_template('main.html', partners=partners, searchQuery=search_query)
@@ -163,7 +216,6 @@ def toggle_bookmark(partner_id):
         partner = db_manager.get_partner_by_id(partner_id)
         if not partner:
             return render_template('main.html')
-            print('PARTNER NOT FOUND')
 
         new_status = not partner['Bookmarked']
         db_manager.modify_partner(partner_id, bookmarked=new_status)
@@ -178,8 +230,8 @@ def partner_image(partner_id):
     if image_data and image_mime_type:
         return send_file(io.BytesIO(image_data), mimetype=image_mime_type)
     else:
-        print("IMAGE UPLOADING WENT WRONG")
         # abort(404)
+        pass
 
 
 @app.route('/help')
@@ -197,3 +249,45 @@ def logout():
 @app.route('/')
 def index():
     return redirect(url_for('login'))
+
+'''
+<div class="detail-overlay"></div>
+    <div class="detail-view">
+        <div class="detail-top">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <h1 id="partnerName">Partner Name</h1>
+            <div class="tool-icon">
+                <i class="fa-solid fa-file-pdf"></i>
+                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-copy"></i>
+                <i class="fa-solid fa-delete-left"></i>
+            </div>
+        </div>
+        <div class="detail-container">
+            <div class="left-detail-col">
+                <div class="partner-photo">
+                    <img id="partnerImage" src="static/assets/company-placeholder.png">
+                </div>
+                <div class="individual-contact">
+                    <P class="caption">Individual-name</P>
+                    <p>[Name]</p>
+                    <p class="caption">individual-role</p>
+                    <p>[Role]</p>
+                    <p class="caption">individual-email</p>
+                    <p>[Email]</p>
+                </div>
+            </div>
+            <div class="right-detail-col">
+                <div class="partner-info">
+                    <p class="caption">Type of Partner </p>
+                    <p>[Type]</p>
+                    <p class="caption">Resource Available </p>
+                    <p>[Resource]</p>
+                    <p class="caption">Telephone Number </p>
+                    <p>[Number]</p>
+                    <p class="caption">Description </p>
+                    <p>[Description]</p>
+                </div>
+            </div>
+        </div>
+    </div>'''

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DBHS CTE Contacts</title>
+    <title>Palink</title>
     <link rel="stylesheet" href="/static/css/mainStyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
@@ -143,17 +143,48 @@
                 </div>
             </form>
         </div>
+
+
         <div class="detail-overlay"></div>
-        <div class="detail-view">
+    <div class="detail-view">
+        <div class="detail-top">
             <i class="fa-solid fa-right-from-bracket"></i>
-            <h1>[Name]</h1>
-            <div class="partner-photo">
-                <img src="/static/assets/company-placeholder.png">
-            </div>
-            <div class="partner-info">
+            <h1>Apple</h1>
+            <div class="tool-icon">
+                <i class="fa-solid fa-file-pdf"></i>
+                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-copy"></i>
+                <i class="fa-solid fa-delete-left"></i>
             </div>
         </div>
-
+        <div class="detail-container">
+            <div class="left-detail-col">
+                <div class="partner-photo">
+                    <img src="static/assets/company-placeholder.png">
+                </div>
+                <div class="individual-contact">
+                    <P class="caption">Individual-name</P>
+                    <p>[Name]</p>
+                    <p class="caption">individual-role</p>
+                    <p>[Role]</p>
+                    <p class="caption">individual-email</p>
+                    <p>[Email]</p>
+                </div>
+            </div>
+            <div class="right-detail-col">
+                <div class="partner-info">
+                    <p class="caption">Type of Partner </p>
+                    <p>[Type]</p>
+                    <p class="caption">Resource Available </p>
+                    <p>[Resource]</p>
+                    <p class="caption">Telephone Number </p>
+                    <p>[Number]</p>
+                    <p class="caption">Description </p>
+                    <p>[Description]</p>
+                </div>
+            </div>
+        </div>
+    </div>
         <script src="/static/js/mainScript.js"></script>
 </body>
 

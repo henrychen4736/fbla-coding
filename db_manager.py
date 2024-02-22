@@ -26,24 +26,26 @@ class DBManager:
         try:
             return sql.connect(self.db_name)
         except sql.Error as e:
-            raise Exception(
-                f'An error occurred connecting to the database: {e}')
+            logger.error(f'An error occurred connecting to the database: {e}')
+            raise DatabaseError(f'An error occurred connecting to the database: {e}')
 
     def _execute(self, cursor, query, params=()):
         try:
             cursor.execute(query, params)
         except sql.IntegrityError as e:
+            logger.error(f'Integrity error: {e}')
             raise IntegrityError(f'Integrity error: {e}')
         except sql.OperationalError as e:
+            logger.error(f'Operational error: {e}')
             raise OperationalError(f'Operational error: {e}')
         except sql.Error as e:
+            logger.error(f'Database error: {e}')
             raise DatabaseError(f'Database error: {e}')
 
     def add_partner(self, user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data=None, image_mime_type='png'):
         if image_data is None:
             with open('./static/assets/company-placeholder.png', 'rb') as default_image:
                 image_data = default_image.read()
-
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -199,8 +201,6 @@ class DBManager:
                     params.extend(resources)
 
             query = ' '.join(query_parts)
-            print("QUERY FOR PARTNER SEARCH: ", query)
-            print("QUERY PARTNER SEARCH PARAMS: ", params)
             self._execute(c, query, params)
             partners = c.fetchall()
 

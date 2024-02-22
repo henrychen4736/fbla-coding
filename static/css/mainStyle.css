@@ -171,12 +171,12 @@
     flex-wrap: wrap;
     border-radius: 20px;
     background: #1E1E1E;
-    transition: background-color 0.3s ease;
+    transition: box-shadow 0.4s ease;
     padding: 20px;
 }
 
 .left-col .company:hover {
-    background: #808080;
+    box-shadow: 0 0 15px #fff;
     cursor: pointer;
 }
 
@@ -274,9 +274,33 @@
     margin-bottom: 20px;
 }
 
-.filter-bar h3 {
+.clear-filter-container {
+    display: flex;
+    align-items: center;
+}
+
+.filter-bar h3,
+.clear-filter-container h3 {
     font-weight: 500;
-    margin: 20px 0 10px;
+    margin: 20px 20px 10px;
+}
+
+.clear-filter-container .clear-filter {
+    height: 40px;
+    background-color: #fff;
+    border: 2px solid #FF0000;
+    color: #FF0000;
+    transition: box-shadow 0.3s ease;
+    font-weight: 500;
+    padding: 5px;
+    border-radius: 20px;
+}
+
+.clear-filter-container .clear-filter:hover {
+    background-color: #FF0000;
+    box-shadow: 0 0 8px #FF0000;
+    color: #fff;
+    cursor: pointer;
 }
 
 .filter-bar .search-bar {
@@ -316,6 +340,10 @@
     width: 28px;
     height: 28px;
     background: #1E1E1E;
+}
+
+.filter-bar .search-bar button:hover {
+    background: #666666;
     cursor: pointer;
 }
 
@@ -343,10 +371,10 @@
 .add-contact {
     position: absolute;
     bottom: 20px;
-    width: 276px;
+    width: 310.3px;
     left: 0;
     padding: 10px 20px;
-    background-color: #1b0d0d;
+    background-color: #fff;
     color: #1E1E1E;
     border-radius: 5px;
     cursor: pointer;
@@ -376,7 +404,7 @@
     width: 100vw;
     height: 100vh;
     position: fixed;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(20px);
     top: 0;
     left: 0;
@@ -391,6 +419,7 @@
     width: 65%;
     height: 85%;
     border-radius: 20px;
+    box-shadow: 0 0 20px #fff;
     z-index: 1000;
     overflow: hidden;
     background: #1E1E1E;
@@ -445,7 +474,7 @@
     align-items: center;
     flex-direction: column;
     width: fit-content;
-    height: 100%;
+    height: 60%;
     padding: 10px;
     margin-right: 20px;
     background-color: #666666;
@@ -473,13 +502,12 @@
     color: #808080;
     border: none;
     transition: box-shadow 0.3s ease;
-    box-shadow: inset 0 0 0 4px #808080;
     font-size: 200px;
     border-radius: 10px;
 }
 
 .add-image-container .fa-plus:hover {
-    box-shadow: inset 0 0 0 4px #fff;
+    box-shadow: 0 0 15px #fff;
     color: #fff;
     cursor: pointer;
 }
@@ -555,14 +583,14 @@
 .input-container .partner-resource:hover,
 .input-container .partner-type:hover {
     transition: box-shadow 0.3s ease;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
     cursor: pointer;
 }
 
 .input-container .description:hover,
 .input-container input:hover {
     transition: box-shadow 0.3s ease;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
 }
 
 .other-resource,
@@ -612,7 +640,7 @@
     width: 100vw;
     height: 100vh;
     position: fixed;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(20px);
     top: 0;
     left: 0;
@@ -620,28 +648,164 @@
 }
 
 .detail-view {
-    display: none;
     position: fixed;
-    background: url(static/assets/background.png) center/cover no-repeat;
-    transform: translate(-50%, -50%);
+    background: #1E1E1E;
+    transition: transform 0.2s ease;
+    transform: translate(-50%, 100%);
+    box-shadow: 0 0 20px #fff;
     top: 50%;
     left: 50%;
-    width: 800px;
-    height: 624px;
-    padding: 20px;
+    width: 880px;
+    height: 700px;
+    border-radius: 40px;
     z-index: 1000;
     overflow: hidden;
 }
 
-.detail-view .fa-right-from-bracket {
-    font-size: 50px;
+.detail-top {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 110px;
+    padding: 20px;
+    border-bottom: 4px solid #fff;
+}
+
+.tool-icon {
+    width: fit-content;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.detail-top i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin-right: 20px;
+    background-color: #1E1E1E;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.detail-top .fa-right-from-bracket {
+    margin-left: 20px;
+    border: 2px solid #FF0000;
     color: #FF0000;
 }
 
-.detail-view h1 {
+.detail-top .fa-right-from-bracket:hover {
+    background-color: #FF0000;
+    color: #1E1E1E;
+    box-shadow: 0 0 8px #FF0000;
+    cursor: pointer;
+}
+
+.detail-top .fa-file-pdf {
+    width: 54px;
+    border: 2px solid #FFA500;
+    color: #FFA500;
+}
+
+.detail-top .fa-file-pdf:hover {
+    background-color: #FFA500;
+    color: #1E1E1E;
+    box-shadow: 0 0 8px #FFA500;
+    cursor: pointer;
+}
+.detail-top .fa-pen-to-square {
+    border: 2px solid #4169E1;
+    color: #4169E1;
+}
+
+.detail-top .fa-pen-to-square:hover {
+    background-color: #4169E1;
+    color: #1E1E1E;
+    box-shadow: 0 0 8px #4169E1;
+    cursor: pointer;
+}
+
+.detail-top .fa-copy {
+    border: 2px solid #90EE90;
+    color: #90EE90;
+}
+
+.detail-top .fa-copy:hover {
+    background-color: #90EE90;
+    color: #1E1E1E;
+    box-shadow: 0 0 8px #90EE90;
+    cursor: pointer;
+}
+
+.detail-top .fa-delete-left {
+    width: 54px;
+    border: 2px solid #CC0000;
+    color: #CC0000;
+}
+
+.detail-top .fa-delete-left:hover {
+    background-color: #CC0000;
+    color: #1E1E1E;
+    box-shadow: 0 0 8px #CC0000;
+    cursor: pointer;
+}
+
+.detail-top h1 {
+    border-radius: 20px;
+    background-color: #000000;
+    box-shadow: 0 0 8px #fff;
+    text-align: center;
+    font-size: 45px;
     color: #fff;
-    width: 30%;
-    font-weight: 500;
-    border-bottom: 2px solid #1E1E1E;
-    margin-bottom: 30px;
+    width: 80%;
+    font-weight: 600;
+    margin-left: 30px;
+    margin-right: 50px;
+}
+
+.detail-container {
+    background: linear-gradient(to bottom, #000000, #333333);
+    height: 100%;
+    position: relative;
+    display: flex;
+    color: #fff;
+}
+
+.right-detail-col {
+    height: 100%;
+    flex-basis: 60%;
+    padding: 10px;
+}
+
+.left-detail-col {
+    border-right: 4px solid #808080;
+    margin-left:  20px;
+    height: 100%;
+    flex-basis: 40%;
+}
+
+.left-detail-col .partner-photo {
+    position: relative;
+    display: flex;
+    height: 280px;
+    width: 280px;
+    padding: 5px;
+    border: 4px solid #999999;
+    border-radius: 20px;
+    background: #fff;
+    overflow: hidden;
+    margin: 20px 0 20px 20px;
+}
+
+.individual-contact {
+    border-top: 4px solid #808080;
+}
+
+.detail-container .caption {
+    width: 250px;
+    font-size: 20px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #fff;
 }

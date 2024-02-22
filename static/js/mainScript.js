@@ -14,6 +14,7 @@ function openSidebar() {
 function closeSidebar() {
     sidebarOpen = false;
     sidebarOverlay.style.display = "none";
+    sidebar.style.transform = "scale(0)";
 }
 
 toggleButton.addEventListener('click', function () {
@@ -86,22 +87,40 @@ function showResourceInput() {
     }
 }
 
-function showTypeInput() {
-    if (typeSelect.value === "Other") {
-        typeInput.style.display = "block";
-        typeInput.setAttribute('required', '');
-    } else {
-        typeInput.style.display = "none";
-        typeInput.removeAttribute('required');
-    }
+
+const detailButtons = document.querySelectorAll('.company');
+const bookmarkButtons = document.querySelectorAll('.blur-background')
+const backButton = document.querySelector('.fa-right-from-bracket');
+const detailOverlay = document.querySelector('.detail-overlay');
+const detailView = document.querySelector('.detail-view');
+
+function openDetail() {
+    detailOverlay.style.transform = "translateY(0)";
+    detailView.style.transform = "translate(-50%, -50%)";
+    document.body.style.overflow = "hidden";
 }
 
-function showResourceInput() {
-    if (resourceSelect.value === "Other") {
-        resourceInput.style.display = "block";
-        resourceInput.setAttribute('required', '');
-    } else {
-        resourceInput.style.display = "none";
-        resourceInput.removeAttribute('required');
-    }
+function closeDetail() {
+    detailOverlay.style.transform = "translateY(100%)";
+    detailView.style.transform = "translate(-50%, 100%)";
+    document.body.style.overflow = "";
 }
+
+detailButtons.forEach(button => {
+    button.addEventListener('click', openDetail);
+});
+
+bookmarkButtons.forEach(button => {
+    button.addEventListener('click', function (event) {
+        event.stopPropagation();
+    });
+});
+
+
+detailOverlay.addEventListener('click', function () {
+    closeDetail();
+});
+
+backButton.addEventListener('click', function () {
+    closeDetail();
+});
