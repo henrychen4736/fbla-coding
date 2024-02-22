@@ -222,9 +222,12 @@
                     <p class="caption" style="width: 265px;">Individual-Information</p>
                     <div class="modify-individual">
                         <div class="individual-info individual-input-container input-container">
-                            <input type="text" class="individual-name" id="modifyContactName" placeholder="Contact name" required>
-                            <input type="text" class="individual-role" id="modifyContactRole" placeholder="Contact role" required>
-                            <input type="email" class="individual-email" id="modifyContactEmail" placeholder="Contact email" required>
+                            <input type="text" class="individual-name" id="modifyContactName" placeholder="Contact name"
+                                required>
+                            <input type="text" class="individual-role" id="modifyContactRole" placeholder="Contact role"
+                                required>
+                            <input type="email" class="individual-email" id="modifyContactEmail"
+                                placeholder="Contact email" required>
                         </div>
                     </div>
                 </div>
@@ -241,16 +244,27 @@
                             <option value="Corporation">Corporation</option>
                             <option value="Other">Other</option>
                         </select>
+                        <div class="type-container input-container" style="display: none;" id="customTypeContainer">
+                            <input type="text" name="custom_partner_type" placeholder="Enter custom type"
+                                id="customTypeInput">
+                        </div>
+
                     </div>
                     <p class="caption">Resource Available</p>
                     <div class="resource-container input-container">
-                        <select class="partner-resource " name="partner-resource" id="resourcesAvailableDropdown" required>
+                        <select class="partner-resource " name="partner-resource" id="resourcesAvailableDropdown"
+                            required>
                             <option value="Food Supply">Food Supply</option>
                             <option value="Construction">Construction</option>
                             <option value="Electronic">Electronic</option>
                             <option value="Education">Education</option>
                             <option value="Other">Other</option>
                         </select>
+                        <div class="resource-container input-container" style="display: none;"
+                            id="customResourceContainer">
+                            <input type="text" name="custom_resource_available" placeholder="Enter custom resource"
+                                id="customResourceInput">
+                        </div>
                     </div>
                     <p class="caption">Telephone Number</p>
                     <div class="tel-container input-container">

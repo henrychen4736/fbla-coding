@@ -238,3 +238,26 @@ backButtons.forEach(button => {
         closeDetail();
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    var partnerTypeDropdown = document.getElementById('partnerTypeDropdown');
+    var resourcesAvailableDropdown = document.getElementById('resourcesAvailableDropdown');
+    var customTypeContainer = document.getElementById('customTypeContainer');
+    var customResourceContainer = document.getElementById('customResourceContainer');
+
+    partnerTypeDropdown.addEventListener('change', function() {
+        if (this.value === 'Other') {
+            customTypeContainer.style.display = 'block';
+        } else {
+            customTypeContainer.style.display = 'none';
+        }
+    });
+
+    resourcesAvailableDropdown.addEventListener('change', function() {
+        if (this.value === 'Other') {
+            customResourceContainer.style.display = 'block';
+        } else {
+            customResourceContainer.style.display = 'none';
+        }
+    });
+});
