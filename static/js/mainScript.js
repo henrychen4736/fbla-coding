@@ -120,7 +120,7 @@ function fetchImage(imageUrl) {
         .then(response => response.blob())
         .then(blob => {
             const imageObjectUrl = URL.createObjectURL(blob);
-            document.getElementById('partnerImageDisplay').src = imageObjectUrl;
+            document.getElementById('partnerImageDisplay').style.backgroundImage = 'url(' + imageObjectUrl + ')';
             document.getElementById('partnerImageDisplay').style.display = 'block';
         })
         .catch(error => {
@@ -187,10 +187,25 @@ resourceSelect.addEventListener('change', showResourceInput);
 document.addEventListener('DOMContentLoaded', function () {
     const addImageIcon = document.querySelector('.add-image-container .fa-plus');
     const fileInput = document.getElementById('partner-image');
+    const partnerImage = document.getElementById('partner-image-preview');
 
     // When the addImageIcon is clicked, triggers a click event on the fileInput element, opening the file dialog
     addImageIcon.addEventListener('click', function () {
         fileInput.click();
+    });
+
+    partnerImage.addEventListener('click', function () {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function () {
+        partnerImage.style.display = 'block';
+        addImageIcon.style.display = 'none';
+        const file = fileInput.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            partnerImage.style.backgroundImage = `url(${imageUrl})`;
+        }
     });
 });
 
@@ -441,7 +456,7 @@ detailButtons.forEach(button => {
     function populateDetailPopup(partner) {
         // Setting text content and image source based on partner details.
         document.getElementById('partnerName').textContent = partner.OrganizationName;
-        document.getElementById('partnerPhoto').src = `/partner-image/${partner.ID}`;
+        document.getElementById('partnerPhoto').style.backgroundImage = `url(/partner-image/${partner.ID})`;
         document.getElementById('contactName').textContent = partner.ContactName;
         document.getElementById('contactRole').textContent = partner.Role;
         document.getElementById('contactEmail').textContent = partner.Email;

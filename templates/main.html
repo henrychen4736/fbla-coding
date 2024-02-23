@@ -149,7 +149,8 @@
             <div class="contact-content">
                 <div class="add-image-container">
                     <p class="caption">Add partner image</p>
-                    <input type="file" name="partner-image" accept="image/*" style="display: none;" id="partner-image">
+                    <input type="file" name="partner-image" accept="image/*" id="partner-image" style="display: none;">
+                    <div class="background-overlay-add" id="partner-image-preview" style="display: none;"></div>
                     <i class="fa-solid fa-plus"></i>
                 </div>
                 <div class="input-container">
@@ -215,7 +216,7 @@
             <div class="detail-container">
                 <div class="left-detail-col">
                     <div class="partner-photo">
-                        <img id="partnerPhoto" src="/static/assets/white.png">
+                        <div class="background-overlay" id="partnerPhoto"></div>
                     </div>
                     <div class="individual-contact">
                         <p class="caption">Individual Name</p>
@@ -258,9 +259,8 @@
             <div class="left-detail-col">
                 <div class="partner-photo">
                     <i class="fa-solid fa-plus modify-plus"></i>
-                    <img id="partnerImageDisplay" src="/static/assets/white.png" alt="Partner Image" style="display: none;">
                     <input type="file" id="partner-photo-upload" name="partner-photo" accept="image/*" style="display: none;">
-                    <div class="background-overlay"></div>
+                    <div class="background-overlay" id="partnerImageDisplay" style="background-image: url(/fbla-coding/static/assets/white.png); display: none;"></div>
                 </div>
                 <div class="individual-contact">
                     <p class="caption" style="width: 265px;">Individual-Information</p>
