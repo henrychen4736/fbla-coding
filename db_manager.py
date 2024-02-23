@@ -1,5 +1,6 @@
 import sqlite3 as sql
 import bcrypt
+import xlsxwriter
 
 
 class DatabaseError(Exception):
@@ -253,6 +254,29 @@ class DBManager:
             raise
         finally:
             conn.close()
+    
+    def generate_excel(self, optional_columns):
+        columns = ['OrganizationName'] + optional_columns
+        conn = self._connect()
+        cursor = conn.cursor()
+        query = f"SELECT {', '.join(columns)} FROM Partners"
+        self._execute(cursor, query)
+        data = cursor.fetchall()
+        conn.close()
+
+        excel_file = 'report.xlsx'
+        workbook = xlsxwriter.Workbook(excel_file)
+        worksheet = workbook.add_worksheet()
+
+        for col_num, header in enumerate(columns):
+            worksheet.write(0, col_num, header)
+        
+        for row_num, row_data in enumerate(data, 1):
+            for col_num, cell_data in enumerate(row_data):
+                worksheet.write(row_num, col_num, cell_data)
+        
+        workbook.close()
+        return excel_file
 
     def register_user(self, username, password):
         '''

@@ -378,11 +378,38 @@
     font-weight: 500;
 }
 
+.right-col .fa-file {
+    position: absolute;
+    bottom: 20px;
+    width: 54px;
+    height: 54px;
+    border: 2px solid #FFA500;
+    color: #FFA500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin-right: 20px;
+    background-color: #1E1E1E;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.right-col .fa-file:hover {
+    background-color: #FFA500;
+    color: #1E1E1E;
+    box-shadow: 0 0 5px #FFA500;
+    cursor: pointer;
+}
+
+
 .add-contact {
     position: absolute;
     bottom: 20px;
-    width: 310.3px;
-    left: 0;
+    width: 240px;
+    height: 54px;
+    margin-right: 20px;
+    right: 0;
     padding: 10px 20px;
     background-color: #fff;
     color: #1E1E1E;
@@ -395,7 +422,7 @@
     border-right: 5px solid rgba(0, 0, 0, .5);
     border-radius: 10px;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .add-contact:hover {
@@ -405,6 +432,121 @@
 
 .add-contact .fa-plus {
     margin-right: 10px;
+}
+
+.report-overlay {
+    transition: transform 0.2s ease;
+    transform-origin: center;
+    transform: scale(0);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.create-report {
+    position: fixed;
+    transform: scale(0) translate(-50%, -50%);
+    display: flex;
+    top: 50%;
+    left: 50%;
+    padding: 20px 0;
+    align-items: center;
+    flex-direction: column;
+    width: 380px;
+    height: 400px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px #fff;
+    z-index: 1000;
+    overflow: hidden;
+    background: #1E1E1E;
+}
+
+.create-report .fa-xmark {
+    position: absolute;
+    display: flex;
+    top: 15px;
+    left: 15px;
+    padding: 5;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #1E1E1E;
+    border-radius: 5px;
+    transition: box-shadow 0.3s ease;
+    font-size: 40px;
+}
+
+.create-report .fa-xmark:hover {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.checkbox-container {
+    height: fit-content;
+    width: 205px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #000000;
+    padding: 10px;
+    border-radius: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+    transition: box-shadow 0.3s ease;
+}
+
+.checkbox-container:hover {
+    box-shadow: 0 0 10px #fff;
+}
+
+.generate-report {
+    height: 60px;
+    width: 205px;
+    margin: 20px 40px 0 40px;
+    background-color: #fff;
+    color: #1E1E1E;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-top: none;
+    border-left: none;
+    border-bottom: 5px solid rgba(0, 0, 0, .5);
+    border-right: 5px solid rgba(0, 0, 0, .5);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.generate-report:hover {
+    background-color: #1E1E1E;
+    color: #fff;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    color: #808080;
+    margin-bottom: 6px;
+}
+
+.info p {
+    flex: 1;
+}
+
+.info input {
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.info input[type="checkbox"]:checked + p {
+    color: #fff;
+    font-weight: 500;
 }
 
 .create-overlay {
@@ -435,13 +577,14 @@
     background: #1E1E1E;
 }
 
-.fa-xmark {
+.create-contact-page .fa-xmark {
     position: absolute;
     display: flex;
     padding: 5;
     margin: 15px 0 0 40px;
     width: 50px;
     height: 50px;
+    justify-content: center;
     text-align: center;
     color: #fff;
     background-color: #1E1E1E;
@@ -450,7 +593,7 @@
     font-size: 50px;
 }
 
-.fa-xmark:hover {
+.create-contact-page .fa-xmark:hover {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     cursor: pointer;
 }

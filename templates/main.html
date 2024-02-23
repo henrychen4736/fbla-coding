@@ -63,9 +63,9 @@
                 </div>
             </div>
             {% endfor %}
-            
+        </div>
+        <div class="right-col">
             <form method="get" action="/search">
-                <div class="right-col">
                     <div class="filter-bar">
                         <h2>Select Filters</h2>
                         <div class="search-bar">
@@ -104,10 +104,41 @@
                         <div class="filter"><input type="checkbox" name="resources" value="Other" {% if "Other" in
                                 request.args.getlist('resources') %}checked{% endif %}> Other</div>
                     </div>
-                </div>
             </form>
+            <i class="fa-solid fa-file"></i>
             <button class="add-contact"><i class="fa-solid fa-plus"></i>Create a new contact</button>
         </div>
+    </div>
+    <div class="report-overlay"></div>
+    <div class="create-report">
+        <i class="fa-solid fa-xmark"></i>
+        <div class="checkbox-container">
+            <div class="info">
+                <input type="checkbox"><p>Partner name</P> 
+            </div>
+            <div class="info">
+                <input type="checkbox"><p>Type of partner</P> 
+            </div>
+            <div class="info">
+                <input type="checkbox"><p>Resource available</P> 
+            </div>
+            <div class="info">
+                <input type="checkbox"><p>Partner telephone</P> 
+            </div>
+            <div class="info">
+                <input type="checkbox"><p>Description</P> 
+            </div>
+            <div class="info">
+                <input type="checkbox"><p>Individual's name</P> 
+            </div>
+            <div class="info">
+                <input type="checkbox"><p>Individual's role</P> 
+            </div>
+            <div class="info">
+                <input type="checkbox"><p>Individual's email</P> 
+            </div>
+        </div>  
+        <button class="generate-report">Generate Report</button>
     </div>
     <div class="create-overlay"></div>
     <div class="create-contact-page">

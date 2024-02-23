@@ -274,6 +274,18 @@ def search():
         return jsonify({'error': 'Database error', 'details': str(e)}), 500
 
 
+@app.route('/generate-report', methods=['GET'])
+def generate_report():
+    optional_columns = ['TypeOfOrganization', 'ResourcesAvailable', 'Description', 'ContactName', 'Role', 'Email', 'Phone']
+    
+    requested_columns = request.args.getlist('columns')
+    valid_requested_columns = [col for col in requested_columns if col in optional_columns]
+    
+    excel_file = db_manager.generate_excel(valid_requested_columns)
+    
+    return send_file(excel_file, as_attachment=True, attachment_filename='partners_report.xlsx')
+
+
 @app.route('/toggle_bookmark/<int:partner_id>', methods=['POST'])
 def toggle_bookmark(partner_id):
     '''

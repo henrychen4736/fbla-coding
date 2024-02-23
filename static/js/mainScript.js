@@ -18,6 +18,10 @@ const detailOverlay = document.querySelector('.detail-overlay');
 const detailView = document.querySelector('.detail-view');
 const modifyDetailView = document.querySelector('.modify-detail-view');
 const deleteButton = document.getElementById('deleteButton');
+const generateButton = document.querySelector('.fa-file');
+const exitButton = document.querySelector('.create-report .fa-xmark');
+const reportOverlay = document.querySelector('.report-overlay')
+const createReport = document.querySelector('.create-report');
 
 let currentPartnerId = null;
 let sidebarOpen = false;
@@ -52,6 +56,18 @@ function closeCreate() {
     createOverlay.style.transform = 'scale(0)';
     createContact.style.transform = 'scale(0)';
     document.body.style.overflow = '';
+}
+
+function openReport() {
+    reportOverlay.style.transform = "scale(1)";
+    createReport.style.transform = "scale(1) translate(-50%, -50%)";
+    document.body.style.overflow = "hidden";
+}
+
+function closeReport() {
+    reportOverlay.style.transform = "scale(0)";
+    createReport.style.transform = "scale(0)";
+    document.body.style.overflow = "";
 }
 
 function showTypeInput() {
@@ -147,6 +163,18 @@ createOverlay.addEventListener('click', function () {
 closeButton.addEventListener('click', function () {
     // Closes the create overlay
     closeCreate();
+})
+
+generateButton.addEventListener('click', function () {
+    openReport();
+})
+
+reportOverlay.addEventListener('click', function () {
+    closeReport();
+})
+
+exitButton.addEventListener('click', function () {
+    closeReport();
 })
 
 typeSelect.addEventListener('change', showTypeInput);
@@ -371,10 +399,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     const addPartnerForm = document.getElementById('addPartnerForm');
-
+    
     addPartnerForm.addEventListener('submit', function (e) {
+        console.log("THIS WAS REACHED")
         e.preventDefault();
-
+        
         const formData = new FormData(addPartnerForm);
 
         // Use the Fetch API to send the form data to a server endpoint.
