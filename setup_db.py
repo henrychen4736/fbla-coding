@@ -24,8 +24,8 @@ def setup(name):
             Email TEXT NOT NULL,
             Phone TEXT NOT NULL,
             Bookmarked BOOLEAN NOT NULL DEFAULT FALSE,
-            ImageData BLOB,
-            ImageMimeType TEXT,
+            ImageData BLOB NOT NULL,
+            ImageMimeType TEXT NOT NULL,
             FOREIGN KEY (UserID) REFERENCES AdminAuth(ID),
             UNIQUE(UserID, OrganizationName)
         )'''

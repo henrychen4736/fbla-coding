@@ -209,18 +209,16 @@
     <div class="modify-detail-view">
         <div class="detail-top">
             <i class="fa-solid fa-right-from-bracket"></i>
-            <h1>Partner Name</h1>
+            <h1 id="editablePartnerName" contenteditable="true">Partner Name</h1>
             <div class="tool-icon">
-                <i class="fa-solid fa-file-pdf"></i>
                 <i class="fa-solid fa-floppy-disk"></i>
-                <i class="fa-solid fa-copy"></i>
-                <i class="fa-solid fa-delete-left"></i>
             </div>
         </div>
         <div class="detail-container">
             <div class="left-detail-col">
                 <div class="partner-photo">
                     <i class="fa-solid fa-plus modify-plus"></i>
+                    <img id="partnerImageDisplay" src="/static/assets/company-placeholder.png" alt="Partner Image" style="display: none;">
                     <input type="file" id="partner-photo-upload" name="partner-photo" accept="image/*" style="display: none;">
                     <div class="background-overlay"></div>
                 </div>

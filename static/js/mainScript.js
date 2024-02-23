@@ -170,7 +170,13 @@ editButton.addEventListener('click', function () {
         document.getElementById('modifyContactEmail').value = partner.Email || '';
         document.getElementById('partnerTelephoneNumber').value = partner.Phone || '';
         document.getElementById('modifyPartnerDescription').value = partner.Description || '';
-    
+        document.getElementById('editablePartnerName').textContent = partner.OrganizationName;
+
+        if (currentPartnerId) {
+            const imageUrl = `/partner-image/${currentPartnerId}`;
+            fetchImage(imageUrl);
+        }
+
         if (partner.OrganizationIsOtherType) {
             document.getElementById('partnerTypeDropdown').value = 'Other';
             document.getElementById('customTypeContainer').style.display = 'block';
@@ -189,7 +195,6 @@ editButton.addEventListener('click', function () {
             document.getElementById('customResourceContainer').style.display = 'none';
         }
     }
-    
     if (currentPartnerId) {
         fetch(`/partner/details/${currentPartnerId}`)
             .then(response => response.json())
@@ -203,53 +208,30 @@ editButton.addEventListener('click', function () {
     }
 });
 
-// saveButton.addEventListener('click', function () {
-//     if (currentPartnerId) {
-//         const isPartnerTypeOther = document.getElementById('partnerTypeDropdown').value === 'Other';
-//         const partnerTypeValue = isPartnerTypeOther ? document.getElementById('customTypeContainer').value : document.getElementById('partnerTypeDropdown').value;
-        
-//         const isResourcesAvailableOther = document.getElementById('resourcesAvailableDropdown').value === 'Other';
-//         const resourcesAvailableValue = isResourcesAvailableOther ? document.getElementById('customResourceContainer').value : document.getElementById('resourcesAvailableDropdown').value;
-
-//         const formData = {
-//             contactName: document.getElementById('modifyContactName').value,
-//             contactRole: document.getElementById('modifyContactRole').value,
-//             contactEmail: document.getElementById('modifyContactEmail').value,
-//             partnerTelephoneNumber: document.getElementById('partnerTelephoneNumber').value,
-//             partnerDescription: document.getElementById('modifyPartnerDescription').value,
-//             partnerType: partnerTypeValue,
-//             partnerTypeIsOther: isPartnerTypeOther,
-//             resourcesAvailable: resourcesAvailableValue,
-//             resourcesAvailableIsOtherType: isResourcesAvailableOther,
-//         };
-//         console.log(formData);
-//         fetch(`/partner/modify/${currentPartnerId}`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify(formData),
-//         })
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log("Update response:", data);
-//             closeModify();
-//         })
-//         .catch(error => console.error('Error:', error));
-//     } else {
-//         console.log("No partner selected for saving.");
-//     }
-// });
+function fetchImage(imageUrl) {
+    fetch(imageUrl)
+    .then(response => response.blob())
+    .then(blob => {
+        const imageObjectUrl = URL.createObjectURL(blob);
+        document.getElementById('partnerImageDisplay').src = imageObjectUrl;
+        document.getElementById('partnerImageDisplay').style.display = 'block';
+    })
+    .catch(error => {
+        console.log('Error fetching image:', error);
+        document.getElementById('partnerImageDisplay').style.display = 'none';
+    });
+}
 
 saveButton.addEventListener('click', function () {
     if (currentPartnerId) {
         const fileInput = document.getElementById('partner-photo-upload');
         const formData = new FormData();
 
-        if(fileInput.files[0]) {
+        if (fileInput.files[0]) {
             formData.append('image', fileInput.files[0]);
         }
 
+        formData.append('organizationName', document.getElementById('editablePartnerName').textContent);
         formData.append('contactName', document.getElementById('modifyContactName').value);
         formData.append('contactRole', document.getElementById('modifyContactRole').value);
         formData.append('contactEmail', document.getElementById('modifyContactEmail').value);
@@ -267,13 +249,20 @@ saveButton.addEventListener('click', function () {
         .then(response => response.json())
         .then(data => {
             console.log("Update response:", data);
-            closeModify();
+            if (data.success) {
+                window.location.reload();
+            } else {
+                console.error('Save operation was not successful:', data.message);
+            }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+        });
     } else {
         console.log("No partner selected for saving.");
     }
 });
+
 
 detailOverlay.addEventListener('click', function () {
     closeModify();
@@ -313,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var customResourceContainer = document.getElementById('customResourceContainer');
     function toggleCustomTypeContainer() {
         if (partnerTypeDropdown.value === 'Other') {
-            customTypeContainer.style.display = 'block';
+            customTypeContainer.style.display = 'blodck';
         } else {
             customTypeContainer.style.display = 'none';
         }
@@ -329,4 +318,25 @@ document.addEventListener('DOMContentLoaded', function() {
     resourcesAvailableDropdown.addEventListener('change', toggleCustomResourceContainer);
     toggleCustomTypeContainer();
     toggleCustomResourceContainer();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const editablePartnerName = document.getElementById('editablePartnerName');
+    let lastValidContent = editablePartnerName.textContent;
+
+    editablePartnerName.addEventListener('blur', function() {
+        if (!this.textContent.trim()) {
+            this.textContent = lastValidContent || 'Partner Name';
+            alert('Partner name cannot be blank.');
+        } else {
+            lastValidContent = this.textContent;
+        }
+    });
+
+    editablePartnerName.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            editablePartnerName.blur();
+        }
+    });
 });
