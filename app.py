@@ -171,9 +171,9 @@ def modify_partner(partner_id):
             partner_id,
             organization_name=data.get('organization_name'),
             type_of_organization=data.get('partnerType'),
-            organization_is_other_type=data.get('organization_is_other_type'),
+            organization_is_other_type=data.get('partherTypeIsOther'),
             resources_available=data.get('resourcesAvailable'),
-            resources_available_is_other_type=data.get('resources_available_is_other_type'),
+            resources_available_is_other_type=data.get('resourcesAvailableIsOtherType'),
             description=data.get('partnerDescription'),
             contact_name=data.get('contactName'),
             role=data.get('contactRole'),
@@ -189,6 +189,9 @@ def modify_partner(partner_id):
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
         pass
+
+
+
 
 
 @app.route('/partner/details/<int:partner_id>')

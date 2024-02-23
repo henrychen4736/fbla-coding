@@ -161,23 +161,24 @@ editButton.addEventListener('click', function () {
         document.getElementById('modifyContactEmail').value = partner.Email || '';
         document.getElementById('partnerTelephoneNumber').value = partner.Phone || '';
         document.getElementById('modifyPartnerDescription').value = partner.Description || '';
-        
-        function setSelectedOption(selectElementId, valueToSelect) {
-            let selectElement = document.getElementById(selectElementId);
-            let foundMatch = false;
-            for(let i = 0; i < selectElement.options.length; i++) {
-                if(selectElement.options[i].value === valueToSelect) {
-                    selectElement.selectedIndex = i;
-                    foundMatch = true;
-                    break;
-                }
-            }
-            if (!foundMatch && selectElement.options.length > 0) {
-                selectElement.selectedIndex = selectElement.options.length - 1;
-            }
+    
+        if (partner.OrganizationIsOtherType) {
+            document.getElementById('partnerTypeDropdown').value = 'Other';
+            document.getElementById('customTypeContainer').style.display = 'block';
+            document.getElementById('customTypeContainer').value = partner.TypeOfOrganization;
+        } else {
+            document.getElementById('partnerTypeDropdown').value = partner.TypeOfOrganization;
+            document.getElementById('customTypeContainer').style.display = 'none';
         }
-        setSelectedOption("partnerTypeDropdown", partner.PartnerType || '');
-        setSelectedOption("resourcesAvailableDropdown", partner.ResourcesAvailable || '');
+    
+        if (partner.ResourcesAvailableIsOtherType) {
+            document.getElementById('resourcesAvailableDropdown').value = 'Other';
+            document.getElementById('customResourceContainer').style.display = 'block';
+            document.getElementById('customResourceContainer').value = partner.ResourcesAvailable;
+        } else {
+            document.getElementById('resourcesAvailableDropdown').value = partner.ResourcesAvailable;
+            document.getElementById('customResourceContainer').style.display = 'none';
+        }
     }
     
     if (currentPartnerId) {
@@ -195,16 +196,24 @@ editButton.addEventListener('click', function () {
 
 saveButton.addEventListener('click', function () {
     if (currentPartnerId) {
+        const isPartnerTypeOther = document.getElementById('partnerTypeDropdown').value === 'Other';
+        const partnerTypeValue = isPartnerTypeOther ? document.getElementById('customTypeContainer').value : document.getElementById('partnerTypeDropdown').value;
+        
+        const isResourcesAvailableOther = document.getElementById('resourcesAvailableDropdown').value === 'Other';
+        const resourcesAvailableValue = isResourcesAvailableOther ? document.getElementById('customResourceContainer').value : document.getElementById('resourcesAvailableDropdown').value;
+
         const formData = {
             contactName: document.getElementById('modifyContactName').value,
             contactRole: document.getElementById('modifyContactRole').value,
             contactEmail: document.getElementById('modifyContactEmail').value,
             partnerTelephoneNumber: document.getElementById('partnerTelephoneNumber').value,
             partnerDescription: document.getElementById('modifyPartnerDescription').value,
-            partnerType: document.getElementById('partnerTypeDropdown').value,
-            resourcesAvailable: document.getElementById('resourcesAvailableDropdown').value,
+            partnerType: partnerTypeValue,
+            partnerTypeIsOther: isPartnerTypeOther,
+            resourcesAvailable: resourcesAvailableValue,
+            resourcesAvailableIsOtherType: isResourcesAvailableOther,
         };
-        console.log(formData)
+        console.log(formData);
         fetch(`/partner/modify/${currentPartnerId}`, {
             method: 'POST',
             headers: {
@@ -223,7 +232,6 @@ saveButton.addEventListener('click', function () {
     }
 });
 
-
 detailOverlay.addEventListener('click', function () {
     closeModify();
     closeDetail();
@@ -234,4 +242,29 @@ backButtons.forEach(button => {
         closeModify();
         closeDetail();
     });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var partnerTypeDropdown = document.getElementById('partnerTypeDropdown');
+    var resourcesAvailableDropdown = document.getElementById('resourcesAvailableDropdown');
+    var customTypeContainer = document.getElementById('customTypeContainer');
+    var customResourceContainer = document.getElementById('customResourceContainer');
+    function toggleCustomTypeContainer() {
+        if (partnerTypeDropdown.value === 'Other') {
+            customTypeContainer.style.display = 'block';
+        } else {
+            customTypeContainer.style.display = 'none';
+        }
+    }
+    function toggleCustomResourceContainer() {
+        if (resourcesAvailableDropdown.value === 'Other') {
+            customResourceContainer.style.display = 'block';
+        } else {
+            customResourceContainer.style.display = 'none';
+        }
+    }
+    partnerTypeDropdown.addEventListener('change', toggleCustomTypeContainer);
+    resourcesAvailableDropdown.addEventListener('change', toggleCustomResourceContainer);
+    toggleCustomTypeContainer();
+    toggleCustomResourceContainer();
 });
