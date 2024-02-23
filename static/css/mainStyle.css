@@ -962,6 +962,8 @@
 .left-detail-col .partner-photo {
     position: relative;
     display: flex;
+    justify-content: center;
+    align-items: center;
     height: 280px;
     width: 280px;
     box-shadow: 0 0 10px #fff;

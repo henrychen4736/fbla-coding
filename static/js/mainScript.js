@@ -2,7 +2,7 @@ const toggleButton = document.querySelector('.fa-bars');
 const sidebar = document.querySelector('.sidebar');
 const sidebarOverlay = document.querySelector('.sidebar-overlay');
 const createButton = document.querySelector('.add-contact');
-const closeButton = document.querySelector('.fa-xmark');
+const closeButton = document.querySelectorAll('.fa-xmark');
 const createOverlay = document.querySelector('.create-overlay')
 const createContact = document.querySelector('.create-contact-page');
 const typeSelect = document.querySelector('.partner-type');
@@ -19,7 +19,7 @@ const detailView = document.querySelector('.detail-view');
 const modifyDetailView = document.querySelector('.modify-detail-view');
 const deleteButton = document.getElementById('deleteButton');
 const generateButton = document.querySelector('.fa-file');
-const exitButton = document.querySelector('.create-report .fa-xmark');
+const exitButton = document.querySelector('.fa-xmark');
 const reportOverlay = document.querySelector('.report-overlay')
 const createReport = document.querySelector('.create-report');
 
@@ -160,10 +160,12 @@ createOverlay.addEventListener('click', function () {
     closeCreate();
 })
 
-closeButton.addEventListener('click', function () {
-    // Closes the create overlay
-    closeCreate();
-})
+closeButton.forEach(button => {
+    button.addEventListener('click', () => {
+        // Closes the create overlay
+        closeCreate();
+    });
+});
 
 generateButton.addEventListener('click', function () {
     openReport();
