@@ -5,7 +5,6 @@ import time
 import shutil
 import os
 import io
-import logging
 import base64
 
 app = Flask(__name__)
@@ -21,19 +20,14 @@ db_manager = DBManager('partners.db')
 # TODO: generate report feature
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 
 def backup_db():
     try:
         timestamp = time.strftime('%Y%m%d-%H%M%S')
         backup_filename = f'db_backup_{timestamp}.db'
         shutil.copyfile('partners.db', backup_filename)
-        logger.info(f'Backup created: {backup_filename}')
     except Exception as e:
-        logger.error(f'Error creating backup: {e}')
-
+        print('Error making backup: ', e)
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=backup_db, trigger='interval', weeks=1)
@@ -50,16 +44,12 @@ def signup():
             session['logged_in'] = True
             session['username'] = username
             session['user_id'] = user_id
-            logger.info(f'Username: {username} signed up with user ID: {user_id}')
             return redirect(url_for('main'))
         except SignupError as e:
-            logger.error(f'Signup error for username: {username}. Error: {e}', exc_info=True)
             return render_template('signup.html', error='The username already exists!')
         except DatabaseError as e:
-            logger.error(f'Database error during signup for username: {username}. Error: {e}', exc_info=True)
             return render_template('signup.html', error='There was a problem connecting to the database. Please try again.')
         except Exception as e:
-            logger.error(f'Unexpected error during signup for username: {username}. Error: {e}', exc_info=True)
             return render_template('signup.html', error='An unexpected error occurred. Please try again.')
     else:
         return render_template('signup.html')
@@ -76,16 +66,12 @@ def login():
                 session['logged_in'] = True
                 session['username'] = username
                 session['user_id'] = user_id
-                logger.info(f"User '{username}' logged in successfully.")
                 return redirect(url_for('main'))
             else:
-                logger.warning(f"Failed login attempt for user '{username}'.")
                 return render_template('login.html', error='Invalid username or password')
         except DatabaseError as e:
-            logger.error(f'Database error during logging in for username: {username}. Error: {e}', exc_info=True)
             return render_template('login.html', error='There was a problem connecting to the database. Please try again.')
         except Exception as e:
-            logger.error(f'Unexpected error during logging in for username: {username}. Error: {e}', exc_info=True)
             return render_template('login.html', error='An unexpected error occurred. Please try again.')
     else:
         return render_template('login.html')
@@ -98,19 +84,14 @@ def main():
         try:
             if search_query:
                 partners = db_manager.search_partners(search_query)
-                logger.info(f'Search performed by user ID {session["user_id"]} with query "{search_query}".')
             else:
                 partners = db_manager.get_all_partners(session['user_id'])
-                logger.info(f'Main page accessed by user ID {session["user_id"]}')
             return render_template('main.html', partners=partners, searchQuery=search_query)
         except DatabaseError as e:
-            logger.error(f'Database error in main page for username: {session["username"]}. Error: {e}', exc_info=True)
-            
+            return render_template('main.html', error='An error occurred while connecting to the database. Please try again.')
         except Exception as e:
-            logger.error(f"Error accessing main page for user ID {session['user_id']}: {e}", exc_info=True)
             return render_template('main.html', error='An error occurred while fetching partner data. Please try again.')
     else:
-        logger.warning("Attempt to access main page without being logged in.")
         return redirect(url_for('login'))
 
 
@@ -157,7 +138,6 @@ def add_partner():
     except OperationalError:
         pass
     except DatabaseError as e:
-        logger.error(f'Database error during add partner for username: {username}. Partner name: {organization_name} type: {type_of_organization} Error: {e}', exc_info=True)
         return render_template('signup.html', error='There was a problem connecting to the database. Please try again.')
     return redirect(url_for('main'))
 

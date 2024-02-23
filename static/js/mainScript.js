@@ -108,6 +108,15 @@ function closeDetail() {
     document.body.style.overflow = "";
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const addImageIcon = document.querySelector('.add-image-container .fa-plus');
+    const fileInput = document.getElementById('partner-image');
+    addImageIcon.addEventListener('click', function() {
+        fileInput.click();
+    });
+});
+
+
 function openModify() {
     modifyDetailView.style.transform = "translate(-50%, -50%)";
     document.body.style.overflow = "hidden";

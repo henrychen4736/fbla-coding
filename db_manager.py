@@ -32,7 +32,6 @@ class DBManager:
         try:
             return sql.connect(self.db_name)
         except sql.Error as e:
-            logger.error(f'An error occurred connecting to the database: {e}')
             raise DatabaseError(f'An error occurred connecting to the database: {e}')
 
     '''
@@ -43,13 +42,10 @@ class DBManager:
         try:
             cursor.execute(query, params)
         except sql.IntegrityError as e:
-            logger.error(f'Integrity error: {e}')
             raise IntegrityError(f'Integrity error: {e}')
         except sql.OperationalError as e:
-            logger.error(f'Operational error: {e}')
             raise OperationalError(f'Operational error: {e}')
         except sql.Error as e:
-            logger.error(f'Database error: {e}')
             raise DatabaseError(f'Database error: {e}')
 
     '''
