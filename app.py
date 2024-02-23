@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, render_template, url_for, session, jsonify, send_file, flash
-from db_manager import DBManager, DatabaseError, IntegrityError, OperationalError, SignupError
+from db_manager import DBManager, DatabaseError, IntegrityError, SignupError
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
 import shutil
@@ -13,7 +13,6 @@ app.secret_key = 'PLACEHOLDER'
 
 db_manager = DBManager('partners.db')
 
-# TODO: add exception handling, if user tries adding partner that already exists, tries changing partner name to already existing partner
 # TODO: add more color to the ui
 # TODO: add 25 examples
 # TODO: add backup option
@@ -131,13 +130,11 @@ def add_partner():
 
     try:
         db_manager.add_partner(user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data, image_mime_type)
+        return jsonify({'success': True, 'message': 'Partner added successfully'}), 200
     except IntegrityError:
-        pass
-    except OperationalError:
-        pass
+        return jsonify({'success': False, 'message': 'Integrity error. Partner may already exist.'}), 400
     except DatabaseError as e:
-        return render_template('signup.html', error='There was a problem connecting to the database. Please try again.')
-    return redirect(url_for('main'))
+        return jsonify({'success': False, 'message': 'Database error', 'details': str(e)}), 500
 
 
 @app.route('/partner/modify/<int:partner_id>', methods=['POST'])
@@ -167,9 +164,11 @@ def modify_partner(partner_id):
             image_data=image_data,
             image_mime_type=image_mime_type
         )
-        return jsonify({'success': True, 'message': 'successfully updated partner'}), 200
-    except Exception as e:
-        return jsonify({'success': False, 'message': str(e)}), 500
+        return jsonify({'success': True, 'message': 'sucessfully updated partner'}), 200
+    except IntegrityError:
+        return jsonify({'success': False, 'message': 'Integrity error. Partner may already exist.'}), 400
+    except DatabaseError as e:
+        return jsonify({'success': False, 'message': 'Database error', 'details': str(e)}), 500
 
 
 @app.route('/partner/delete/<int:partner_id>', methods=['DELETE'])
@@ -180,8 +179,8 @@ def delete_partner(partner_id):
     try:
         db_manager.remove_partner(partner_id)
         return jsonify({'success': True, 'message': 'Partner successfully deleted'}), 200
-    except Exception as e:
-        return jsonify({'success': False, 'message': 'Failed to delete partner'}), 500
+    except DatabaseError as e:
+        return jsonify({'success': False, 'message': 'Database error', 'details': str(e)}), 500
 
 
 @app.route('/partner/details/<int:partner_id>')
@@ -192,22 +191,25 @@ def partner_details(partner_id):
             partner_data = dict(list(partner_data.items())[:-2])
             return jsonify(partner_data)
         else:
-            return jsonify({'error': 'Partner not found'}), 404
+            return jsonify({'success': False, 'message': 'Partner not found'}), 404
     except DatabaseError as e:
-        return jsonify({'error': 'An error occurred while fetching partner data', 'details': str(e)}), 500
+        return jsonify({'success': False, 'message': 'Database error', 'details': str(e)}), 500
 
 
 @app.route('/search')
 def search():
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(url_for('login'))
-    
-    search_query = request.args.get('searchQuery', '')
-    types = request.args.getlist('types')
-    resources = request.args.getlist('resources')
 
-    partners = db_manager.search_partners(search_query, types, resources)
-    return render_template('main.html', partners=partners, searchQuery=search_query)
+    try:
+        search_query = request.args.get('searchQuery', '')
+        types = request.args.getlist('types')
+        resources = request.args.getlist('resources')
+
+        partners = db_manager.search_partners(search_query, types, resources)
+        return render_template('main.html', partners=partners, searchQuery=search_query)
+    except DatabaseError as e:
+        return jsonify({'error': 'Database error', 'details': str(e)}), 500
 
 
 @app.route('/toggle_bookmark/<int:partner_id>', methods=['POST'])
@@ -215,23 +217,21 @@ def toggle_bookmark(partner_id):
     try:
         partner = db_manager.get_partner_by_id(partner_id)
         if not partner:
-            return render_template('main.html')
-
+            return jsonify({'success': False, 'message': 'Partner not found. Please try again.'}), 500
         new_status = not partner['Bookmarked']
         db_manager.modify_partner(partner_id, bookmarked=new_status)
         return redirect(url_for('main'))
-    except Exception as e:
-        return str(e), 500
+    except DatabaseError as e:
+        return jsonify({'success': False, 'message': 'Database error', 'details': str(e)}), 500
 
 
 @app.route('/partner-image/<int:partner_id>')
 def partner_image(partner_id):
-    print("Received request for partner image:", partner_id)
-    image_data, image_mime_type = db_manager.get_partner_image(partner_id)
-    if image_data and image_mime_type:
+    try:
+        image_data, image_mime_type = db_manager.get_partner_image(partner_id)
         return send_file(io.BytesIO(image_data), mimetype=image_mime_type)
-    else:
-        pass
+    except DatabaseError as e:
+        return jsonify({'success': False, 'message': 'Database error', 'details': str(e)}), 500
 
 
 @app.route('/help')

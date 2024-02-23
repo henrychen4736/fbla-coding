@@ -10,10 +10,6 @@ class IntegrityError(DatabaseError):
     pass
 
 
-class OperationalError(DatabaseError):
-    pass
-
-
 class SignupError(DatabaseError):
     pass
 
@@ -43,25 +39,25 @@ class DBManager:
             cursor.execute(query, params)
         except sql.IntegrityError as e:
             raise IntegrityError(f'Integrity error: {e}')
-        except sql.OperationalError as e:
-            raise OperationalError(f'Operational error: {e}')
         except sql.Error as e:
             raise DatabaseError(f'Database error: {e}')
 
     '''
     method to add a partner to the database
     '''
-    def add_partner(self, user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data=None, image_mime_type='png'):
+    def add_partner(self, user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data=None, image_mime_type=None):
         if image_data is None:
             with open('./static/assets/company-placeholder.png', 'rb') as default_image:
                 image_data = default_image.read()
+                image_mime_type = 'png'
         try:
             conn = self._connect()
             c = conn.cursor()
             self._execute(c, 'INSERT INTO Partners (UserID, OrganizationName, TypeOfOrganization, OrganizationIsOtherType, ResourcesAvailable, ResourcesAvailableIsOtherType, Description, ContactName, Role, Email, Phone, Bookmarked, ImageData, ImageMimeType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                           (user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data, image_mime_type))
             conn.commit()
-        except Exception:
+        except Exception as e:
+            print(e)
             raise
         finally:
             conn.close()

@@ -144,19 +144,21 @@ detailButtons.forEach(button => {
     button.addEventListener('click', function() {
         const partnerId = this.getAttribute('data-partner-id');
         currentPartnerId = partnerId;
-        console.log(partnerId)
         document.getElementById('editButton').setAttribute('data-partner-id', partnerId);
         fetch(`/partner/details/${partnerId}`)
-            .then(response => 
-                response.json())
+            .then(response => response.json())
             .then(data => {
-                console.log(data)
                 populateDetailPopup(data);
                 openDetail();
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching partner details. Please try again.');
+            });
     });
+    
 });
+
 
 bookmarkButtons.forEach(button => {
     button.addEventListener('click', function(event) {
@@ -203,7 +205,10 @@ editButton.addEventListener('click', function () {
                 populateEditPopup(data);
                 openModify();
             })
-            .catch(error => console.log('Error: ', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching partner details. Please try again.');
+            });
     } else {
         console.log("No partner selected for editing.");
     }
@@ -218,7 +223,8 @@ function fetchImage(imageUrl) {
         document.getElementById('partnerImageDisplay').style.display = 'block';
     })
     .catch(error => {
-        console.log('Error fetching image:', error);
+        alert('Error fetching image. Please try again');
+        console.log('Error fetching image: ' + error.message);
         document.getElementById('partnerImageDisplay').style.display = 'none';
     });
 }
@@ -258,6 +264,7 @@ saveButton.addEventListener('click', function () {
         })
         .catch(error => {
             console.error('Error:', error);
+            alert('Error occurred during save operation. Please try again later.');
         });
     } else {
         console.log("No partner selected for saving.");
@@ -360,10 +367,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(error => {
+                alert('An error occurred while deleting from the database');
                 console.error('Error: ', error);
             });
         } else {
             console.error('Partner ID not found');
         }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addPartnerForm = document.getElementById('addPartnerForm');
+
+    addPartnerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(addPartnerForm);
+
+        fetch('/add_partner', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Partner added successfully');
+                window.location.reload();
+            } else {
+                console.error('Failed to add the partner', data.message);
+            }
+        })
+        .catch(error => {
+            alert('An error occurred while adding the partner to the database');
+            console.error('Error:', error);
+        });
     });
 });
