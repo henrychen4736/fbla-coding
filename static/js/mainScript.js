@@ -203,32 +203,66 @@ editButton.addEventListener('click', function () {
     }
 });
 
+// saveButton.addEventListener('click', function () {
+//     if (currentPartnerId) {
+//         const isPartnerTypeOther = document.getElementById('partnerTypeDropdown').value === 'Other';
+//         const partnerTypeValue = isPartnerTypeOther ? document.getElementById('customTypeContainer').value : document.getElementById('partnerTypeDropdown').value;
+        
+//         const isResourcesAvailableOther = document.getElementById('resourcesAvailableDropdown').value === 'Other';
+//         const resourcesAvailableValue = isResourcesAvailableOther ? document.getElementById('customResourceContainer').value : document.getElementById('resourcesAvailableDropdown').value;
+
+//         const formData = {
+//             contactName: document.getElementById('modifyContactName').value,
+//             contactRole: document.getElementById('modifyContactRole').value,
+//             contactEmail: document.getElementById('modifyContactEmail').value,
+//             partnerTelephoneNumber: document.getElementById('partnerTelephoneNumber').value,
+//             partnerDescription: document.getElementById('modifyPartnerDescription').value,
+//             partnerType: partnerTypeValue,
+//             partnerTypeIsOther: isPartnerTypeOther,
+//             resourcesAvailable: resourcesAvailableValue,
+//             resourcesAvailableIsOtherType: isResourcesAvailableOther,
+//         };
+//         console.log(formData);
+//         fetch(`/partner/modify/${currentPartnerId}`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify(formData),
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             console.log("Update response:", data);
+//             closeModify();
+//         })
+//         .catch(error => console.error('Error:', error));
+//     } else {
+//         console.log("No partner selected for saving.");
+//     }
+// });
+
 saveButton.addEventListener('click', function () {
     if (currentPartnerId) {
-        const isPartnerTypeOther = document.getElementById('partnerTypeDropdown').value === 'Other';
-        const partnerTypeValue = isPartnerTypeOther ? document.getElementById('customTypeContainer').value : document.getElementById('partnerTypeDropdown').value;
-        
-        const isResourcesAvailableOther = document.getElementById('resourcesAvailableDropdown').value === 'Other';
-        const resourcesAvailableValue = isResourcesAvailableOther ? document.getElementById('customResourceContainer').value : document.getElementById('resourcesAvailableDropdown').value;
+        const fileInput = document.getElementById('partner-photo-upload');
+        const formData = new FormData();
 
-        const formData = {
-            contactName: document.getElementById('modifyContactName').value,
-            contactRole: document.getElementById('modifyContactRole').value,
-            contactEmail: document.getElementById('modifyContactEmail').value,
-            partnerTelephoneNumber: document.getElementById('partnerTelephoneNumber').value,
-            partnerDescription: document.getElementById('modifyPartnerDescription').value,
-            partnerType: partnerTypeValue,
-            partnerTypeIsOther: isPartnerTypeOther,
-            resourcesAvailable: resourcesAvailableValue,
-            resourcesAvailableIsOtherType: isResourcesAvailableOther,
-        };
-        console.log(formData);
+        if(fileInput.files[0]) {
+            formData.append('image', fileInput.files[0]);
+        }
+
+        formData.append('contactName', document.getElementById('modifyContactName').value);
+        formData.append('contactRole', document.getElementById('modifyContactRole').value);
+        formData.append('contactEmail', document.getElementById('modifyContactEmail').value);
+        formData.append('partnerTelephoneNumber', document.getElementById('partnerTelephoneNumber').value);
+        formData.append('partnerDescription', document.getElementById('modifyPartnerDescription').value);
+        formData.append('partnerType', document.getElementById('partnerTypeDropdown').value === 'Other' ? document.getElementById('customTypeContainer').value : document.getElementById('partnerTypeDropdown').value);
+        formData.append('partnerTypeIsOther', document.getElementById('partnerTypeDropdown').value === 'Other');
+        formData.append('resourcesAvailable', document.getElementById('resourcesAvailableDropdown').value === 'Other' ? document.getElementById('customResourceContainer').value : document.getElementById('resourcesAvailableDropdown').value);
+        formData.append('resourcesAvailableIsOtherType', document.getElementById('resourcesAvailableDropdown').value === 'Other');
+
         fetch(`/partner/modify/${currentPartnerId}`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
+            body: formData,
         })
         .then(response => response.json())
         .then(data => {
@@ -252,6 +286,25 @@ backButtons.forEach(button => {
         closeDetail();
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadButton = document.querySelector('.partner-photo .fa-plus.modify-plus');
+    const fileInput = document.getElementById('partner-photo-upload');
+    uploadButton.addEventListener('click', function() {
+        fileInput.click();
+    });
+    
+    fileInput.addEventListener('change', function() {
+        if(this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.querySelector('.partner-photo .background-overlay').style.backgroundImage = `url(${e.target.result})`;
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+});
+
 
 document.addEventListener('DOMContentLoaded', function() {
     var partnerTypeDropdown = document.getElementById('partnerTypeDropdown');

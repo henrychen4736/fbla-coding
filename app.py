@@ -6,6 +6,7 @@ import shutil
 import os
 import io
 import base64
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'PLACEHOLDER'
@@ -15,10 +16,6 @@ db_manager = DBManager('partners.db')
 # TODO: add exception handling
 # TODO: add more color to the ui
 # TODO: add 25 examples
-# TODO: make help page better
-# TODO: add button to clear search/filters
-# TODO: generate report feature
-
 
 
 def backup_db():
@@ -144,34 +141,62 @@ def add_partner():
 
 @app.route('/partner/modify/<int:partner_id>', methods=['POST'])
 def modify_partner(partner_id):
-    data = request.json
     try:
-        print(data)
+        image = request.files.get('image')
+        image_data = None
+        image_mime_type = None
+        if image:
+            image_data = image.read()
+            image_mime_type = image.content_type
+
+        data = request.form
         db_manager.modify_partner(
             partner_id,
             organization_name=data.get('organization_name'),
             type_of_organization=data.get('partnerType'),
-            organization_is_other_type=data.get('partherTypeIsOther'),
+            organization_is_other_type=data.get('partnerTypeIsOther') == 'true',
             resources_available=data.get('resourcesAvailable'),
-            resources_available_is_other_type=data.get('resourcesAvailableIsOtherType'),
+            resources_available_is_other_type=data.get('resourcesAvailableIsOtherType') == 'true',
             description=data.get('partnerDescription'),
             contact_name=data.get('contactName'),
             role=data.get('contactRole'),
             email=data.get('contactEmail'),
             phone=data.get('partnerTelephoneNumber'),
             bookmarked=data.get('bookmarked'),
-            image_data=data.get('image_data'),
-            image_mime_type=data.get('image_mime_type')
+            image_data=image_data,
+            image_mime_type=image_mime_type
         )
-        print("UPDATE SUCCESSFUL")
-        return render_template('main')
         return jsonify({'success': True, 'message': 'successfully updated partner'}), 200
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
-        pass
 
-
-
+# @app.route('/partner/modify/<int:partner_id>', methods=['POST'])
+# def modify_partner(partner_id):
+#     data = request.json
+#     try:
+#         print(data)
+#         db_manager.modify_partner(
+#             partner_id,
+#             organization_name=data.get('organization_name'),
+#             type_of_organization=data.get('partnerType'),
+#             organization_is_other_type=data.get('partherTypeIsOther'),
+#             resources_available=data.get('resourcesAvailable'),
+#             resources_available_is_other_type=data.get('resourcesAvailableIsOtherType'),
+#             description=data.get('partnerDescription'),
+#             contact_name=data.get('contactName'),
+#             role=data.get('contactRole'),
+#             email=data.get('contactEmail'),
+#             phone=data.get('partnerTelephoneNumber'),
+#             bookmarked=data.get('bookmarked'),
+#             image_data=data.get('image_data'),
+#             image_mime_type=data.get('image_mime_type')
+#         )
+#         print("UPDATE SUCCESSFUL")
+#         return render_template('main')
+#         return jsonify({'success': True, 'message': 'successfully updated partner'}), 200
+#     except Exception as e:
+#         return jsonify({'success': False, 'message': str(e)}), 500
+#         pass
 
 
 @app.route('/partner/details/<int:partner_id>')
@@ -185,7 +210,6 @@ def partner_details(partner_id):
             return jsonify({'error': 'Partner not found'}), 404
     except DatabaseError as e:
         return jsonify({'error': 'An error occurred while fetching partner data', 'details': str(e)}), 500
-
 
 
 @app.route('/search')
