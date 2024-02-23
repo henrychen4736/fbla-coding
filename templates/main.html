@@ -12,6 +12,9 @@
 <body>
     <i class="fa-solid fa-bars"></i>
     <div class="sidebar-overlay"></div>
+    {% if error %}
+                <div style="color: red;">{{ error }}</div>
+    {% endif %}
     <div class="sidebar">
         <a href="main" class="sidebar-item">
             <i class="fa-solid fa-house"></i>
@@ -34,21 +37,21 @@
             <h1>Your Contacts</h1>
         </div>
         <div class="left-col">
-
+            
             {% for partner in partners %}
             <div class="company" data-partner-id="{{ partner['ID'] }}">
                 <div class="company-img">
                     <div class="blur-background">
                         <form action="{{ url_for('toggle_bookmark', partner_id=partner['ID']) }}" method="post"
-                            style="display: inline;">
-                            <button type="submit" style="background: none; border: none; cursor: pointer;">
+                        style="display: inline;">
+                        <button type="submit" style="background: none; border: none; cursor: pointer;">
                                 <i class="{{ 'fa-solid' if partner['Bookmarked'] else 'fa-regular' }} fa-bookmark"></i>
                             </button>
                         </form>
                     </div>
                     <img src="{{ url_for('partner_image', partner_id=partner['ID']) }}"
                         alt="{{ partner['OrganizationName'] }} Logo">
-                </div>
+                    </div>
                 <div class="company-info">
                     <h3>{{ partner['OrganizationName'] }}</h3>
                     <div class="brief-info">
@@ -56,11 +59,11 @@
                         <p class="company-type">{{ partner['TypeOfOrganization'] }}</p>
                         <p class="company-resources">Resources Available: <br><span>{{ partner['ResourcesAvailable']
                                 }}</span></p>
-                    </div>
+                            </div>
                 </div>
             </div>
             {% endfor %}
-
+            
             <form method="get" action="/search">
                 <div class="right-col">
                     <div class="filter-bar">
@@ -74,18 +77,18 @@
                                 if "Sole Proprietorship" in request.args.getlist('types') %}checked{% endif %}> Sole
                             Proprietorship</div>
                         <div class="filter"><input type="checkbox" name="types" value="Partnership" {% if "Partnership"
-                                in request.args.getlist('types') %}checked{% endif %}> Partnership</div>
+                            in request.args.getlist('types') %}checked{% endif %}> Partnership</div>
                         <div class="filter"><input type="checkbox" name="types" value="Limited Partnership" {%
                                 if "Limited Partnership" in request.args.getlist('types') %}checked{% endif %}> Limited
                             Partnership</div>
-                        <div class="filter"><input type="checkbox" name="types" value="LLC" {% if "LLC" in
+                            <div class="filter"><input type="checkbox" name="types" value="LLC" {% if "LLC" in
                                 request.args.getlist('types') %}checked{% endif %}> LLC</div>
                         <div class="filter"><input type="checkbox" name="types" value="Corporation" {% if "Corporation"
-                                in request.args.getlist('types') %}checked{% endif %}> Corporation</div>
-                        <div class="filter"><input type="checkbox" name="types" value="Non-Profit" {% if "Non-Profit" in
+                            in request.args.getlist('types') %}checked{% endif %}> Corporation</div>
+                            <div class="filter"><input type="checkbox" name="types" value="Non-Profit" {% if "Non-Profit" in
                                 request.args.getlist('types') %}checked{% endif %}> Non-Profit</div>
-                        <div class="filter"><input type="checkbox" name="types" value="Other" {% if "Other" in
-                                request.args.getlist('types') %}checked{% endif %}> Other</div>
+                                <div class="filter"><input type="checkbox" name="types" value="Other" {% if "Other" in
+                                    request.args.getlist('types') %}checked{% endif %}> Other</div>
                         <h3>Resource Available</h3>
                         <div class="filter"><input type="checkbox" name="resources" value="Food Supply" {%
                                 if "Food Supply" in request.args.getlist('resources') %}checked{% endif %}> Food Supply

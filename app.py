@@ -6,7 +6,6 @@ import shutil
 import os
 import io
 import base64
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'PLACEHOLDER'
@@ -19,6 +18,10 @@ db_manager = DBManager('partners.db')
 
 
 def backup_db():
+    '''
+    Function to create a backup of the database file.
+    It copies the database file to a new file with a timestamp appended to the filename.
+    '''
     try:
         timestamp = time.strftime('%Y%m%d-%H%M%S')
         backup_filename = f'db_backup_{timestamp}.db'
@@ -33,6 +36,12 @@ scheduler.start()
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    '''
+    Handles user signup process.
+    If the request method is POST, it attempts to register a new user with the provided username and password.
+    If successful, it sets up the user session and redirects to the main page.
+    If the username already exists or if there's a database error, it renders the signup page with an error message.
+    '''
     if request.method == 'POST':
         try:
             username = request.form['username']
@@ -54,6 +63,13 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    '''
+    Handles user login process.
+    If the request method is POST, it verifies the user's credentials.
+    If valid, it sets up the user session and redirects to the main page.
+    If invalid, it renders the login page with an error message.
+    If there's a database error or an unexpected error, it renders the login page with an error message.
+    '''
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -76,6 +92,13 @@ def login():
 
 @app.route('/main')
 def main():
+    '''
+    Renders the main page.
+    Checks if the user is logged in. If yes, retrieves partner data based on the search query or all partners.
+    Renders the main page with the retrieved partner data.
+    If there's a database error or an unexpected error, it renders the main page with an error message.
+    Redirects to the login page if the user is not logged in.
+    '''
     if 'logged_in' in session and session['logged_in']:
         search_query = request.args.get('searchQuery', None)
         try:
@@ -94,6 +117,15 @@ def main():
 
 @app.route('/add_partner', methods=['POST'])
 def add_partner():
+    '''
+    Adds a new partner to the database.
+    Retrieves form data from the request.
+    Handles various form inputs, including file uploads for partner images.
+    Attempts to add the partner to the database.
+    Returns a JSON response with success message if successful.
+    Handles IntegrityError and DatabaseError exceptions and returns error messages.
+    Redirects to the login page if the user is not logged in.
+    '''
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(url_for('login'))
 
@@ -139,6 +171,14 @@ def add_partner():
 
 @app.route('/partner/modify/<int:partner_id>', methods=['POST'])
 def modify_partner(partner_id):
+    '''
+    Modifies an existing partner in the database.
+    Retrieves form data from the request.
+    Handles various form inputs, including file uploads for partner images.
+    Attempts to modify the partner in the database.
+    Returns a JSON response with success message if successful.
+    Handles IntegrityError and DatabaseError exceptions and returns error messages.
+    '''
     try:
         image = request.files.get('image')
         image_data = None
@@ -173,6 +213,13 @@ def modify_partner(partner_id):
 
 @app.route('/partner/delete/<int:partner_id>', methods=['DELETE'])
 def delete_partner(partner_id):
+    '''
+    Deletes a partner from the database.
+    Checks if the user is logged in before proceeding.
+    Attempts to remove the partner from the database.
+    Returns a JSON response with success message if successful.
+    Handles DatabaseError exceptions and returns error messages.
+    '''
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(url_for('login'))
 
@@ -185,6 +232,13 @@ def delete_partner(partner_id):
 
 @app.route('/partner/details/<int:partner_id>')
 def partner_details(partner_id):
+    '''
+    Retrieves details of a partner from the database by its ID.
+    Attempts to fetch partner data by ID.
+    If partner data is found, constructs a JSON response with the partner details.
+    If partner data is not found, constructs a JSON response indicating the partner was not found.
+    Handles DatabaseError exceptions and returns error messages.
+    '''
     try:
         partner_data = db_manager.get_partner_by_id(partner_id)
         if partner_data:
@@ -198,6 +252,14 @@ def partner_details(partner_id):
 
 @app.route('/search')
 def search():
+    '''
+    Handles the search functionality for partners.
+    Checks if the user is logged in, if not, redirects to the login page.
+    Retrieves search query, partner types, and resources from the request parameters.
+    Searches for partners based on the provided parameters.
+    Renders the main page with the search results.
+    Handles DatabaseError exceptions and returns appropriate error messages.
+    '''
     if 'logged_in' not in session or not session['logged_in']:
         return redirect(url_for('login'))
 
@@ -214,6 +276,11 @@ def search():
 
 @app.route('/toggle_bookmark/<int:partner_id>', methods=['POST'])
 def toggle_bookmark(partner_id):
+    '''
+    Toggles the bookmark status of a partner.
+    Redirects to the main page after toggling the bookmark.
+    Handles DatabaseError exceptions and returns appropriate error messages.
+    '''
     try:
         partner = db_manager.get_partner_by_id(partner_id)
         if not partner:
@@ -227,6 +294,11 @@ def toggle_bookmark(partner_id):
 
 @app.route('/partner-image/<int:partner_id>')
 def partner_image(partner_id):
+    '''
+    Retrieves the image data and MIME type of a partner image from the database.
+    Sends the image file to the client with the appropriate MIME type.
+    Handles DatabaseError exceptions and returns appropriate error messages.
+    '''
     try:
         image_data, image_mime_type = db_manager.get_partner_image(partner_id)
         return send_file(io.BytesIO(image_data), mimetype=image_mime_type)
@@ -236,11 +308,17 @@ def partner_image(partner_id):
 
 @app.route('/help')
 def help():
+    '''
+    Renders the help page template.
+    '''
     return render_template('help.html')
 
 
 @app.route('/logout')
 def logout():
+    '''
+    Logs out the user by clearing the session and redirecting to the login page.
+    '''
     session['logged_in'] = False
     session.clear()
     return redirect(url_for('login'))
@@ -248,4 +326,7 @@ def logout():
 
 @app.route('/')
 def index():
+    '''
+    Redirects the user to the login page.
+    '''
     return redirect(url_for('login'))
