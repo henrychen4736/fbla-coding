@@ -27,7 +27,12 @@
         </a>
     </div>
     <div class="list-container">
-        <h1>Your Contacts</h1>
+        <div class="header-container">
+            <div class="logo">
+                <img src="static/assets/logo.png">
+            </div>
+            <h1>Your Contacts</h1>
+        </div>
         <div class="left-col">
 
             {% for partner in partners %}
@@ -216,7 +221,8 @@
         <div class="detail-container">
             <div class="left-detail-col">
                 <div class="partner-photo">
-                    <img src="static/assets/company-placeholder.png">
+                    <i class="fa-solid fa-plus modify-plus"></i>
+                    <div class="background-overlay"></div>
                 </div>
                 <div class="individual-contact">
                     <p class="caption" style="width: 265px;">Individual-Information</p>
@@ -272,7 +278,8 @@
                     </div>
                     <p class="caption">Description</p>
                     <div class="description-container input-container">
-                        <textarea class="description" name="description" id="modifyPartnerDescription"></textarea>
+                        <textarea class="description-modify" name="description"
+                            id="modifyPartnerDescription"></textarea>
                     </div>
                 </div>
             </div>

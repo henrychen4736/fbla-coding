@@ -17,11 +17,17 @@ class OperationalError(DatabaseError):
 class SignupError(DatabaseError):
     pass
 
-
+'''
+A class with several methods to add/modify records in the database
+'''
 class DBManager:
     def __init__(self, db_name):
         self.db_name = db_name
 
+    '''
+    A private method used to connect to the database. Helps avoid repitition of the database file name and
+    includes error handling.
+    '''
     def _connect(self):
         try:
             return sql.connect(self.db_name)
@@ -29,6 +35,10 @@ class DBManager:
             logger.error(f'An error occurred connecting to the database: {e}')
             raise DatabaseError(f'An error occurred connecting to the database: {e}')
 
+    '''
+    A private method used to execute a query on the database. Improves error handling by wrapping it in 
+    one function.
+    '''
     def _execute(self, cursor, query, params=()):
         try:
             cursor.execute(query, params)
@@ -42,6 +52,9 @@ class DBManager:
             logger.error(f'Database error: {e}')
             raise DatabaseError(f'Database error: {e}')
 
+    '''
+    method to add a partner to the database
+    '''
     def add_partner(self, user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data=None, image_mime_type='png'):
         if image_data is None:
             with open('./static/assets/company-placeholder.png', 'rb') as default_image:
@@ -57,6 +70,9 @@ class DBManager:
         finally:
             conn.close()
 
+    '''
+    method to remove a partner from the database
+    '''
     def remove_partner(self, partner_id):
         try:
             conn = self._connect()
@@ -69,6 +85,9 @@ class DBManager:
         finally:
             conn.close()
 
+    '''
+    method to modify a partner using the id.
+    '''
     def modify_partner(self, partner_id, organization_name=None, type_of_organization=None, organization_is_other_type=None, resources_available=None, resources_available_is_other_type=None, description=None, contact_name=None, role=None, email=None, phone=None, bookmarked=None, image_data=None, image_mime_type=None):
         try:
             conn = self._connect()
@@ -127,6 +146,9 @@ class DBManager:
         finally:
             conn.close()
 
+    '''
+    method to fetch information about one partner using ID
+    '''
     def get_partner_by_id(self, partner_id):
         try:
             conn = self._connect()
@@ -144,6 +166,9 @@ class DBManager:
         finally:
             conn.close()
 
+    '''
+    method to get all the partners of a user
+    '''
     def get_all_partners(self, user_id):
         try:
             conn = self._connect()
@@ -162,6 +187,9 @@ class DBManager:
         finally:
             conn.close()
     
+    '''
+    method to return the image of a partner by ID
+    '''
     def get_partner_image(self, partner_id):
         conn = self._connect()
         c = conn.cursor()
@@ -174,6 +202,10 @@ class DBManager:
             conn.close()
         return None, None
 
+    '''
+    method that returns partners by searching and filtering. It takes a keyword, and two optional
+    filters: the type of partner and the resources of the partner
+    '''
     def search_partners(self, search_query, types=None, resources=None):
         try:
             conn = self._connect()
@@ -215,6 +247,10 @@ class DBManager:
         finally:
             conn.close()
 
+    '''
+    method to add a new user using a username and password. Raises a SignupError if a username is already
+    taken. Encrypts password with bcrypt
+    '''
     def register_user(self, username, password):
         try:
             conn = self._connect()
@@ -236,6 +272,9 @@ class DBManager:
         finally:
             conn.close()
 
+    '''
+    method to allow a user to log in. Passwords are safely stored using bcrypt.
+    '''
     def verify_credentials(self, input_username, input_password):
         try:
             conn = self._connect()

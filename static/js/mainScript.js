@@ -63,6 +63,8 @@ closeButton.addEventListener('click', function () {
 
 const typeSelect = document.querySelector('.partner-type');
 const typeInput = document.querySelector('.other-type');
+const resourceSelect = document.querySelector('.partner-resource');
+const resourceInput = document.querySelector('.other-resource');
 
 typeSelect.addEventListener('change', showTypeInput);
 
@@ -73,9 +75,6 @@ function showTypeInput() {
         typeInput.style.display = "none";
     }
 }
-
-const resourceSelect = document.querySelector('.partner-resource');
-const resourceInput = document.querySelector('.other-resource');
 
 resourceSelect.addEventListener('change', showResourceInput);
 
@@ -148,8 +147,6 @@ detailButtons.forEach(button => {
             .catch(error => console.error('Error:', error));
     });
 });
-
-
 
 bookmarkButtons.forEach(button => {
     button.addEventListener('click', function(event) {
@@ -236,28 +233,5 @@ backButtons.forEach(button => {
     button.addEventListener('click', function() {
         closeModify();
         closeDetail();
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    var partnerTypeDropdown = document.getElementById('partnerTypeDropdown');
-    var resourcesAvailableDropdown = document.getElementById('resourcesAvailableDropdown');
-    var customTypeContainer = document.getElementById('customTypeContainer');
-    var customResourceContainer = document.getElementById('customResourceContainer');
-
-    partnerTypeDropdown.addEventListener('change', function() {
-        if (this.value === 'Other') {
-            customTypeContainer.style.display = 'block';
-        } else {
-            customTypeContainer.style.display = 'none';
-        }
-    });
-
-    resourcesAvailableDropdown.addEventListener('change', function() {
-        if (this.value === 'Other') {
-            customResourceContainer.style.display = 'block';
-        } else {
-            customResourceContainer.style.display = 'none';
-        }
     });
 });

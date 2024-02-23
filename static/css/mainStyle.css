@@ -131,9 +131,8 @@
     background-color: #333333;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    margin-left: 10px;
     gap: 10px;
-    padding: 10px
+    padding: 10px;
 }
 
 .list-container .right-col {
@@ -148,19 +147,30 @@
     z-index: 3;
 }
 
-.list-container h1 {
+.header-container {
     top: 0;
     left: 0;
-    flex-basis: 71%;
-    background: #1E1E1E;
+    width: 1010px;
+    display: flex;
     color: #fff;
-    font-weight: 500;
-    height: 70px;
-    margin-left: 10px;
+    height: 100px;
+    background-color: #1E1E1E;
     position: sticky;
     padding-top: 20px;
+    padding-left: 20px;
     border-bottom: 2px solid #fff;
     z-index: 3;
+}
+
+.header-container h1 {
+    font-weight: 600;
+    font-size: 38px;
+    margin-left: 10px;
+}
+
+.logo img {
+    width: 50px;
+    height: 50px;
 }
 
 .left-col .company {
@@ -417,7 +427,7 @@
     top: 50%;
     left: 50%;
     width: 65%;
-    height: 85%;
+    height: 600px;
     border-radius: 20px;
     box-shadow: 0 0 15px #fff;
     z-index: 1000;
@@ -426,32 +436,29 @@
 }
 
 .fa-xmark {
-    position: relative;
-    top: 0;
-    left: 0;
-    margin: 20px 0 0 20px;
-    width: 40px;
-    height: 40px;
+    position: absolute;
+    display: flex;
+    padding: 5;
+    margin: 15px 0 0 40px;
+    width: 50px;
+    height: 50px;
     text-align: center;
     color: #fff;
     background-color: #1E1E1E;
     border-radius: 5px;
-    cursor: pointer;
     transition: box-shadow 0.3s ease;
-    border-top: none;
-    border-left: none;
-    border-bottom: 4px solid rgba(0, 0, 0, 1);
-    border-right: 4px solid rgba(0, 0, 0, 1);
-    font-size: 40px;
+    font-size: 50px;
 }
 
 .fa-xmark:hover {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    cursor: pointer;
 }
 
 .create-contact-page h1 {
     text-align: center;
     border-bottom: 2px solid #fff;
+    margin-top: 20px;
     color: #fff;
     padding-bottom: 10px;
 }
@@ -461,10 +468,8 @@
     display: flex;
     position: fixed;
     align-items: center;
-    top: 18.5%;
-    bottom: 0;
     padding: 40px;
-    height: auto;
+    height: 540px;
     width: 100%;
 }
 
@@ -841,22 +846,26 @@
 
 .type-container {
     display: flex;
+    flex-direction: column;
     padding: 6px;
     border-radius: 10px;
     height: fit-content;
     width: fit-content;
-    min-width: 250px;
+    min-width: 266px;
+    max-width: 266px;
     background: #333333;
     margin: 10px 0 20px 20px;
 }
 
 .resource-container {
     display: flex;
+    flex-direction: column;
     padding: 6px;
     border-radius: 10px;
     height: fit-content;
     width: fit-content;
-    min-width: 250px;
+    min-width: 266px;
+    max-width: 266px;
     background: #333333;
     margin: 10px 0 20px 20px;
 }
@@ -879,7 +888,7 @@
     border-radius: 10px;
     min-height: 100px;
     height: 100px;
-    width: 263px;
+    width: 266px;
     background: #333333;
     overflow-x: hidden;
     overflow-y: auto;
@@ -921,7 +930,6 @@
 
 .background-overlay {
     position: absolute;
-    background-image: url(static/assets/company-placeholder.png);
     background-size: cover;
     width: 100%;
     height: 100%;
@@ -959,4 +967,21 @@
     height: 130px;
     border-radius: 20px;
     overflow: hidden;
+}
+
+.input-container .description-modify {
+    width: 250px;
+    height: 84px;
+    padding: 4px;
+    background: #1E1E1E;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    resize: none;
+    display: block;
+}
+
+.input-container .description-modify:hover {
+    transition: box-shadow 0.3s ease;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
 }
