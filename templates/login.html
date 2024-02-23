@@ -19,11 +19,10 @@
         <div class="blur-background">
             <div class="log-form">
                 <form action="/login" method="post">
-                    <div class="logo-container">
-                        <img src="/static/assets/logo.png">
-                        <h2>Palink | link with your pals</h2>
-                    </div>
                     <h1>Sign In</h1>
+                    {% if error %}
+                    <div style="color: red;">{{ error }}</div>
+                    {% endif %}
                     <p class="welcome">Welcome back, please sign in below.</p>
                     <div class="inner-form">
                         <p class="caption">Enter your Admin ID</p>
@@ -40,7 +39,7 @@
                         <p class="caption">New user? <a href="{{ url_for('signup') }}" class="link">Register here</a></p>
                     </div>
                     <div class="button-container">
-                        <input type="image" name="submit" src="static/assets/button.png" alt="Submit" />
+                        <input type="image" name="submit" src="/static/assets/button.png" alt="Submit" />
                     </div>
                 </form>
                 <script src="/static/js/loginScript.js"></script>
