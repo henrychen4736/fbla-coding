@@ -834,16 +834,22 @@
 
 .detail-top .name-container {
     background-color: #000000;
-    box-shadow: 0 0 8px #fff;
+    
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 0 8px #fff;
     border-radius: 20px;
     width: 80%;
     height: 68px;
     margin-left: 30px;
     margin-right: 50px;
     overflow-y: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.detail-top .name-container:focus-within {
+    box-shadow: 0 0 8px #FFA500;
 }
 
 .detail-top .name-container::-webkit-scrollbar {
