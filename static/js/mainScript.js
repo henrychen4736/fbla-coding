@@ -312,7 +312,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
 document.addEventListener('DOMContentLoaded', function () {
     var partnerTypeDropdown = document.getElementById('partnerTypeDropdown');
     var resourcesAvailableDropdown = document.getElementById('resourcesAvailableDropdown');
@@ -472,9 +471,54 @@ detailButtons.forEach(button => {
     });
 });
 
-bookmarkButtons.forEach(button => {
-    button.addEventListener('click', function (event) {
-        event.stopPropagation();
+document.addEventListener('DOMContentLoaded', function() {
+    const generateReportButton = document.querySelector('.generate-report');
+    
+    generateReportButton.addEventListener('click', function() {
+        const checkboxes = document.querySelectorAll('.create-report .checkbox-container input[type="checkbox"]:checked');
+        let queryParams = new URLSearchParams();
+
+        checkboxes.forEach((checkbox) => {
+            const optionText = checkbox.nextElementSibling.textContent.trim();
+            const columnMap = {
+                'Partner name': 'OrganizationName',
+                'Type of partner': 'TypeOfOrganization',
+                'Resource available': 'ResourcesAvailable',
+                'Partner telephone': 'Phone',
+                'Description': 'Description',
+                "Individual's name": 'ContactName',
+                "Individual's role": 'Role',
+                "Individual's email": 'Email',
+            };
+            const columnName = columnMap[optionText];
+            if (columnName) {
+                queryParams.append('columns', columnName);
+            }
+        });
+
+        const requestURL = `/generate-report?${queryParams.toString()}`;
+
+        fetch(requestURL)
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.blob();
+        })
+        .then(blob => {
+            // Create a new URL for the blob object
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'report.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        })
+        .catch(error => console.error('There was an error:', error));
+
+        // Close the overlay
+        document.querySelector('.report-overlay').style.display = 'none';
+        document.querySelector('.create-report').style.display = 'none';
     });
 });
 
