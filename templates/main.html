@@ -74,35 +74,35 @@
                         </div>
                         <h3>Partner Type</h3>
                         <div class="filter"><input type="checkbox" name="types" value="Sole Proprietorship" {%
-                                if "Sole Proprietorship" in request.args.getlist('types') %}checked{% endif %}> Sole
-                            Proprietorship</div>
+                                if "Sole Proprietorship" in request.args.getlist('types') %}checked{% endif %}><p>Sole Proprietorship</p>
+                        </div>
                         <div class="filter"><input type="checkbox" name="types" value="Partnership" {% if "Partnership"
-                            in request.args.getlist('types') %}checked{% endif %}> Partnership</div>
+                            in request.args.getlist('types') %}checked{% endif %}><p>Partnership</p></div>
                         <div class="filter"><input type="checkbox" name="types" value="Limited Partnership" {%
-                                if "Limited Partnership" in request.args.getlist('types') %}checked{% endif %}> Limited
-                            Partnership</div>
+                                if "Limited Partnership" in request.args.getlist('types') %}checked{% endif %}><p>Limited Partnership</p>
+                        </div>
                             <div class="filter"><input type="checkbox" name="types" value="LLC" {% if "LLC" in
-                                request.args.getlist('types') %}checked{% endif %}> LLC</div>
+                                request.args.getlist('types') %}checked{% endif %}><p>LLC</p></div>
                         <div class="filter"><input type="checkbox" name="types" value="Corporation" {% if "Corporation"
-                            in request.args.getlist('types') %}checked{% endif %}> Corporation</div>
+                            in request.args.getlist('types') %}checked{% endif %}><p>Corporation</p></div>
                             <div class="filter"><input type="checkbox" name="types" value="Non-Profit" {% if "Non-Profit" in
-                                request.args.getlist('types') %}checked{% endif %}> Non-Profit</div>
+                                request.args.getlist('types') %}checked{% endif %}><p>Non-Profit</p></div>
                                 <div class="filter"><input type="checkbox" name="types" value="Other" {% if "Other" in
-                                    request.args.getlist('types') %}checked{% endif %}> Other</div>
+                                    request.args.getlist('types') %}checked{% endif %}><p>Other</p></div>
                         <h3>Resource Available</h3>
                         <div class="filter"><input type="checkbox" name="resources" value="Food Supply" {%
-                                if "Food Supply" in request.args.getlist('resources') %}checked{% endif %}> Food Supply
+                                if "Food Supply" in request.args.getlist('resources') %}checked{% endif %}><p>Food Supply</p>
                         </div>
                         <div class="filter"><input type="checkbox" name="resources" value="Construction" {%
                                 if "Construction" in request.args.getlist('resources') %}checked{% endif %}>
-                            Construction</div>
+                            <p>Construction</p></div>
                         <div class="filter"><input type="checkbox" name="resources" value="Electronic" {%
-                                if "Electronic" in request.args.getlist('resources') %}checked{% endif %}> Electronic
+                                if "Electronic" in request.args.getlist('resources') %}checked{% endif %}><p>Electronic</p>
                         </div>
                         <div class="filter"><input type="checkbox" name="resources" value="Education" {% if "Education"
-                                in request.args.getlist('resources') %}checked{% endif %}> Education</div>
+                                in request.args.getlist('resources') %}checked{% endif %}><p>Education</p></div>
                         <div class="filter"><input type="checkbox" name="resources" value="Other" {% if "Other" in
-                                request.args.getlist('resources') %}checked{% endif %}> Other</div>
+                                request.args.getlist('resources') %}checked{% endif %}><p>Other</p></div>
                     </div>
             </form>
             <i class="fa-solid fa-file"></i>
