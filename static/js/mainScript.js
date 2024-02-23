@@ -94,6 +94,7 @@ const saveButton = document.querySelector('.fa-floppy-disk');
 const detailOverlay = document.querySelector('.detail-overlay');
 const detailView = document.querySelector('.detail-view');
 const modifyDetailView = document.querySelector('.modify-detail-view');
+const deleteButton = document.getElementById('deleteButton');
 let currentPartnerId = null;
 
 function openDetail() {
@@ -337,6 +338,32 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Enter') {
             e.preventDefault();
             editablePartnerName.blur();
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButton = document.getElementById('deleteButton');
+
+    deleteButton.addEventListener('click', function() {
+        if (currentPartnerId) {
+            fetch(`/partner/delete/${currentPartnerId}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Partner deleted successfully');
+                    window.location.reload();
+                } else {
+                    console.error('Failed to delete the partner');
+                }
+            })
+            .catch(error => {
+                console.error('Error: ', error);
+            });
+        } else {
+            console.error('Partner ID not found');
         }
     });
 });

@@ -16,6 +16,7 @@ db_manager = DBManager('partners.db')
 # TODO: add exception handling, if user tries adding partner that already exists, tries changing partner name to already existing partner
 # TODO: add more color to the ui
 # TODO: add 25 examples
+# TODO: add backup option
 
 
 def backup_db():
@@ -169,6 +170,18 @@ def modify_partner(partner_id):
         return jsonify({'success': True, 'message': 'successfully updated partner'}), 200
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
+
+
+@app.route('/partner/delete/<int:partner_id>', methods=['DELETE'])
+def delete_partner(partner_id):
+    if 'logged_in' not in session or not session['logged_in']:
+        return redirect(url_for('login'))
+
+    try:
+        db_manager.remove_partner(partner_id)
+        return jsonify({'success': True, 'message': 'Partner successfully deleted'}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'message': 'Failed to delete partner'}), 500
 
 
 @app.route('/partner/details/<int:partner_id>')
