@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Palink | Login</title>
     <link rel="stylesheet" href="/static/css/loginStyle.css">
-    <link rel="shortcut icon" type="image/x-icon" href="static/assets/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/static/assets/favicon.ico" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 
@@ -18,16 +18,13 @@
     <div class="bottom">
         <div class="blur-background">
             <div class="log-form">
-                {% if error %}
-                <div style="color: red;">{{ error }}</div>
-                {% endif %}
                 <form action="/login" method="post">
-                    <h1>Sign In</h1>
-                    <p class="welcome">Welcome back, please sign in below.</p>
                     <div class="logo-container">
                         <img src="/static/assets/logo.png">
                         <h2>Palink | link with your pals</h2>
                     </div>
+                    <h1>Sign In</h1>
+                    <p class="welcome">Welcome back, please sign in below.</p>
                     <div class="inner-form">
                         <p class="caption">Enter your Admin ID</p>
                         <div class="input-container">
@@ -43,7 +40,7 @@
                         <p class="caption">New user? <a href="{{ url_for('signup') }}" class="link">Register here</a></p>
                     </div>
                     <div class="button-container">
-                        <input type="image" name="submit" src="/static/assets/button.png" alt="Submit" />
+                        <input type="image" name="submit" src="static/assets/button.png" alt="Submit" />
                     </div>
                 </form>
                 <script src="/static/js/loginScript.js"></script>

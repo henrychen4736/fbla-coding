@@ -166,42 +166,45 @@
 
     <div class="detail-overlay"></div>
     <div class="detail-view">
-        <div class="detail-top">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <h1 id="partnerName">Partner Name</h1>
-            <div class="tool-icon">
-                <i id="pdfButton" class="fa-solid fa-file-pdf"></i>
-                <i id="editButton" class="fa-solid fa-pen-to-square"></i>
-                <i id="deleteButton" class="fa-solid fa-delete-left"></i>
+        <div id="content">
+            <div class="detail-top">
+                <i class="fa-solid fa-right-from-bracket" id="backButton"></i>
+                <h1 id="partnerName">Partner Name</h1>
+                <div class="tool-icon">
+                    <i id="pdfButton" class="fa-solid fa-file-pdf"></i>
+                    <i id="editButton" class="fa-solid fa-pen-to-square"></i>
+                    <i id="deleteButton" class="fa-solid fa-delete-left"></i>
+                </div>
+            </div>
+            <div class="detail-container">
+                <div class="left-detail-col">
+                    <div class="partner-photo">
+                        <img id="partnerPhoto" src="/static/assets/company-placeholder.png">
+                    </div>
+                    <div class="individual-contact">
+                        <p class="caption">Individual Name</p>
+                        <p id="contactName">[Name]</p>
+                        <p class="caption">Role</p>
+                        <p id="contactRole">[Role]</p>
+                        <p class="caption">Email</p>
+                        <p id="contactEmail">[Email]</p>
+                    </div>
+                </div>
+                <div class="right-detail-col">
+                    <div class="partner-info">
+                        <p class="caption">Type of Partner</p>
+                        <p id="partnerType">[Type]</p>
+                        <p class="caption">Resource Available</p>
+                        <p id="partnerResource">[Resource]</p>
+                        <p class="caption">Telephone Number</p>
+                        <p id="partnerPhone">[Number]</p>
+                        <p class="caption">Description</p>
+                        <p id="partnerDescription">[Description]</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="detail-container" id="content">
-            <div class="left-detail-col">
-                <div class="partner-photo">
-                    <img id="partnerPhoto" src="static/assets/company-placeholder.png">
-                </div>
-                <div class="individual-contact">
-                    <p class="caption">Individual Name</p>
-                    <p id="contactName">[Name]</p>
-                    <p class="caption">Role</p>
-                    <p id="contactRole">[Role]</p>
-                    <p class="caption">Email</p>
-                    <p id="contactEmail">[Email]</p>
-                </div>
-            </div>
-            <div class="right-detail-col">
-                <div class="partner-info">
-                    <p class="caption">Type of Partner</p>
-                    <p id="partnerType">[Type]</p>
-                    <p class="caption">Resource Available</p>
-                    <p id="partnerResource">[Resource]</p>
-                    <p class="caption">Telephone Number</p>
-                    <p id="partnerPhone">[Number]</p>
-                    <p class="caption">Description</p>
-                    <p id="partnerDescription">[Description]</p>
-                </div>
-            </div>
-        </div>
+        
     </div>
 
     <div class="modify-detail-view">
@@ -282,22 +285,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
         integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        window.jsPDF = window.jspdf.jsPDF;
-
-        function generatePDF() {
-            var element = document.getElementById('content');
-            html2canvas(element).then(function (canvas) {
-                var imgData = canvas.toDataURL('image/png');
-                var pdfWidth = 190;
-                var pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                var doc = new jsPDF();
-                doc.addImage(imgData, 'PNG', 10, 10, pdfWidth, pdfHeight);
-                doc.save('report.pdf');
-            });
-        }
-        document.getElementById('pdfButton').addEventListener('click', generatePDF);
-    </script>
-</body>
+        <script>
+            window.jsPDF = window.jspdf.jsPDF;
+        
+            function generatePDF() {
+                const ignoreElementIds = ['pdfButton', 'editButton', 'deleteButton', 'backButton'];
+                ignoreElementIds.forEach(id => {
+                    const elem = document.getElementById(id);
+                    if (elem) {
+                        elem.style.display = 'none';
+                    }
+                });
+        
+                var element = document.getElementById('content');
+                html2canvas(element).then(function (canvas) {
+                    var imgData = canvas.toDataURL('image/png');
+                    var pdfWidth = 190;
+                    var pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                    var doc = new jsPDF();
+                    doc.addImage(imgData, 'PNG', 10, 10, pdfWidth, pdfHeight);
+                    doc.save('report.pdf');
+        
+                    ignoreElementIds.forEach(id => {
+                        const elem = document.getElementById(id);
+                        if (elem) {
+                            elem.style.display = '';
+                        }
+                    });
+                });
+            }
+            document.getElementById('pdfButton').addEventListener('click', generatePDF);
+        </script>
 
 </html>

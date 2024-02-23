@@ -24,7 +24,6 @@ body {
     width: 100%;
     padding: 10px;
     background-color: #1E1E1E;
-    border-bottom: 4px solid #fff;
     height: fit-content;
     color: #fff;
 }
@@ -75,14 +74,13 @@ body {
 }
 
 .log-form .logo-container {
-    position: fixed;
     display: flex;
+    margin-left: 160px;
     align-items: center;
     justify-content: center;
     top: 50px;
     right: 50px;
-    height: 70px;
-    width: fit-content;
+    height: fit-content;
 }
 
 .log-form .logo-container img {
@@ -96,6 +94,7 @@ body {
 }
 
 .log-form h1 {
+    margin-top: 20px;
     font-size: 36px;
     font-weight: 500;
     text-align: left;

@@ -56,4 +56,4 @@ def test_db(name):
 
 
 setup('partners.db')
-test_db('partners.db')
+# test_db('partners.db')
