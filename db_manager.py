@@ -1,6 +1,7 @@
 import sqlite3 as sql
 import bcrypt
 import xlsxwriter
+from io import BytesIO
 
 
 class DatabaseError(Exception):
@@ -250,33 +251,47 @@ class DBManager:
                 partner_dict = dict(zip(columns, partner))
                 partners_list.append(partner_dict)
             return partners_list
-        except Exception as e:
+        except Exception:
             raise
         finally:
             conn.close()
     
     def generate_excel(self, optional_columns):
-        columns = ['OrganizationName'] + optional_columns
-        conn = self._connect()
-        cursor = conn.cursor()
-        query = f"SELECT {', '.join(columns)} FROM Partners"
-        self._execute(cursor, query)
-        data = cursor.fetchall()
-        conn.close()
+        '''
+        Generates an Excel file in memory containing data from the Partners table,
+        based on a list of optional columns to include alongside the organization name.
+        The Excel file is generated with xlsxwriter and stored in a BytesIO object
+        to avoid saving to disk
+        '''
+        try:
+            columns = ['OrganizationName'] + optional_columns
+            conn = self._connect()
+            cursor = conn.cursor()
+            query = f"SELECT {', '.join(columns)} FROM Partners"
+            self._execute(cursor, query)
+            data = cursor.fetchall()
+            conn.close()
 
-        excel_file = 'report.xlsx'
-        workbook = xlsxwriter.Workbook(excel_file)
-        worksheet = workbook.add_worksheet()
+            output = BytesIO()
+            workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+            worksheet = workbook.add_worksheet()
 
-        for col_num, header in enumerate(columns):
-            worksheet.write(0, col_num, header)
-        
-        for row_num, row_data in enumerate(data, 1):
-            for col_num, cell_data in enumerate(row_data):
-                worksheet.write(row_num, col_num, cell_data)
-        
-        workbook.close()
-        return excel_file
+            for col_num, header in enumerate(columns):
+                worksheet.write(0, col_num, header)
+            
+            for row_num, row_data in enumerate(data, 1):
+                for col_num, cell_data in enumerate(row_data):
+                    worksheet.write(row_num, col_num, cell_data)
+            
+            workbook.close()
+
+            output.seek(0)
+            return output
+        except Exception:
+            raise
+        finally:
+            conn.close()
+
 
     def register_user(self, username, password):
         '''

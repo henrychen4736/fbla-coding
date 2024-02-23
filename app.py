@@ -276,14 +276,25 @@ def search():
 
 @app.route('/generate-report', methods=['GET'])
 def generate_report():
-    optional_columns = ['TypeOfOrganization', 'ResourcesAvailable', 'Description', 'ContactName', 'Role', 'Email', 'Phone']
-    
-    requested_columns = request.args.getlist('columns')
-    valid_requested_columns = [col for col in requested_columns if col in optional_columns]
-    
-    excel_file = db_manager.generate_excel(valid_requested_columns)
-    
-    return send_file(excel_file, as_attachment=True, attachment_filename='partners_report.xlsx')
+    '''
+    Generates a report.
+    The report is a spreadsheet where columns are chosen by the user and rows are all
+    of the user's partners.
+    '''
+    try:
+        optional_columns = ['TypeOfOrganization', 'ResourcesAvailable', 'Description', 'ContactName', 'Role', 'Email', 'Phone']
+        
+        requested_columns = request.args.getlist('columns')
+        valid_requested_columns = [col for col in requested_columns if col in optional_columns]
+        
+        excel_io = db_manager.generate_excel(valid_requested_columns)
+        
+        return send_file(excel_io,
+                        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        as_attachment=True,
+                        download_name='report.xlsx')
+    except DatabaseError as e:
+        return jsonify({'success': False, 'message': 'Unable to generate report. Try again later'}), 500
 
 
 @app.route('/toggle_bookmark/<int:partner_id>', methods=['POST'])
