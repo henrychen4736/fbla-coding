@@ -1,5 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+.company {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #000000;
+    flex-wrap: wrap;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.company:hover {
+    background: #1E1E1E;
+    cursor: pointer;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -8,13 +23,18 @@
     font-weight: 400;
 }
 
-.overlay {
-    width: 0;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 4;
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: #333333;
+}
+  
+::-webkit-scrollbar-thumb {
+    background-color: #666666;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #999999;
 }
 
 .fa-bars {
@@ -105,50 +125,101 @@
     width: 70%;
 }
 
-.left-col h1 {
+.main-container {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    background-color: #1E1E1E;
+    padding: 0 20px 20px 20px;
     color: #fff;
-    font-weight: 500;
-    margin: 0 0 20px 10px;
-    grid-column: 1 / -1;
-    padding-top: 20px;
-    border-bottom: 2px solid rgba(255, 255, 255, .2);
+    overflow: auto;
 }
 
-.left-col .company {
+.header-container {
+    top: 0;
+    left: 0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    border-radius: 20px;
-    padding: 20px;
+    color: #fff;
+    height: 100px;
+    background-color: #1E1E1E;
+    position: sticky;
+    padding-top: 20px;
+    padding-left: 20px;
+    border-bottom: 2px solid #fff;
+    z-index: 1;
 }
 
-.left-col .company:hover {
-    background: #808080;
-    cursor: pointer;
+.logo img {
+    width: 50px;
+    height: 50px;
+}
+
+
+h1 {
+    font-weight: 600;
+    font-size: 38px;
+    margin-left: 10px;
+    
+}
+
+.accordion-container {
+    padding: 10px;
+    height: fit-content;
+    background: #333333;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+
+.qna-set {
+    background-color: #666666;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: margin 0.3s ease;
+    margin: 5px 0 5px;
+}
+
+.qna-set:hover {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 0 8px #fff;
 }
 
 .accordion {
-    background-color: #eee;
-    color: #444;
+    background-color: #000000;
+    display: flex;
+    align-items: center;
+    color: #fff;
     cursor: pointer;
     padding: 18px;
+    font-size: 20px;
     width: 100%;
     border: none;
     text-align: left;
     outline: none;
-    font-size: 15px;
-    transition: 0.4s;
+    transition: background-color 0.3s ease;
 }
 
-.active, .accordion:hover {
-    background-color: #ccc;
+.accordion:hover {
+    background-color: #333333;
+}
+
+.accordion .fa-chevron-down {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+.rotate-clockwise {
+    transform: rotate(180deg);
+}
+
+.rotate-counterclockwise {
+    transform: rotate(0deg);
 }
 
 .panel {
-    padding: 0 18px;
+    padding: 18px;
     display: none;
-    background-color: white;
     overflow: hidden;
-    transition: max-height 0.2s ease-out;
 }

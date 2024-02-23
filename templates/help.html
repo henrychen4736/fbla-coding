@@ -4,55 +4,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Help Page</title>
+    <title>Palink | Help</title>
     <link rel="stylesheet" href="/static/css/helpStyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/assets/favicon.ico" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
 </head>
-
 <body>
     <i class="fa-solid fa-bars"></i>
-    <div class="sidebar-overlay"></div>
-    <div class="main-container">
+        <div class="sidebar-overlay"></div>
         <div class="sidebar">
-            <a href="main" class="sidebar-item">
+            <a href="/main" class="sidebar-item">
                 <i class="fa-solid fa-house"></i>
                 <div>Home</div>
             </a>
-            <a href="help" class="sidebar-item">
+            <a href="/help" class="sidebar-item">
                 <i class="fa-solid fa-question"></i>
                 <div>Help</div>
             </a>
-            <a href="logout" class="sidebar-item" style="color: #FF0000;">
+            <a href="/logout" class="sidebar-item" style="color: #FF0000;">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <div>Sign out</div>
             </a>
         </div>
-        <h1>How can we help you?</h1>
-        <div class="accordion-container">
-            <button class="accordion">How do I add a new partner to the database?</button>
-            <div class="panel">
-                <p>To add a new partner to the database, click on the "create new contact" button at the bottom of the main page, and fill out the form to add a new partner.</p>
+        <div class="main-container">
+            <div class="header-container">
+                <div class="logo">
+                    <img src="/static/assets/logo.png">
+                </div>
+                <h1>Welcome to Palink, how may we help you?</h1>
             </div>
-            <button class="accordion">Can I edit information for an existing partner?</button>
-            <div class="panel">
-                <p>Yes, you can edit information for an existing partner. Go to the main page, and click on the partner that you want to edit. Then, change the information for the partner that you want to edit.</p>
+            <div class="accordion-container">
+                <div class="qna-set">
+                    <button class="accordion">How do I add a new partner to the database?<i class="fa-solid fa-chevron-down"></i></button>
+                    <div class="panel">
+                        <p>To add a new partner to the database, click on the "create new contact" button at the bottom of the main page, and fill out the form to add a new partner.</p>
+                    </div>
+                </div>
+                <div class="qna-set">
+                    <button class="accordion">Can I edit information for an existing partner?<i class="fa-solid fa-chevron-down"></i></button>
+                    <div class="panel">
+                        <p>Yes, you can edit information for an existing partner. Go to the main page, and click on the partner that you want to edit. Then, change the information for the partner that you want to edit.</p>
+                    </div>
+                </div>
+                <div class="qna-set">
+                    <button class="accordion">Can I attach an image to each partner?<i class="fa-solid fa-chevron-down"></i></button>
+                    <div class="panel">
+                        <p>Yes, when adding a partner you can upload an image of your choice.</p>
+                    </div>
+                </div>
+                <div class="qna-set">
+                    <button class="accordion">What information about a partner can I store?<i class="fa-solid fa-chevron-down"></i></button>
+                    <div class="panel">
+                        <p>You can store the partner's name, their organization type, resources available, and direct contact information for an individual.</p>
+                    </div>
+                </div>
+                <div class="qna-set">
+                    <button class="accordion">Can I generate reports of partners?<i class="fa-solid fa-chevron-down"></i></button>
+                    <div class="panel">
+                        <p>Yes, you can generate reports of partners. Click on the partner's profile, and click the generate report button</p>
+                    </div>
+                </div>
+                <div class="qna-set">
+                    <button class="accordion">Can I make a backup of my data?<i class="fa-solid fa-chevron-down"></i></button>
+                    <div class="panel">
+                        <p>PLACEHOLDER</p>
+                    </div>
+                </div>
             </div>
-            <button class="accordion">Can I attach an image to each partner?</button>
-            <div class="panel">
-                <p>Yes, when adding a partner you can upload an image of your choice.</p>
-            </div>
-            <button class="accordion">What information about a partner can I store?</button>
-            <div class="panel">
-                <p>You can store the partner's name, their organization type, resources available, and direct contact information for an individual.</p>
-            </div>
-            <button class="accordion">Can I generate reports of partners?</button>
-            <div class="panel">
-                <p>yes, you can generate reports of partners. Click on the partner's profile, and click the generate report button</p>
-            </div>
-            <button class="accordion">Can I make a backup of my data?</button>
-            <div class="panel">
-                <p>PLACEHOLDER</p>
+            <div class="end-container">
+
             </div>
         </div>
     </div>

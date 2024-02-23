@@ -4,38 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DBHS CTE Contacts</title>
+    <title>Palink | Login</title>
     <link rel="stylesheet" href="/static/css/loginStyle.css">
+    <link rel="shortcut icon" type="image/x-icon" href="static/assets/favicon.ico" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 
 <body>
-    <div class="log-form">
-        {% if error %}
-        <div style="color: red;">{{ error }}</div>
-        {% endif %}
-        <form action="/login" method="post">
-            <h1>Sign In</h1>
-            <p class="welcome">Welcome back, please sign in below.</p>
-            <div class="inner-form">
-                <p class="caption">Enter your Admin ID</p>
-                <div class="input-container">
-                    <i class="fa-solid fa-id-card"></i>
-                    <input type="text" name="username" placeholder="Admin ID" id="ID" required>
-                </div>
-                <p class="caption">Enter your Password</p>
-                <div class="input-container">
-                    <i class="fa-solid fa-lock"></i>
-                    <i class="fa-solid fa-eye" id="show-password"></i>
-                    <input type="password" name="password" placeholder="Password" id="password" required>
-                </div>
-                <p class="caption">New user? <a href="{{ url_for('signup') }}" style="color: #FF5733;">Sign up here!</a></p>
+    <div class="top">
+        <img src="/static/assets/logo.png">
+        <h1>Palink | link with your pals</h2>
+    </div>
+    <div class="bottom">
+        <div class="blur-background">
+            <div class="log-form">
+                {% if error %}
+                <div style="color: red;">{{ error }}</div>
+                {% endif %}
+                <form action="/login" method="post">
+                    <h1>Sign In</h1>
+                    <p class="welcome">Welcome back, please sign in below.</p>
+                    <div class="logo-container">
+                        <img src="/static/assets/logo.png">
+                        <h2>Palink | link with your pals</h2>
+                    </div>
+                    <div class="inner-form">
+                        <p class="caption">Enter your Admin ID</p>
+                        <div class="input-container">
+                            <i class="fa-solid fa-id-card"></i>
+                            <input type="text" name="username" placeholder="Admin ID" id="ID" required>
+                        </div>
+                        <p class="caption">Enter your Password</p>
+                        <div class="input-container">
+                            <i class="fa-solid fa-lock"></i>
+                            <i class="fa-solid fa-eye" id="show-password"></i>
+                            <input type="password" name="password" placeholder="Password" id="password" required>
+                        </div>
+                        <p class="caption">New user? <a href="{{ url_for('signup') }}" class="link">Register here</a></p>
+                    </div>
+                    <div class="button-container">
+                        <input type="image" name="submit" src="/static/assets/button.png" alt="Submit" />
+                    </div>
+                </form>
+                <script src="/static/js/loginScript.js"></script>
             </div>
-            <div class="button-container">
-                <input type="image" name="submit" src="/static/assets/buttonIdle.png" alt="Submit" />
-            </div>
-        </form>
-        <script src="/static/js/loginScript.js"></script>
+        </div>
     </div>
 </body>
 
