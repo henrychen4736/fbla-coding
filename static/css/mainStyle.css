@@ -228,18 +228,17 @@
 .company-info .brief-info {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    flex-direction: column;
     color: #fff;
     font-size: 11px;
 }
 
 .company-info .brief-info .company-type {
-    text-align: right;
-    flex-basis: 30%;
+    margin-top: 5px;
 }
 
 .company-info .brief-info .phone-number {
-    flex-basis: 70%;
+    margin-top: 5px;
 }
 
 .company-info .brief-info .company-resource {
