@@ -20,21 +20,36 @@ class DBManager:
     def __init__(self, db_name):
         self.db_name = db_name
 
-    '''
-    A private method used to connect to the database. Helps avoid repitition of the database file name and
-    includes error handling.
-    '''
     def _connect(self):
+        '''
+        A private method used to connect to the database. Helps avoid repitition of the database file name and
+        includes error handling.
+        
+        Returns:
+            sqlite3.Connection: A connection object to the database.
+        
+        Raises:
+            DatabaseError: If there is an error connecting to the database.
+        '''
         try:
             return sql.connect(self.db_name)
         except sql.Error as e:
             raise DatabaseError(f'An error occurred connecting to the database: {e}')
 
-    '''
-    A private method used to execute a query on the database. Improves error handling by wrapping it in 
-    one function.
-    '''
     def _execute(self, cursor, query, params=()):
+        '''
+        A private method used to execute a query on the database. Improves error handling by wrapping it in 
+        one function.
+
+        Args:
+            cursor (sqlite3.Cursor): The cursor object to execute the query.
+            query (str): The SQL query to execute.
+            params (tuple, optional): The parameters to pass into the query.
+
+        Raises:
+            IntegrityError: If there is an integrity error in the database.
+            DatabaseError: If there is a generic database error.
+        '''
         try:
             cursor.execute(query, params)
         except sql.IntegrityError as e:
@@ -42,10 +57,10 @@ class DBManager:
         except sql.Error as e:
             raise DatabaseError(f'Database error: {e}')
 
-    '''
-    method to add a partner to the database
-    '''
     def add_partner(self, user_id, organization_name, type_of_organization, organization_is_other_type, resources_available, resources_available_is_other_type, description, contact_name, role, email, phone, bookmarked, image_data=None, image_mime_type=None):
+        '''
+        method to add a partner to the database
+        '''
         if image_data is None:
             with open('./static/assets/company-placeholder.png', 'rb') as default_image:
                 image_data = default_image.read()
@@ -62,10 +77,10 @@ class DBManager:
         finally:
             conn.close()
 
-    '''
-    method to remove a partner from the database
-    '''
     def remove_partner(self, partner_id):
+        '''
+        method to remove a partner from the database
+        '''
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -77,10 +92,10 @@ class DBManager:
         finally:
             conn.close()
 
-    '''
-    method to modify a partner using the id.
-    '''
     def modify_partner(self, partner_id, organization_name=None, type_of_organization=None, organization_is_other_type=None, resources_available=None, resources_available_is_other_type=None, description=None, contact_name=None, role=None, email=None, phone=None, bookmarked=None, image_data=None, image_mime_type=None):
+        '''
+        method to modify a partner using the id.
+        '''
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -138,10 +153,10 @@ class DBManager:
         finally:
             conn.close()
 
-    '''
-    method to fetch information about one partner using ID
-    '''
     def get_partner_by_id(self, partner_id):
+        '''
+        method to fetch information about one partner using ID
+        '''
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -158,10 +173,10 @@ class DBManager:
         finally:
             conn.close()
 
-    '''
-    method to get all the partners of a user
-    '''
     def get_all_partners(self, user_id):
+        '''
+        method to get all the partners of a user
+        '''
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -179,10 +194,10 @@ class DBManager:
         finally:
             conn.close()
     
-    '''
-    method to return the image of a partner by ID
-    '''
     def get_partner_image(self, partner_id):
+        '''
+        method to return the image of a partner by ID
+        '''
         conn = self._connect()
         c = conn.cursor()
         try:
@@ -194,11 +209,11 @@ class DBManager:
             conn.close()
         return None, None
 
-    '''
-    method that returns partners by searching and filtering. It takes a keyword, and two optional
-    filters: the type of partner and the resources of the partner
-    '''
     def search_partners(self, search_query, types=None, resources=None):
+        '''
+        method that returns partners by searching and filtering. It takes a keyword, and two optional
+        filters: the type of partner and the resources of the partner
+        '''
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -239,11 +254,11 @@ class DBManager:
         finally:
             conn.close()
 
-    '''
-    method to add a new user using a username and password. Raises a SignupError if a username is already
-    taken. Encrypts password with bcrypt
-    '''
     def register_user(self, username, password):
+        '''
+        method to add a new user using a username and password. Raises a SignupError if a username is already
+        taken. Encrypts password with bcrypt
+        '''
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -264,10 +279,10 @@ class DBManager:
         finally:
             conn.close()
 
-    '''
-    method to allow a user to log in. Passwords are safely stored using bcrypt.
-    '''
     def verify_credentials(self, input_username, input_password):
+        '''
+        method to allow a user to log in. Passwords are safely stored using bcrypt.
+        '''
         try:
             conn = self._connect()
             c = conn.cursor()
