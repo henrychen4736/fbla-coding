@@ -183,6 +183,11 @@
     background: #1E1E1E;
     transition: box-shadow 0.4s ease;
     padding: 20px;
+    overflow-y: auto;
+}
+
+.company::-webkit-scrollbar {
+    width: 0;
 }
 
 .left-col .company:hover {
@@ -406,7 +411,7 @@
 .add-contact {
     position: absolute;
     bottom: 20px;
-    width: 240px;
+    width: 220px;
     height: 54px;
     margin-right: 20px;
     right: 0;
@@ -825,6 +830,31 @@
     justify-content: flex-end;
 }
 
+.detail-top .name-container {
+    border-radius: 20px;
+    background-color: #000000;
+    box-shadow: 0 0 8px #fff;
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    height: 68px;
+    margin-left: 30px;
+    margin-right: 50px;
+    overflow-y: auto;
+}
+
+.detail-top .name-container::-webkit-scrollbar {
+    width: 0;
+}
+
+.name-container input,
+.name-container h1 {
+    background-color: #000000;
+    color: #fff;
+    font-size: 45px;
+    font-weight: 600;
+}
+
 .detail-top i {
     display: flex;
     align-items: center;
@@ -898,11 +928,11 @@
     cursor: pointer;
 }
 
-.detail-top h1 {
+.detail-top .name-container {
     border-radius: 20px;
     background-color: #000000;
     box-shadow: 0 0 8px #fff;
-    text-align: center;
+    display: f;
     font-size: 45px;
     color: #fff;
     width: 80%;

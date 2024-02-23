@@ -203,7 +203,9 @@
         <div id="content">
             <div class="detail-top">
                 <i class="fa-solid fa-right-from-bracket" id="backButton"></i>
-                <h1 id="partnerName">Partner Name</h1>
+                <div class="name-container">
+                    <h1 id="partnerName">[Partner Name]</h1>
+                </div>
                 <div class="tool-icon">
                     <i id="pdfButton" class="fa-solid fa-file-pdf"></i>
                     <i id="editButton" class="fa-solid fa-pen-to-square"></i>
@@ -244,7 +246,10 @@
     <div class="modify-detail-view">
         <div class="detail-top">
             <i class="fa-solid fa-right-from-bracket"></i>
-            <h1 id="editablePartnerName" contenteditable="true">Partner Name</h1>
+            <div class="name-container">
+                <input type="text" id="editablePartnerName">
+            </div>
+            
             <div class="tool-icon">
                 <i class="fa-solid fa-floppy-disk"></i>
             </div>
