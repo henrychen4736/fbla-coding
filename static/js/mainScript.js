@@ -1,91 +1,14 @@
 const toggleButton = document.querySelector('.fa-bars');
 const sidebar = document.querySelector('.sidebar');
 const sidebarOverlay = document.querySelector('.sidebar-overlay');
-
-let sidebarOpen = false;
-
-function openSidebar() {
-    sidebarOpen = true;
-    sidebarOverlay.style.display = "block";
-    sidebarOverlay.style.width = "100vw";
-    sidebar.style.transform = "scale(1)";
-}
-
-function closeSidebar() {
-    sidebarOpen = false;
-    sidebarOverlay.style.display = "none";
-    sidebar.style.transform = "scale(0)";
-}
-
-toggleButton.addEventListener('click', function () {
-    if (!sidebarOpen) {
-        openSidebar();
-    }
-    else {
-        closeSidebar();
-    }
-})
-
-sidebarOverlay.addEventListener('click', function () {
-    if (sidebarOpen) {
-        closeSidebar();
-    }
-})
-
 const createButton = document.querySelector('.add-contact');
 const closeButton = document.querySelector('.fa-xmark');
 const createOverlay = document.querySelector('.create-overlay')
 const createContact = document.querySelector('.create-contact-page');
-
-function openCreate() {
-    createOverlay.style.transform = "scale(1)";
-    createContact.style.transform = "scale(1) translate(-50%, -50%)";
-    document.body.style.overflow = "hidden";
-}
-
-function closeCreate() {
-    createOverlay.style.transform = "scale(0)";
-    createContact.style.transform = "scale(0)";
-    document.body.style.overflow = "";
-}
-
-createButton.addEventListener('click', function () {
-    openCreate();
-})
-
-createOverlay.addEventListener('click', function () {
-    closeCreate();
-})
-
-closeButton.addEventListener('click', function () {
-    closeCreate();
-})
-
 const typeSelect = document.querySelector('.partner-type');
 const typeInput = document.querySelector('.other-type');
 const resourceSelect = document.querySelector('.partner-resource');
 const resourceInput = document.querySelector('.other-resource');
-
-typeSelect.addEventListener('change', showTypeInput);
-
-function showTypeInput() {
-    if (typeSelect.value === "Other") {
-        typeInput.style.display = "block";
-    } else {
-        typeInput.style.display = "none";
-    }
-}
-
-resourceSelect.addEventListener('change', showResourceInput);
-
-function showResourceInput() {
-    if (resourceSelect.value === "Other") {
-        resourceInput.style.display = "block";
-    } else {
-        resourceInput.style.display = "none";
-    }
-}
-
 const detailButtons = document.querySelectorAll('.company');
 const bookmarkButtons = document.querySelectorAll('.blur-background');
 const backButtons = document.querySelectorAll('.fa-right-from-bracket');
@@ -95,77 +18,153 @@ const detailOverlay = document.querySelector('.detail-overlay');
 const detailView = document.querySelector('.detail-view');
 const modifyDetailView = document.querySelector('.modify-detail-view');
 const deleteButton = document.getElementById('deleteButton');
+
 let currentPartnerId = null;
+let sidebarOpen = false;
+
+/**
+ * Functions
+ */
+function openSidebar() {
+    // Opens the sidebar
+    sidebarOpen = true;
+    sidebarOverlay.style.display = 'block';
+    sidebarOverlay.style.width = '100vw';
+    sidebar.style.transform = 'scale(1)';
+}
+
+function closeSidebar() {
+    // Closes the sidebar
+    sidebarOpen = false;
+    sidebarOverlay.style.display = 'none';
+    sidebar.style.transform = 'scale(0)';
+}
+
+function openCreate() {
+    // Opens the create overlay
+    createOverlay.style.transform = 'scale(1)';
+    createContact.style.transform = 'scale(1) translate(-50%, -50%)';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCreate() {
+    // Closes the create overlay
+    createOverlay.style.transform = 'scale(0)';
+    createContact.style.transform = 'scale(0)';
+    document.body.style.overflow = '';
+}
+
+function showTypeInput() {
+    // Shows input for other type if selected
+    if (typeSelect.value === 'Other') {
+        typeInput.style.display = 'block';
+    } else {
+        typeInput.style.display = 'none';
+    }
+}
+
+function showResourceInput() {
+    // Shows input for other resource if selected
+    if (resourceSelect.value === 'Other') {
+        resourceInput.style.display = 'block';
+    } else {
+        resourceInput.style.display = 'none';
+    }
+}
 
 function openDetail() {
-    detailOverlay.style.transform = "translateY(0)";
-    detailView.style.transform = "translate(-50%, -50%)";
-    document.body.style.overflow = "hidden";
+    // Opens the detail view overlay
+    detailOverlay.style.transform = 'translateY(0)';
+    detailView.style.transform = 'translate(-50%, -50%)';
+    document.body.style.overflow = 'hidden';
 }
 
 function closeDetail() {
-    detailOverlay.style.transform = "translateY(100%)";
-    detailView.style.transform = "translate(-50%, 100%)";
-    document.body.style.overflow = "";
+    // Closes the detail view overlay
+    detailOverlay.style.transform = 'translateY(100%)';
+    detailView.style.transform = 'translate(-50%, 100%)';
+    document.body.style.overflow = '';
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+function openModify() {
+    // Opens the modify detail view overlay
+    modifyDetailView.style.transform = 'translate(-50%, -50%)';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModify() {
+    // Closes the modify detail view overlay
+    modifyDetailView.style.transform = 'translate(-50%, 100%)';
+    document.body.style.overflow = 'hidden';
+}
+
+function fetchImage(imageUrl) {
+    // Fetches and displays an image
+    fetch(imageUrl)
+        .then(response => response.blob())
+        .then(blob => {
+            const imageObjectUrl = URL.createObjectURL(blob);
+            document.getElementById('partnerImageDisplay').src = imageObjectUrl;
+            document.getElementById('partnerImageDisplay').style.display = 'block';
+        })
+        .catch(error => {
+            alert('Error fetching image. Please try again');
+            console.log('Error fetching image: ' + error.message);
+            document.getElementById('partnerImageDisplay').style.display = 'none';
+        });
+}
+
+/**
+ * Event Listeners
+ */
+toggleButton.addEventListener('click', function () {
+    // Toggles the sidebar
+    if (!sidebarOpen) {
+        openSidebar();
+    }
+    else {
+        closeSidebar();
+    }
+})
+
+sidebarOverlay.addEventListener('click', function () {
+    // Closes the sidebar if clicked on overlay
+    if (sidebarOpen) {
+        closeSidebar();
+    }
+})
+
+createButton.addEventListener('click', function () {
+    // Opens the create overlay
+    openCreate();
+})
+
+createOverlay.addEventListener('click', function () {
+    // Closes the create overlay if clicked outside
+    closeCreate();
+})
+
+closeButton.addEventListener('click', function () {
+    // Closes the create overlay
+    closeCreate();
+})
+
+typeSelect.addEventListener('change', showTypeInput);
+
+resourceSelect.addEventListener('change', showResourceInput);
+
+// Listens for the DOMContentLoaded event, which triggers when the initial HTML document has been fully loaded and parsed
+document.addEventListener('DOMContentLoaded', function () {
     const addImageIcon = document.querySelector('.add-image-container .fa-plus');
     const fileInput = document.getElementById('partner-image');
-    addImageIcon.addEventListener('click', function() {
+
+    // When the addImageIcon is clicked, triggers a click event on the fileInput element, opening the file dialog
+    addImageIcon.addEventListener('click', function () {
         fileInput.click();
     });
 });
 
-
-function openModify() {
-    modifyDetailView.style.transform = "translate(-50%, -50%)";
-    document.body.style.overflow = "hidden";
-}
-
-function closeModify() {
-    modifyDetailView.style.transform = "translate(-50%, 100%)";
-    document.body.style.overflow = "hidden";
-}
-
-detailButtons.forEach(button => {
-    function populateDetailPopup(partner) {
-        document.getElementById('partnerName').textContent = partner.OrganizationName;
-        document.getElementById('partnerPhoto').src = `/partner-image/${partner.ID}`;
-        document.getElementById('contactName').textContent = partner.ContactName;
-        document.getElementById('contactRole').textContent = partner.Role;
-        document.getElementById('contactEmail').textContent = partner.Email;
-        document.getElementById('partnerType').textContent = partner.TypeOfOrganization;
-        document.getElementById('partnerResource').textContent = partner.ResourcesAvailable;
-        document.getElementById('partnerPhone').textContent = partner.Phone;
-        document.getElementById('partnerDescription').textContent = partner.Description;
-    }
-
-    button.addEventListener('click', function() {
-        const partnerId = this.getAttribute('data-partner-id');
-        currentPartnerId = partnerId;
-        document.getElementById('editButton').setAttribute('data-partner-id', partnerId);
-        fetch(`/partner/details/${partnerId}`)
-            .then(response => response.json())
-            .then(data => {
-                populateDetailPopup(data);
-                openDetail();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while fetching partner details. Please try again.');
-            });
-    });
-    
-});
-
-
-bookmarkButtons.forEach(button => {
-    button.addEventListener('click', function(event) {
-        event.stopPropagation();
-    });
-});
-
+// Listens for a click event on the editButton element
 editButton.addEventListener('click', function () {
     function populateEditPopup(partner) {
         document.getElementById('modifyContactName').value = partner.ContactName || '';
@@ -175,11 +174,13 @@ editButton.addEventListener('click', function () {
         document.getElementById('modifyPartnerDescription').value = partner.Description || '';
         document.getElementById('editablePartnerName').textContent = partner.OrganizationName;
 
+        // If a currentPartnerId is available, fetches the image associated with the partner and displays it
         if (currentPartnerId) {
             const imageUrl = `/partner-image/${currentPartnerId}`;
             fetchImage(imageUrl);
         }
 
+        // Adjusts the dropdown and input field for the partner type based on whether it's an "Other" type
         if (partner.OrganizationIsOtherType) {
             document.getElementById('partnerTypeDropdown').value = 'Other';
             document.getElementById('customTypeContainer').style.display = 'block';
@@ -188,7 +189,7 @@ editButton.addEventListener('click', function () {
             document.getElementById('partnerTypeDropdown').value = partner.TypeOfOrganization;
             document.getElementById('customTypeContainer').style.display = 'none';
         }
-    
+
         if (partner.ResourcesAvailableIsOtherType) {
             document.getElementById('resourcesAvailableDropdown').value = 'Other';
             document.getElementById('customResourceContainer').style.display = 'block';
@@ -198,10 +199,12 @@ editButton.addEventListener('click', function () {
             document.getElementById('customResourceContainer').style.display = 'none';
         }
     }
+    // Checks if a currentPartnerId exists
     if (currentPartnerId) {
         fetch(`/partner/details/${currentPartnerId}`)
             .then(response => response.json())
             .then(data => {
+                // Populates the edit popup with the details of the fetched partner and opens the modify view
                 populateEditPopup(data);
                 openModify();
             })
@@ -210,30 +213,17 @@ editButton.addEventListener('click', function () {
                 alert('An error occurred while fetching partner details. Please try again.');
             });
     } else {
-        console.log("No partner selected for editing.");
+        console.log('No partner selected for editing.');
     }
 });
 
-function fetchImage(imageUrl) {
-    fetch(imageUrl)
-    .then(response => response.blob())
-    .then(blob => {
-        const imageObjectUrl = URL.createObjectURL(blob);
-        document.getElementById('partnerImageDisplay').src = imageObjectUrl;
-        document.getElementById('partnerImageDisplay').style.display = 'block';
-    })
-    .catch(error => {
-        alert('Error fetching image. Please try again');
-        console.log('Error fetching image: ' + error.message);
-        document.getElementById('partnerImageDisplay').style.display = 'none';
-    });
-}
-
 saveButton.addEventListener('click', function () {
     if (currentPartnerId) {
+        // Retrieves the file input element for partner photo upload
         const fileInput = document.getElementById('partner-photo-upload');
         const formData = new FormData();
 
+        // Appends the selected image file to the FormData object if available
         if (fileInput.files[0]) {
             formData.append('image', fileInput.files[0]);
         }
@@ -249,52 +239,44 @@ saveButton.addEventListener('click', function () {
         formData.append('resourcesAvailable', document.getElementById('resourcesAvailableDropdown').value === 'Other' ? document.getElementById('customResourceContainer').value : document.getElementById('resourcesAvailableDropdown').value);
         formData.append('resourcesAvailableIsOtherType', document.getElementById('resourcesAvailableDropdown').value === 'Other');
 
+         // Sends a POST request to modify the partner details with the currentPartnerId
         fetch(`/partner/modify/${currentPartnerId}`, {
             method: 'POST',
             body: formData,
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Update response:", data);
-            if (data.success) {
-                window.location.reload();
-            } else {
-                console.error('Save operation was not successful:', data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error occurred during save operation. Please try again later.');
-        });
+            .then(response => response.json())
+            .then(data => {
+                console.log('Update response:', data);
+                if (data.success) {
+                    window.location.reload(); // reload page to refresh information
+                } else {
+                    console.error('Save operation was not successful:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error occurred during save operation. Please try again later.');
+            });
     } else {
-        console.log("No partner selected for saving.");
+        console.log('No partner selected for saving.');
     }
 });
 
-
-detailOverlay.addEventListener('click', function () {
-    closeModify();
-    closeDetail();
-});
-
-backButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        closeModify();
-        closeDetail();
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const uploadButton = document.querySelector('.partner-photo .fa-plus.modify-plus');
     const fileInput = document.getElementById('partner-photo-upload');
-    uploadButton.addEventListener('click', function() {
+
+    // Add click event listener to simulate file input click when upload button is clicked.
+    uploadButton.addEventListener('click', function () {
         fileInput.click();
     });
-    
-    fileInput.addEventListener('change', function() {
-        if(this.files && this.files[0]) {
+
+    fileInput.addEventListener('change', function () {
+        // Check if any file is selected.
+        if (this.files && this.files[0]) {
             var reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
+                // Set the background image of the overlay to the selected file.
                 document.querySelector('.partner-photo .background-overlay').style.backgroundImage = `url(${e.target.result})`;
             };
             reader.readAsDataURL(this.files[0]);
@@ -303,18 +285,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var partnerTypeDropdown = document.getElementById('partnerTypeDropdown');
     var resourcesAvailableDropdown = document.getElementById('resourcesAvailableDropdown');
     var customTypeContainer = document.getElementById('customTypeContainer');
     var customResourceContainer = document.getElementById('customResourceContainer');
+
+    // Toggle visibility of the custom type input based on the partner type selection.
     function toggleCustomTypeContainer() {
         if (partnerTypeDropdown.value === 'Other') {
-            customTypeContainer.style.display = 'blodck';
+            customTypeContainer.style.display = 'block';
         } else {
             customTypeContainer.style.display = 'none';
         }
     }
+
+    // Toggle visibility of the custom resource input based on the resources available selection.
     function toggleCustomResourceContainer() {
         if (resourcesAvailableDropdown.value === 'Other') {
             customResourceContainer.style.display = 'block';
@@ -322,17 +308,21 @@ document.addEventListener('DOMContentLoaded', function() {
             customResourceContainer.style.display = 'none';
         }
     }
+
     partnerTypeDropdown.addEventListener('change', toggleCustomTypeContainer);
     resourcesAvailableDropdown.addEventListener('change', toggleCustomResourceContainer);
+
     toggleCustomTypeContainer();
     toggleCustomResourceContainer();
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const editablePartnerName = document.getElementById('editablePartnerName');
     let lastValidContent = editablePartnerName.textContent;
 
-    editablePartnerName.addEventListener('blur', function() {
+    // Add a blur event listener to validate content when the element loses focus.
+    editablePartnerName.addEventListener('blur', function () {
+        // If content is empty or only whitespace, revert to last valid content or default.
         if (!this.textContent.trim()) {
             this.textContent = lastValidContent || 'Partner Name';
             alert('Partner name cannot be blank.');
@@ -341,49 +331,53 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    editablePartnerName.addEventListener('keypress', function(e) {
+    // Prevent the Enter key from creating a new line and blur to trigger validation.
+    editablePartnerName.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
-            editablePartnerName.blur();
+            editablePartnerName.blur(); // Trigger blur event for validation.
         }
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const deleteButton = document.getElementById('deleteButton');
 
-    deleteButton.addEventListener('click', function() {
+    deleteButton.addEventListener('click', function () {
+        // Check if the current partner ID exists before attempting to delete.
         if (currentPartnerId) {
+            // Perform a fetch request to delete the partner using the DELETE method.
             fetch(`/partner/delete/${currentPartnerId}`, {
                 method: 'DELETE',
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Partner deleted successfully');
-                    window.location.reload();
-                } else {
-                    console.error('Failed to delete the partner');
-                }
-            })
-            .catch(error => {
-                alert('An error occurred while deleting from the database');
-                console.error('Error: ', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Partner deleted successfully');
+                        window.location.reload();
+                    } else {
+                        console.error('Failed to delete the partner');
+                    }
+                })
+                .catch(error => {
+                    alert('An error occurred while deleting from the database');
+                    console.error('Error: ', error);
+                });
         } else {
             console.error('Partner ID not found');
         }
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const addPartnerForm = document.getElementById('addPartnerForm');
 
-    addPartnerForm.addEventListener('submit', function(e) {
+    addPartnerForm.addEventListener('submit', function (e) {
         e.preventDefault();
 
         const formData = new FormData(addPartnerForm);
 
+        // Use the Fetch API to send the form data to a server endpoint.
         fetch('/add_partner', {
             method: 'POST',
             body: formData,
@@ -391,6 +385,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                // If the server responds with success, log a message and reload the page.
                 console.log('Partner added successfully');
                 window.location.reload();
             } else {
@@ -398,8 +393,65 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .catch(error => {
+            // Handle any errors that occur during the fetch operation.
             alert('An error occurred while adding the partner to the database');
             console.error('Error:', error);
         });
+    });
+});
+
+
+detailOverlay.addEventListener('click', function () {
+    closeModify();
+    closeDetail();
+});
+
+detailButtons.forEach(button => {
+    // Function to populate the details popup with partner information.
+    function populateDetailPopup(partner) {
+        // Setting text content and image source based on partner details.
+        document.getElementById('partnerName').textContent = partner.OrganizationName;
+        document.getElementById('partnerPhoto').src = `/partner-image/${partner.ID}`;
+        document.getElementById('contactName').textContent = partner.ContactName;
+        document.getElementById('contactRole').textContent = partner.Role;
+        document.getElementById('contactEmail').textContent = partner.Email;
+        document.getElementById('partnerType').textContent = partner.TypeOfOrganization;
+        document.getElementById('partnerResource').textContent = partner.ResourcesAvailable;
+        document.getElementById('partnerPhone').textContent = partner.Phone;
+        document.getElementById('partnerDescription').textContent = partner.Description;
+    }
+
+    button.addEventListener('click', function () {
+        // Retrieve partner ID stored in button's data attribute.
+        const partnerId = this.getAttribute('data-partner-id');
+        currentPartnerId = partnerId;
+        document.getElementById('editButton').setAttribute('data-partner-id', partnerId);
+        // Fetch partner details from the server using the partner ID.
+        fetch(`/partner/details/${partnerId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Populate the details popup with fetched partner data.
+                populateDetailPopup(data);
+                // Call function to display the details popup.
+                openDetail();
+            })
+            .catch(error => {
+                // Log and alert the user in case of an error during fetch.
+                console.error('Error:', error);
+                alert('An error occurred while fetching partner details. Please try again.');
+            });
+    });
+});
+
+bookmarkButtons.forEach(button => {
+    button.addEventListener('click', function (event) {
+        event.stopPropagation();
+    });
+});
+
+backButtons.forEach(button => {
+    button.addEventListener('click', function () {
+        closeModify();
+        closeDetail();
     });
 });
