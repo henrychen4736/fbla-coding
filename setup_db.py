@@ -1,7 +1,6 @@
 import sqlite3 as sql
 from db_manager import DBManager
 import os
-import bcrypt
 
 def setup(name):
    if os.path.exists(name):

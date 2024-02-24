@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, url_for, session, jsonify, send_file, flash
+from flask import Flask, request, redirect, render_template, url_for, session, jsonify, send_file
 from db_manager import DBManager, DatabaseError, IntegrityError, SignupError
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
@@ -11,10 +11,6 @@ app = Flask(__name__)
 app.secret_key = 'PLACEHOLDER'
 
 db_manager = DBManager('partners.db')
-
-# TODO: add more color to the ui
-# TODO: add 25 examples
-# TODO: add backup option
 
 
 def backup_db():
